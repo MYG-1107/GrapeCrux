@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 66" role="img" aria-labelledby="title desc">
+<title id="title">GrapeCrux</title><desc id="desc">GrapeCrux brand mark with a green geometric G and wordmark.</desc>
+<rect x="1" y="1" width="64" height="64" rx="20" fill="#163F36"/>
+<path d="M45 22.5a17 17 0 1 0 1.2 19.9H31.7v-9.1h25.1v5.2c0 12.2-9.1 21.4-22.3 21.4A25.9 25.9 0 1 1 55 17.5l-7.2 5z" fill="#D9F36A" transform="translate(-1 -1) scale(.99)"/>
+<text x="80" y="43" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="800" letter-spacing="-1.25" fill="#163F36">Grape<tspan fill="#527A36">Crux</tspan></text>
+</svg>

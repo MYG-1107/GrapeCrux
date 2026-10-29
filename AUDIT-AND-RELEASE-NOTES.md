@@ -1,48 +1,88 @@
-# GrapeCrux Engineering & Website Audit — Package Notes
+# GrapeCrux — Follow-up Audit & Release Notes
 
-## Scope
+## Repository review scope
 
-This replacement package was prepared from the public repository structure and current homepage source. The existing repository had a single `index.html`, a dark purple-oriented stylesheet, a JavaScript loader for header/footer includes, a brand PNG, and a `CNAME` for `grapecrux.com`. This package keeps the custom-domain configuration and reworks the site into a clean-URL, directory-based static site.
+The current `main` branch contains a bright static frontend with directory-based clean routes, eight service landing pages, an illustrative work/concepts page, an insights hub, a contact form, legal templates, a local browser chatbot and an optional FastAPI backend. This update builds on that structure rather than replacing the design with a different visual system.
 
-## Main changes in this package
+## Changes in this package
 
-1. **Visual design:** brighter warm-white surfaces, forest-green typography, lime accent, editorial spacing, service cards and responsive layouts.
-2. **Content:** clearer business-first positioning, eight detailed service categories and service-specific landing pages.
-3. **Credibility:** no fake client logos, numbers, testimonials or claimed results. The portfolio examples are explicitly labelled illustrative concepts.
-4. **Navigation:** common header/footer components, mobile navigation and clean internal paths.
-5. **URLs:** directory-based routes, canonical clean URLs, legacy redirect pages and an `index.html` address-bar cleanup script.
-6. **SEO:** per-page titles/descriptions, canonical tags, Open Graph metadata, Organization JSON-LD, robots file and sitemap.
-7. **Chat:** local guided assistant for service selection and project enquiry guidance, plus an optional FastAPI backend scaffold for generative AI. The local guide remains the fallback when no API URL is configured.
-8. **Contact:** validated project brief that prepares a `mailto:` message, with no silent server-side collection.
-9. **Legal:** starter privacy/terms pages with review warnings because actual legal data practices and jurisdictional needs were not provided.
-10. **QA support:** 404 page, deployment instructions and pre-launch checklist.
+1. **Original logo:** Replaced the stylised G lockup with the original repository grape image in shared header/footer and chatbot avatar; favicon references the original PNG. Keep the existing repository-root `grapecrux_brand_logo.png` when uploading.
+2. **Navigation:** Added an Industries & Use Cases route and header/footer links.
+3. **Insights:** Converted the three in-page guide anchors into standalone clean-URL articles with unique metadata and article structured data. This helps the guides be shared and indexed independently.
+4. **Contact brief:** Removed the awkward “currency to confirm” wording, added a separate currency field, and included currency in the prepared enquiry email.
+5. **SEO:** Added the new industry and article routes to the sitemap; preserved existing canonical URL and root CNAME strategy.
+6. **Shared UI:** Kept the existing warm-white/forest-green/lime visual language, but adjusted logo lockup sizing and the assistant avatar to use the provided artwork.
+7. **No invented credentials:** No client logos, testimonials, completed project metrics, locations, registrations or certifications were added. Work examples remain explicitly labelled as concepts unless verified evidence is provided.
 
-## QA matrix to run after uploading
+## Items still needing owner confirmation
 
-| Area | Validation | Expected result |
-|---|---|---|
-| Root page | Open `/` and `/index.html` | Root content loads; visible `index.html` is removed by redirect script |
-| Clean routes | Open every clean URL directly | Each directory route loads without `.html` |
-| Legacy paths | Open `about.html`, `services.html`, `contact.html`, etc. | Redirects to the corresponding clean route |
-| Navigation | Click all desktop/mobile menu links | Correct target; mobile menu can open/close by keyboard and pointer |
-| Assets | Inspect images, CSS and JS requests | No missing local asset requests |
-| Enquiry | Submit invalid/valid data | Browser validation works; valid submission prepares an email |
-| Assistant | Try service, unknown, quote and contact questions | Answers relevant local FAQ or provides an honest fallback; never promises a quote/ranking |
-| Responsive | Test 360px, 768px, 1024px and desktop | No horizontal overflow; controls remain usable |
-| SEO | Inspect head metadata and sitemap | Unique title/description, canonical clean URLs and sitemap URLs align |
-| Accessibility | Keyboard, visible focus, reduced motion, colour contrast | No obvious keyboard trap; motion can be reduced; follow up with a formal audit |
-| Deployment | Test custom domain and GitHub Pages project URL | Correct path prefix and assets on both contexts |
+- Add verified registered address, registration identifiers, approved leadership details and public company profile only when the owner confirms them.
+- Add genuine case studies and testimonials only with permission and evidence; the current Work page correctly labels its cards as concept directions.
+- Verify `service@grapecrux.com` is monitored.
+- Have privacy and terms text reviewed against actual practices and applicable law.
+- Decide whether contact leads should be emailed only or handled by a hosted backend/CRM.
+- Deploy and configure the optional FastAPI AI backend if a generative model is needed. The default assistant remains a local guided FAQ.
 
-## Known constraints / not yet verified
+## Validation performed in package
 
-- This package has not been run through a live browser automation suite or Lighthouse in this environment.
-- GitHub Pages hosting settings and DNS for `grapecrux.com` are not changed by creating this ZIP.
-- GitHub Pages cannot do arbitrary server-side redirects. Directory-based routes provide clean URLs; legacy redirect pages are client-side/static fallbacks and should be tested after deployment.
-- The enquiry form depends on the visitor's email application. It does not guarantee a message is delivered and does not record leads server-side.
-- The chatbot is rule-based client-side guidance by default. An optional FastAPI generative-AI backend is included under `backend/` but has not been deployed or connected; use server-side secrets and configure its API URL/CORS before enabling it.
-- Privacy and terms pages are templates and must be checked against actual practices and local requirements.
-- The exact currently stored PNG brand artwork was not embedded into this build; this package contains a self-contained SVG wordmark treatment used by the site. If the current official PNG is mandatory, copy `grapecrux_brand_logo.png` from the existing repository into the final root and update the shared header/footer to use it after visual validation.
+- HTML syntax parse check across all static HTML files.
+- Unique titles, meta descriptions and canonical URL checks for indexable page files.
+- Local link and local image target checks (with explicit exceptions for anchor links and the original repo-root logo asset).
+- Sitemap XML parse and sitemap-to-page existence checks.
+- JavaScript syntax check if Node.js is available.
+- ZIP archive integrity check.
 
-## Release recommendation
+## Live validation boundary
 
-Publish to a backup branch first, verify the page source and links, then switch the published branch once the functional and content checks pass.
+Static checks cannot guarantee the browser has no runtime errors, the live CNAME/DNS are correct, an external email application opens, the optional backend is deployed, or search engines have indexed the pages. Verify on `https://grapecrux.com/` after upload and run Lighthouse/Search Console separately.
+
+
+## Page-by-page coverage
+
+The static package includes these 20 canonical routes:
+
+- `/` — Home
+- `/about/` — About GrapeCrux
+- `/services/` — Service catalogue
+- `/services/web-development/`
+- `/services/ai-automation/`
+- `/services/product-design/`
+- `/services/branding/`
+- `/services/digital-growth/`
+- `/services/cloud-devops/`
+- `/services/data-integration/`
+- `/services/quality-assurance/`
+- `/industries/` — Illustrative use cases, not a claim of past client work
+- `/work/` — Concept directions clearly labelled as concepts
+- `/insights/` — Insight index
+- `/insights/website-project-planning/`
+- `/insights/ai-assistant-readiness/`
+- `/insights/website-launch-qa/`
+- `/contact/`
+- `/privacy/`
+- `/terms/`
+
+In addition, the package includes the home `index.html`, 8 legacy `.html` redirect pages, `404.html`, reusable assets/scripts, `robots.txt`, `sitemap.xml`, `CNAME`, the optional `backend/`, and deployment documentation. The visible path `/index.html` is cleaned by the script; GitHub Pages still requires the physical homepage file `index.html`.
+
+## Latest local validation result
+
+- 29 HTML files scanned.
+- 20 indexable pages and 9 noindex pages (redirects plus 404).
+- 20 sitemap URLs, each resolving to a packaged clean-route page.
+- 0 static structure errors and 0 warnings in `validate_site.py`.
+- JavaScript syntax check passed with Node.js.
+- Python syntax compilation passed for the optional FastAPI backend.
+- ZIP integrity check passed after packaging.
+
+## Known content gaps that cannot be filled honestly without company approval
+
+- No verified registered-office address, registration number, leadership bio, team names, certifications or public phone number were supplied, so these have not been invented.
+- No approved real client case studies, testimonials or measurable outcomes were supplied. The Work page remains clearly labelled concept directions. Replace these with genuine work as evidence becomes available.
+- The contact form prepares a `mailto:` message; it does not store leads or prove an email was delivered.
+- The optional generative-AI backend is only a scaffold and is not deployed by GitHub Pages. The default chatbot is a local rules-based guide.
+- Privacy and terms pages are starter templates that require company/legal review.
+- The official logo PNG is already in the existing repository but is not duplicated inside this ZIP. The site uses the official public raw asset and falls back to the local root PNG, so preserve that file when uploading the package.
+
+## Live testing limitation
+
+The automated web page fetch did not provide a readable live HTML response in this environment, and a headless Chromium smoke-test attempt timed out. Therefore the checks above are local/static checks, not proof of live production navigation, visual rendering, live contact email delivery, deployed chatbot API availability, Lighthouse scores, or search-engine indexing. Run those checks after deployment.

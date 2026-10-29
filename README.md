@@ -1,26 +1,29 @@
-# GrapeCrux Website
+# GrapeCrux Official Repository
 
-Official global website repository for **GrapeCrux** — Creative Agency & Digital Solutions.
+Global digital, creative agency and AI solutions website for **GrapeCrux** (Infinite Resource Creators Private Limited).
 
-## 📁 Repository Folder Structure
+## 📁 Repository Structure
 
 ```text
 GrapeCrux/
-├── index.html              # Main Landing Page
-├── README.md               # Repository documentation
+├── index.html                  # Main Landing Page (SEO optimized)
+├── grapecrux_brand_logo.png    # Official brand logo
+├── README.md                   # Documentation
+├── includes/                   # Modular components folder
+│   ├── header.html             # Reusable header component
+│   └── footer.html             # Reusable footer component
 └── assets/
     ├── css/
-    │   └── style.css       # Main agency styling
+    │   └── style.css           # Minimalist dark theme & responsive grid
     ├── js/
-    │   └── main.js         # Interactive site scripts
-    └── images/             # Static visual assets & branding logos
+    │   └── main.js             # Dynamic include loader & interactive scripts
+    └── images/                 # Static visual assets
 ```
 
 ## 🚀 Deployment Instructions (GitHub Pages)
 
-1. Upload or commit all these files directly into your GitHub repository: `https://github.com/MYG-1107/GrapeCrux`
-2. Go to your repository **Settings** tab on GitHub.
-3. On the left sidebar, click on **Pages**.
-4. Under **Build and deployment** -> **Branch**, select `main` (or `master`) and folder `/ (root)`. Click **Save**.
-5. Under **Custom domain**, enter your GoDaddy domain name (e.g. `grapecrux.com`).
-6. In your GoDaddy DNS settings, add the required CNAME or A records pointing to GitHub Pages.
+1. Upload all files and folders directly to your repository: `https://github.com/MYG-1107/GrapeCrux`
+2. Go to repository **Settings** -> **Pages**.
+3. Set **Branch** to `main` and folder to `/ (root)`. Click **Save**.
+4. Configure your custom domain (`grapecrux.com`) under **Custom domain**.
+5. Ensure DNS records in GoDaddy point correctly to GitHub Pages.

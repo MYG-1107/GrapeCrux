@@ -1,40 +1,29 @@
-# GrapeCrux — QA and Content Release Notes
+# GrapeCrux Careers, Blogs and Assistant Update
 
-**Release date:** 31 October 2026  
-**Scope:** client-perspective content audit, chatbot QA, blog expansion, internship careers page, shared layout and analytics verification.
+**Prepared:** 31 October 2026  
+**Repository:** `MYG-1107/GrapeCrux`  
+**Delivery:** Overlay package; no changes have been pushed to the live repository by this ZIP build.
 
-## Release changes
+## Delivered
 
-- Added a Blogs hub and six original service-aligned articles with primary-source/read-more resources, unique SEO metadata, canonical URLs, Open Graph data and BlogPosting schema.
-- Added Careers with seven remote three-month internship tracks across software development, AI/ML, data analytics, QA/test automation, UI/UX, cloud/DevOps and business/digital marketing.
-- Marked the ₹5,000–₹10,000 monthly stipend as indicative and subject to written offer; added confirmation requirements for seats, schedule, mentor and dates.
-- Connected each Careers card's Apply button to the matching role in the form.
-- Expanded the deterministic FAQ assistant to answer company identity, legal relationship, registered office, services, industries, concept-only portfolio, no published verified testimonials, pricing limits, no SEO ranking guarantees, blogs, internship terms and contact handling.
-- Explicitly disclosed that the current website assistant is a curated FAQ, not a human representative or live generative AI model.
-- Repaired assistant script references, included the GA4 consent configuration on Blogs and Careers, kept the Google tag in each page `<head>`, and left header/footer content in shared include files.
-- Updated Privacy wording to describe the current GA4 consent behaviour and mailto-only forms; clarified that GrapeCrux is a brand initiative of Infinite Resource Creators Private Limited.
-- Updated Work page messaging to say that its examples are concepts and that the site does not currently publish verified case studies or testimonials.
-- Updated the shared footer year after the footer fragment loads.
+- Replaced the old seven-track, three-month internship-only Careers page with six full-time positions and seven internship tracks.
+- Removed fixed-duration wording and all compensation amounts from the Careers page.
+- Added a dynamic application form with required full name, email and phone number; different full-time and internship questions; individual GitHub, portfolio and LinkedIn fields; and impact-focused prompts.
+- Connected role-card buttons to the corresponding type and role in the application form.
+- Set the application email recipient to `yaswanth@grapecrux.com`.
+- Added a Life at GrapeCrux section, selection explanation, applicant guidance, role-specific FAQs and a business project CTA.
+- Corrected the shared header and footer lockups to display only the logo image without the previous white tile or duplicate text wordmark.
+- Added five technical blog articles and updated the blog hub and XML sitemap.
+- Expanded the local assistant knowledge base and optional backend system guidance for jobs, internships, blog topics and the Work page. Generic fallback messages now vary and route users to relevant pages.
 
-## Automated QA summary
+## Important delivery behaviour
 
-- 37 HTML documents scanned.
-- 29 full content pages with shared header/footer placeholders.
-- 28 canonical, indexable routes in sitemap.
-- 0 static validation errors and 0 warnings.
-- Chatbot knowledge tests: 23/23 passed.
-- Main JavaScript and assistant knowledge module: syntax checks passed.
-- Optional backend Python compile check: passed.
+The site is static GitHub Pages content. A browser `mailto:` form cannot silently deliver an email or attach a local resume. The new application flow prepares a draft addressed to `yaswanth@grapecrux.com`; the applicant must attach the CV and click Send. The page tells applicants this clearly. Automatic server-side submission requires a secured mail service, server-side credentials, hosting and privacy review, none of which were supplied for this static deployment.
 
-Full findings and the manual post-deployment test plan are in `QA-TEST-REPORT.md`.
+## Technical editorial note
 
-## Known limitations / approval items
+The PHP article references the official PHP 8.5 release announcement and migration guide. On 31 October 2026, the official PHP downloads page identified PHP 8.5.12 (released 21 October 2026) as the current stable PHP version. The article also distinguishes the PHP 8.6.0 beta testing release from stable production versions.
 
-- The root `grapecrux_brand_logo.png` is retained in the existing repository and is not duplicated in this archive. Preserve it during upload.
-- Contact and internship forms prepare `mailto:` messages; they do not persist data or submit to a CRM. A server-side lead/application workflow is a future enhancement.
-- The chatbot is a local rules-based FAQ. A live generative assistant requires separate backend hosting, secure secret configuration, model evaluation and privacy review.
-- The Work page has concept directions, not verified public client case studies or testimonials. Do not invent proof.
-- Internship stipend/schedule/slots are indicative and must be approved in the written offer before announcing confirmed vacancies.
-- Privacy and terms pages should be reviewed against the company's actual processes and applicable laws.
-- SEO improvements do not guarantee indexing or a top ranking. Search Console verification and post-deployment monitoring remain necessary.
-- The live domain could not be fetched by the available browser/network tools in this run. Live visual checks, actual GA4 Realtime events, mail-client handoff and Lighthouse/Core Web Vitals scores remain post-deployment checks.
+## Validation boundary
+
+The overlay package can be syntax-checked and the updated chatbot intent tests can be run independently. The full repository-wide validator requires the unchanged repository files to be present in the working directory; visual browser QA, live email-client handoff, hosted assistant availability and Google Search Console checks must be completed after merging and deployment. No search-ranking or indexing outcome is guaranteed.

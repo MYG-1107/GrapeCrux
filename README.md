@@ -1,65 +1,55 @@
-# GrapeCrux Website — QA, Blogs, Careers and SEO Release
+# GrapeCrux Website Update Package
 
-This is the complete static GitHub Pages source package for GrapeCrux. It includes the existing corporate site structure plus a Blogs hub, six original blog posts, a Careers page, chatbot knowledge refinements, shared navigation/footer loading and consent-aware GA4 configuration.
+This is an **overlay ZIP** for the existing `MYG-1107/GrapeCrux` repository. It contains every changed and newly added file for the careers, blog, shared branding, chatbot, sitemap and supporting documentation updates. It is not a replacement copy of the entire repository.
 
-## Upload to GitHub Pages
+## Apply the update
 
-1. Back up the repository or create a branch before replacing files.
-2. Extract this ZIP and open the `grapecrux-v4` folder.
-3. Upload the **contents** of that folder to the root of `MYG-1107/GrapeCrux`.
-4. Preserve the existing root file `grapecrux_brand_logo.png`. It is used by the shared header, footer and chatbot and is intentionally not duplicated in this source archive. Do not delete or rename it during replacement.
-5. Preserve `CNAME` and `.nojekyll`.
-6. Keep GitHub Pages configured to publish from `main` and `/ (root)`.
-7. After deployment, verify the clean canonical routes directly in a browser.
+1. Download and extract this ZIP.
+2. Open the extracted `GrapeCrux-update` folder.
+3. Copy its contents into the root of your existing `MYG-1107/GrapeCrux` working copy, allowing the listed files to be replaced and the five new blog folders to be added.
+4. Keep all other repository files and assets. In particular, preserve the existing root `grapecrux_brand_logo.png`, `CNAME`, and all unchanged pages/assets.
+5. Review the changed files, then commit and push to the GitHub Pages publishing branch.
+6. After deployment, check `https://grapecrux.com/careers/`, `https://grapecrux.com/blogs/`, each new article URL, the header/footer logo and the chatbot.
 
-## Shared header and footer
+## Careers changes
 
-- `includes/header.html` is the only shared navigation source.
-- `includes/footer.html` is the only shared footer source.
-- All full content pages contain `#site-header` and `#site-footer` placeholders.
-- `assets/js/main.js` loads these files once per page. On GitHub Pages it rebases root links under `/GrapeCrux/`; on `grapecrux.com` it uses root paths.
-- To change the shared navigation or footer, edit only the respective include file. Google Analytics belongs in each document's `<head>`, not inside these body fragments.
+- Six full-time openings: Senior Full-stack Developer, AI Engineer, Forward Deployment Engineer, Quality Assurance Tester, DevOps Engineer and Big Data Engineer.
+- Seven internship tracks: Software Developer, Prompt Engineer, AI Engineer, Python Developer, .NET Developer, Machine Learning Engineer and Data Analytics.
+- No fixed-duration wording and no compensation figures are published on the careers page.
+- The application requires full name, email address and phone number.
+- Full-time and internship selections show different questions. Full-time applicants provide employment history, experience and impact; internship applicants provide education, current status, projects and learning goals.
+- GitHub, portfolio and LinkedIn are collected as separate optional fields.
+- Role buttons preselect the opportunity type and track.
+- Applications are prepared for `yaswanth@grapecrux.com`. The current static website uses a `mailto:` draft: applicants must attach their resume and press Send in their own email application. This website does not transmit or store applications. Automatic server-side delivery would require a configured, secured mail provider and hosting environment.
 
-## Google Analytics
+## Blogs and SEO
 
-GA4 measurement ID: `G-QXMRMGJEP2`.
+Five new original articles are added under `blogs/`, and the blog hub is updated to list all eleven articles. New pages include unique titles, descriptions, keywords, canonical URLs, Open Graph metadata, BlogPosting structured data, internal service links and further-reading sources. The sitemap includes all five new article routes.
 
-The tag is configured on each HTML page. Analytics and advertising storage start as denied. A page-view event is sent only after the visitor accepts optional analytics in the preference banner. The footer's **Cookie preferences** link reopens the setting. After deployment, test consent and page views with Google Tag Assistant and GA4 Realtime.
+The PHP article is based on the official PHP release and migration documentation. At the time prepared (31 October 2026), the official downloads page identified PHP 8.5.12 (released 21 October 2026) as the current stable PHP version; re-check the official page before publishing any future version-specific announcement. The article distinguishes stable releases from pre-release builds.
 
-## Blogs
-
-`/blogs/` contains six original editorial articles on trustworthy AI assistants, AI application security, Core Web Vitals, service-page SEO, reliable API integrations and quality engineering. Each article includes page-specific metadata, canonical URL, BlogPosting structured data and further-reading links to primary technical sources.
-
-## Careers
-
-`/careers/` describes seven remote, three-month internship tracks: Software Development, AI / Machine Learning, Data Analytics, QA & Test Automation, UI / UX, Cloud & DevOps, and Business & Digital Marketing.
-
-The page displays an indicative stipend of ₹5,000–₹10,000 per month and an indicative commitment of around 20 hours/week. Confirm budget, available seats, mentor capacity, dates, schedule and final stipend before announcing openings or issuing offers. The amount is not guaranteed until it is in the written offer. Internship completion does not guarantee a permanent job.
-
-The application form prepares an email to `service@grapecrux.com`; it does not store applications or upload CVs. Applicants attach their resume to the email that opens. Role-card Apply buttons select the matching role in the form.
+SEO metadata and crawl paths improve discoverability but do not guarantee indexing, rich results or search ranking. Verify Search Console ownership and submit `/sitemap.xml` after deployment.
 
 ## Chatbot
 
-`assets/js/assistant-knowledge.js` contains curated, deterministic FAQ answers. The current front-end assistant is not a generative AI model or human agent. The optional FastAPI backend in `backend/` is separate, not hosted by GitHub Pages and not enabled by default; deploy and configure it securely before using a live model. Do not expose provider API keys in front-end code.
+`assets/js/assistant-knowledge.js` adds specific answers for all available roles, application steps, the new blog topics and the illustrative nature of the Work page. Unknown questions now rotate through different fallback replies and point to relevant website sections rather than repeating one identical message.
 
-## Forms and privacy
+`backend/main.py` updates the optional hosted assistant's system guidance. The frontend still uses the deterministic local knowledge base unless `GRAPECRUX_CHAT_API_URL` is configured. The hosted backend requires a secure server environment and a server-side provider key; do not put secrets in frontend JavaScript.
 
-Contact and internship forms use `mailto:`. They validate required fields and prepare an email; the visitor's email app must send it. The static website does not store these submissions. The Privacy page describes this and the consent-aware GA4 behaviour. Have privacy/terms wording reviewed for the company's markets before treating it as legal advice or a contract.
+## Logo
 
-## QA commands
+The shared header and footer now render the existing root `grapecrux_brand_logo.png` directly as a single image, without the old white tile, border or duplicate text wordmark. Preserve that transparent PNG when merging the overlay.
 
-Run from the extracted folder:
+## Checks
+
+Run from the repository root after merging:
 
 ```bash
-python validate_site.py
-node --check assets/js/main.js
+node --check assets/js/careers.js
 node --check assets/js/assistant-knowledge.js
 node tests/chatbot-intents.test.cjs
 python -m py_compile backend/main.py
+python validate_site.py
 ```
 
-See `QA-TEST-REPORT.md` and `AUDIT-AND-RELEASE-NOTES.md` for source-level findings, checks, limitations and manual post-deployment test cases.
-
-## SEO note
-
-The package includes page-specific metadata, canonical clean URLs, internal links, XML sitemap, robots directives and BlogPosting metadata. These improve clarity and crawlability; they do not guarantee crawling, indexing or first-place rankings. Verify Search Console ownership, submit the sitemap and monitor search performance after deployment.
+Also manually test one full-time and one internship application in a browser, including role auto-selection, conditional required fields, the generated recipient/subject/body, the resume attachment step and the final Send action. Check mobile layout and the circle alignment at desktop and mobile widths.

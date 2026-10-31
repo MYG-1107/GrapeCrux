@@ -1,42 +1,43 @@
 /* GrapeCrux assistant knowledge base.
-   This is a deterministic, rule-based FAQ assistant, not a generative AI model or human agent.
-   Keep answers aligned with published company information; never invent unverified proof. */
+   Deterministic, curated FAQ content. This is not a generative AI model or a human agent. */
 (() => {
   const answers = [
     [/\b(what is grapecrux|who are you|about grapecrux|what does grapecrux do)\b/i,
-      'GrapeCrux is a creative initiative of Infinite Resource Creators Private Limited, an Indian private limited company incorporated in Pune on 27 November 2019. GrapeCrux is a brand initiative, not a separate legal entity. It brings creativity, technology, strategic thinking and innovation together to explore practical digital solutions and opportunities.'],
+      'GrapeCrux is a creative initiative of Infinite Resource Creators Private Limited, an Indian private limited company incorporated in Pune on 27 November 2019. GrapeCrux brings creativity, technology, strategic thinking and purposeful execution together to explore practical digital solutions.'],
     [/\b(where are you|where is grapecrux|location|office|based|registered office)\b/i,
-      'The registered office of Infinite Resource Creators Private Limited, the company behind GrapeCrux, is in Chinchwad MIDC, Pune, Maharashtra, India. The website does not list additional offices. Remote or on-site project arrangements, where relevant, are discussed and confirmed for each engagement. See the About page for the registered-office address.'],
+      'The registered office of Infinite Resource Creators Private Limited, the company behind GrapeCrux, is in Chinchwad MIDC, Pune, Maharashtra, India. The website does not list additional offices. See the About page for the registered-office address.'],
     [/\b(cin|incorporat|legal entity|registered company|parent company|company registration)\b/i,
-      'The legal entity is Infinite Resource Creators Private Limited. The CIN displayed on the company profile is U74999PN2019PTC188068, and the stated incorporation date is 27 November 2019. GrapeCrux is its creative initiative, not a separate incorporated company. Corporate details are presented as supplied by the company.'],
+      'The legal entity is Infinite Resource Creators Private Limited. The CIN displayed on the company profile is U74999PN2019PTC188068, and the stated incorporation date is 27 November 2019. GrapeCrux is its creative initiative, not a separate incorporated company.'],
+    [/\b(job|jobs|full[- ]time|career|careers|internship|intern|vacanc|recruit|hiring|opening|position|opportunit)\b/i,
+      'GrapeCrux lists six full-time roles: Senior Full-stack Developer, AI Engineer, Forward Deployment Engineer, Quality Assurance Tester, DevOps Engineer and Big Data Engineer. It also lists seven internship tracks: Software Developer, Prompt Engineer, AI Engineer, Python Developer, .NET Developer, Machine Learning Engineer and Data Analytics. Full-time roles are ongoing, with no pre-set end date stated on the Careers page. View roles and apply at https://grapecrux.com/careers/. Applications are addressed to yaswanth@grapecrux.com. To apply, choose a role and complete the matching form. Full-time applicants provide employment history and experience; internship applicants provide education, current status and project details. Attach your resume, review the email draft and press Send. The website does not upload or store applications.'],
+    [/\b(resume|cv|how do i apply|application form|apply now|send my application|application email)\b/i,
+      'Open https://grapecrux.com/careers/, choose a full-time role or internship track and complete the matching fields. Full-time applicants provide employment history and experience; internship applicants provide education, current status and project details. The form prepares an email for yaswanth@grapecrux.com. Attach your resume, review the draft and press Send in your email app. The website does not upload or store applications.'],
+    [/\b(salary|stipend|pay|compensation|income|how much do you pay)\b/i,
+      'Role-specific employment and internship terms are discussed with shortlisted applicants during the interview process. Please use the Careers page to review the available roles and submit an application: https://grapecrux.com/careers/.'],
+    [/\b(how long|duration|fixed term|end date|permanent|ongoing employment)\b/i,
+      'The full-time roles on the Careers page are ongoing opportunities and do not have a pre-set end date. Role expectations and applicable employment terms are discussed during recruitment and provided in the written terms. Internship arrangements are explained to shortlisted applicants.'],
+    [/\b(blog|blogs|article|articles|resources|read more)\b/i,
+      'The GrapeCrux Blogs section includes articles on PHP 8.5, agentic AI workflow automation, retrieval-augmented generation for business knowledge, big-data pipeline engineering and production-ready Python AI services. It also covers trustworthy AI assistants, AI application security, Core Web Vitals, SEO, reliable APIs and quality engineering. Read them at https://grapecrux.com/blogs/.'],
+    [/\b(php|pipe operator|uri extension|php 8\.5|php 8\.6)\b/i,
+      'Our PHP article explains PHP 8.5 features such as the URI extension, pipe operator (|>), clone() property updates and the #[\NoDiscard] attribute. It also discusses patch updates and why beta versions should not be used in production. Read: https://grapecrux.com/blogs/php-85-practical-upgrade-guide/.'],
+    [/\b(projects|portfolio|case studies|work examples|what have you built|show me your work|client work)\b/i,
+      'The Work page currently presents illustrative concept directions for business websites, guided assistants and operational dashboards. These examples explain possible solution approaches; they are not represented as completed client engagements or verified case studies. Explore https://grapecrux.com/work/ or contact the team to discuss a project.'],
     [/\b(testimonial|testimonials|client review|reviews|customer feedback|client names)\b/i,
       'The public website does not currently publish verified client testimonials or named client endorsements. We do not invent reviews. The Work page labels its current examples as illustrative concepts rather than completed client projects.'],
-    [/\b(projects|portfolio|case studies|work examples|what have you built|show me your work)\b/i,
-      'The public Work page currently presents illustrative concept directions for a corporate digital presence, a service-discovery assistant and an operations dashboard. They demonstrate possible solution types; they are not represented as completed client engagements. Verifiable case studies can be added when project details and publication permission are available.'],
     [/\b(industry|industries|sectors|who do you work with)\b/i,
-      'The site describes illustrative use cases for technology and SaaS, professional services, commerce and retail, education and knowledge-led teams, operations and internal teams, and growing organisations. These are potential contexts for applying the published services, not claims of past clients in every industry.'],
+      'GrapeCrux describes potential use cases across technology and SaaS, professional services, commerce and retail, education, operations and growing organisations. These are possible contexts for applying the published services, not claims of past clients in every industry.'],
     [/\b(how do you work|process|how do you execute|delivery steps|methodology|project phases)\b/i,
-      'A typical engagement is scoped in stages: understand the business challenge and users; agree on outcomes, scope and responsibilities; shape the experience and technical approach; build the agreed solution; test and validate key journeys; then launch and discuss any ongoing support. Exact deliverables, milestones, fees and timelines are agreed in writing for each project.'],
+      'A typical engagement starts by understanding the business challenge and users, agreeing on outcomes and scope, shaping the experience and technical approach, building the solution, testing key journeys and then discussing launch and support. Deliverables, milestones and fees are agreed in writing for each project.'],
     [/\b(services|what services|what do you offer|capabilities|service list)\b/i,
-      'The published service areas are: Web & App Development; AI & Automation; Product Design & UX; Brand Strategy & Visual Identity; Digital Growth & SEO; Cloud & DevOps; Data & System Integration; and Quality Assurance & Technical Consulting. Each service page explains potential scope and deliverables. Actual project scope is confirmed after discussion.'],
+      'Published GrapeCrux services include Web & App Development, AI & Automation, Product Design & UX, Brand Strategy & Visual Identity, Digital Growth & SEO, Cloud & DevOps, Data & System Integration, and Quality Assurance & Technical Consulting. Explore https://grapecrux.com/services/.'],
     [/\b(guarantee|first place|number one|#1|rank first|top ranking|top of google|google ranking|ranking guarantee)\b/i,
-      'No agency can responsibly guarantee a first-place Google ranking. Search visibility depends on competition, relevance, technical quality, site reputation, content and other factors that change over time. GrapeCrux can help with technical SEO, content structure and measurement, but results are not guaranteed.'],
-    [/\b(career|careers|internship|intern|job|vacanc|recruit|hiring|apply for an internship)\b/i,
-      'The Careers page describes remote, three-month internship tracks in software development, AI / machine learning, data analytics, quality assurance and test automation, UI / UX design, cloud / DevOps, and business and digital marketing. The page currently shows an indicative stipend range of ₹5,000–₹10,000 per month and an expected commitment of about 20 hours per week; these are proposed terms that must be confirmed in a written offer. Applications are prepared as email drafts and are not stored by the website.'],
-    [/\b(resume|cv|attach my|how do i apply|application process)\b/i,
-      'Use the Careers page to choose an internship track and complete the short application form. It prepares an email draft to service@grapecrux.com; attach your resume before sending. The website does not upload or store the application. Do not send sensitive identity or banking information with an initial application.'],
-    [/\b(stipend|salary|pay|compensation|internship amount)\b/i,
-      'The Careers page currently lists an indicative internship stipend of ₹5,000–₹10,000 per month, depending on role and scope, and an expected commitment of about 20 hours per week. These are proposed programme terms, not a guaranteed payment offer. The exact stipend, schedule, dates and responsibilities must be confirmed in the written offer before accepting an internship.'],
-    [/\b(blog|blogs|article|articles|resources|read more)\b/i,
-      'The Blogs section contains practical articles on trustworthy AI assistants, AI application security, website performance and Core Web Vitals, useful service-page SEO, reliable API integrations, and quality engineering for AI-enabled products. Each article includes links to further technical resources.'],
-    [/\b(price|pricing|cost|budget|quote|how much|fee)\b/i,
-      'Project pricing depends on the agreed scope, integrations, content, complexity, dependencies and delivery expectations. I cannot confirm a price or quote in chat. Share your requirements through the project enquiry page so the team can review them.'],
+      'No agency can responsibly guarantee a first-place Google ranking. Search visibility depends on competition, relevance, technical quality, site reputation, content and other changing factors. GrapeCrux can help with technical SEO, content structure and measurement, but results are not guaranteed.'],
+    [/\b(price|pricing|cost|budget|quote|how much does a website cost|fee)\b/i,
+      'Project pricing depends on scope, integrations, content, complexity, dependencies and delivery expectations. I cannot confirm a quote in chat. Share your requirements through https://grapecrux.com/contact/ so the team can review them.'],
     [/\b(website|web development|e-commerce|ecommerce|portal|app|application)\b/i,
-      'Web & App Development can include responsive corporate websites, business portals, web applications, e-commerce experiences and API integrations. A useful starting brief identifies the audience, key tasks, required content or features, existing systems and success criteria.'],
-    [/\b(is this chatbot ai|are you an ai|are you human|who am i chatting with|is this a real person)\b/i,
-      'I am the GrapeCrux website FAQ assistant. This version matches questions to curated company information and is not a human representative or a live generative AI model. For questions requiring an employee or a confirmed business decision, contact service@grapecrux.com.'],
-    [/\b(ai|chatbot|automation|agent|llm|workflow|machine learning)\b/i,
-      'AI & Automation can include guided service assistants, internal knowledge tools, document workflows and integrations with business systems. A responsible project starts with a defined user task, approved source information, an evaluation plan, clear fallbacks and privacy/security controls. The GrapeCrux website assistant itself is a curated, rule-based FAQ—not a live generative AI service.'],
+      'Web & App Development can include responsive corporate websites, business portals, web applications, e-commerce experiences and API integrations. A useful brief identifies the audience, key tasks, required content or features, existing systems and success criteria.'],
+    [/\b(ai|chatbot|automation|agent|llm|workflow|machine learning|rag)\b/i,
+      'AI & Automation can include guided service assistants, retrieval-based knowledge tools, document workflows and integrations with business systems. A responsible project starts with a defined user task, approved source information, evaluation, clear fallbacks and privacy/security controls. The GrapeCrux website assistant itself uses curated FAQ answers unless an optional hosted model is configured.'],
     [/\b(design|ux|ui|prototype|wireframe|experience)\b/i,
       'Product Design & UX can cover discovery, user journeys, wireframes, clickable prototypes, interface systems and implementation handoff. The work starts by clarifying the audience, their most important tasks and the business outcome.'],
     [/\b(brand|logo|identity|visual)\b/i,
@@ -50,20 +51,28 @@
     [/\b(integration|api|data|dashboard|database)\b/i,
       'Data & System Integration can include API connections, data processing, validation rules, database-backed features and operational dashboards. The first step is mapping systems, data owners, permissions and the decisions the information must support.'],
     [/\b(contact|email|talk|human|team|project enquiry|start a project|speak to|sales|book a call|meeting)\b/i,
-      'You can contact the team at service@grapecrux.com or use the project enquiry page. The current static form prepares an email in your email application; it does not submit the enquiry to or store it on a website server.'],
-    [/\b(timeline|how long|when can you deliver|delivery date)\b/i,
-      'Delivery timing depends on the project scope, content readiness, integrations, feedback cycles and dependencies. The team should confirm milestones and acceptance criteria in a written proposal rather than estimate from a short chat message.'],
+      'For business and project enquiries, email service@grapecrux.com or use https://grapecrux.com/contact/. For careers applications, use https://grapecrux.com/careers/; the application draft is addressed to yaswanth@grapecrux.com.'],
     [/\b(certification|certified|iso|soc 2|accreditation|credentials)\b/i,
-      'The public website does not currently list independently verified ISO, SOC 2 or other formal certifications. I cannot confirm credentials that are not published. Please contact service@grapecrux.com for any current company documentation.'],
+      'The public website does not currently list independently verified ISO, SOC 2 or other formal certifications. I cannot confirm credentials that are not published. Please contact service@grapecrux.com for current company documentation.'],
     [/\b(hello|hi|hey|good morning|good afternoon)\b/i,
-      'Hello! I can explain GrapeCrux, its services, process, industries, public work examples, blogs and internship tracks. What would you like to understand first?']
+      'Hello! I can help explain GrapeCrux, services, project enquiries, work examples, blogs and current careers opportunities. What would you like to explore?']
   ];
+
+  const fallbacks = [
+    'I do not have a verified answer for that detail yet. I can still help with services (https://grapecrux.com/services/), work examples (https://grapecrux.com/work/), blogs (https://grapecrux.com/blogs/), careers (https://grapecrux.com/careers/) or a project enquiry (https://grapecrux.com/contact/). For a company-specific answer, email service@grapecrux.com.',
+    'That is outside the information I can confirm. Try asking about GrapeCrux services, current full-time roles, internship tracks, blog topics or how to start a project. You can also reach the team at service@grapecrux.com.',
+    'I do not want to guess. The website has dedicated pages for Services, Work, Blogs, Careers and Contact. Tell me which area you mean, or email service@grapecrux.com for a confirmed response.'
+  ];
+  let fallbackIndex = 0;
+
   window.GrapeCruxKnowledge = {
     answerFor(message) {
       const text = String(message || '').trim();
-      if (!text) return 'Please type a question about GrapeCrux or the services you are considering.';
+      if (!text) return 'Please type a question about GrapeCrux, our services, projects, blogs or careers opportunities.';
       for (const [pattern, answer] of answers) if (pattern.test(text)) return answer;
-      return 'I can help with GrapeCrux company information, Pune registered-office details, services, industries, project examples, testimonials, blogs, internships and enquiry steps. I do not have verified information beyond the published website. Please contact service@grapecrux.com or use the Contact page for company-specific questions.';
+      const answer = fallbacks[fallbackIndex % fallbacks.length];
+      fallbackIndex += 1;
+      return answer;
     }
   };
 })();

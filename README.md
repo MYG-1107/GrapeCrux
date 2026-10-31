@@ -1,59 +1,62 @@
-# GrapeCrux Website — Complete Redesign Package
+# GrapeCrux Website — Shared Layout & GA4 Update
 
-This is a static GitHub Pages website for GrapeCrux, presented as a digital, creative and AI solutions brand operated under Infinite Resource Creators Private Limited.
+This is a static GitHub Pages website for **GrapeCrux**, a creative initiative of **Infinite Resource Creators Private Limited**.
 
-## Included
+## Shared header and footer
 
-- Brighter forest-green, lime and warm-white visual system inspired by restrained European corporate design.
-- Homepage, About, Services, Industries & Use Cases, Work/Concepts, Insights, Contact, Privacy Notice and Terms.
-- Eight individual service pages: Web & App Development, AI & Automation, Product Design & UX, Brand Strategy & Visual Identity, Digital Growth & SEO, Cloud & DevOps, Data & System Integration, and Quality Assurance & Consulting.
-- Three standalone insight guides: Website Project Planning, AI Assistant Readiness, and Website Launch QA.
-- Clean directory-based URLs and legacy `.html` redirect pages.
-- Shared header/footer, mobile menu, local service assistant and optional FastAPI generative-AI backend.
-- Per-page title, description, canonical, Open Graph data; sitemap, robots.txt, 404 page and CNAME.
-- Project enquiry form with client-side validation, optional budget currency, and an honest `mailto:` workflow.
-- QA validator and release notes.
+The website now has a single source of truth for its shared navigation and footer:
 
-## Official logo asset
+- `includes/header.html` — edit this file to change the header/navigation across content pages.
+- `includes/footer.html` — edit this file to change the footer across content pages.
+- `assets/js/main.js` — fetches these fragments into each page's `#site-header` and `#site-footer` placeholders, then wires up active navigation and the mobile menu.
 
-The shared header, footer, chatbot avatar and favicon now use the original `grapecrux_brand_logo.png` from the repository instead of the stylised “G” symbol. The official PNG is loaded from the public GitHub raw URL, with the repository-root PNG as a first-party fallback.
+This is the correct pattern for a static GitHub Pages site: GitHub Pages does not process PHP/server-side includes. The fragments are fetched in the browser. Do not open pages by double-clicking them with `file://`; use a local HTTP server or the deployed site so browser `fetch()` can load the fragments.
 
-**The PNG itself is not duplicated inside this ZIP.** It already exists at the root of the current repository, so keep it when uploading this package. If you deploy the extracted site in a different repository, keep/copy that PNG into the new repository root. Source URL: `https://raw.githubusercontent.com/MYG-1107/GrapeCrux/main/grapecrux_brand_logo.png`.
+### Local preview
 
-## Deploy on GitHub Pages
+From the repository root run:
 
-1. Extract the ZIP.
-2. Back up the current repository or create a branch first.
-3. Upload the extracted folder contents to the root of `MYG-1107/GrapeCrux`; do not upload the containing folder as an extra nested directory.
-4. Keep `CNAME` set to `grapecrux.com` and preserve the original `grapecrux_brand_logo.png` repository asset.
-5. Confirm **Settings → Pages** publishes from `main` and the repository root.
-6. Test `https://grapecrux.com/`, all clean routes, legacy redirects, mobile navigation, the enquiry form and chatbot.
-7. Submit `https://grapecrux.com/sitemap.xml` in Search Console after verifying the canonical URLs.
+```bash
+python -m http.server 8000
+```
 
-## Clean URL design
+Then open `http://localhost:8000/`.
 
-Use URLs such as `/about/`, `/services/`, `/industries/`, `/services/ai-automation/`, `/insights/website-project-planning/`, `/contact/`, `/privacy/` and `/terms/`. Page files are placed in route directories as `index.html`. The homepage file must remain named `index.html` for GitHub Pages, but `assets/js/main.js` removes the visible `/index.html` path when JavaScript runs.
+## Google Analytics 4
 
-GitHub Pages does not support arbitrary server-side rewrite rules. Directory routing provides clean URLs; legacy redirect files are static/client-side redirects, not HTTP 301 server redirects.
+The Google tag supplied for this site is **G-QXMRMGJEP2**. The exact gtag.js loader and configuration snippet has been placed once in the `<head>` of every complete HTML page (29 page documents), including the 404 and legacy redirect pages. The two files in `includes/` are HTML fragments, not standalone pages, and correctly do not carry their own tag. It is intentionally **not** placed in `includes/header.html`: that fragment is inserted inside `<body>`, while Google recommends installing the tag high in each page's `<head>`.
 
-## Chatbot and form limitations
+Do not add another copy of the same tag to `main.js`, the footer, or `includes/header.html`, or page views may be duplicated. If new HTML pages are added, copy the existing snippet into their `<head>` once.
 
-By default, the chatbot is a browser-based guided service assistant, not a generative model. The optional FastAPI backend in `backend/` can call an AI model after separate deployment, configuration of `OPENAI_API_KEY` on the server, CORS setup and setting `window.GRAPECRUX_CHAT_API_URL` in `assets/js/config.js`. Never place secrets in frontend JavaScript.
+To test measurement:
 
-The contact form validates inputs and prepares an email in the visitor's email app. The site does not store or deliver form submissions server-side. For reliable lead tracking, configure a secure hosted form/backend service with validation, spam controls, retention rules and an updated privacy notice.
+1. Deploy the updated files.
+2. Open the site in a clean browser session and accept/reject any consent control if one is later implemented.
+3. In GA4 open **Reports → Realtime** or **Admin → DebugView** and browse several pages.
+4. Use Google's **Test installation** tool or Tag Assistant to confirm the `G-QXMRMGJEP2` tag is detected on the homepage and at least one nested page.
 
-## Repository coverage
+Note: this package adds the Google tag as requested. It does not implement a consent banner or Consent Mode. Review applicable privacy requirements for visitors in the EEA/UK and other relevant regions before using analytics; configure consent before measurement where required.
 
-The current package has 20 clean, indexable route pages: Home; About; Services overview; eight service details; Industries & Use Cases; Work & Concepts; Insights overview; three standalone insight guides; Contact; Privacy Notice; and Terms. The package also includes 8 legacy `.html` redirect pages and a 404 page.
+## Clean URLs and deployment
 
-## Before production launch
+Content pages use directory index files, for example `/about/index.html` is served as `/about/`. Root `.html` pages remain as compatibility redirects. Keep `CNAME` and `.nojekyll` when deploying to the repository root.
 
-- Verify the business legal name, approved company description, contact email and legal pages.
-- Confirm the service catalogue reflects what the company can actually deliver.
-- Replace concept mock-ups with approved work only when verified evidence is available.
-- Run the included validator, then test all links and forms in a browser across desktop/mobile sizes.
-- Run Lighthouse and inspect console/network errors. Static checks do not establish live hosting, performance or SEO rankings.
+GitHub Pages settings should publish from `main` and `/ (root)`. The repository contains a custom domain in `CNAME`.
 
-## Company profile and legal identity
+## Important deployment note
 
-GrapeCrux is presented as a creative initiative of **Infinite Resource Creators Private Limited**, not as a separate legal entity. The About page includes company details supplied by the company representative. Please verify the CIN, incorporation date and registered office against current official company records before publication. Update the Privacy and Terms pages to reflect the actual production data collection, form handling and chatbot configuration.
+Preserve the existing root file `grapecrux_brand_logo.png`. The shared header/footer reference that company logo file. This update package includes all site source and shared components; the logo file is retained from the existing repository rather than re-created.
+
+## Files of interest
+
+```text
+includes/
+  header.html              # shared header
+  footer.html              # shared footer
+assets/js/main.js          # include loader, nav, form and chat behaviour
+404.html                   # uses shared layout too
+sitemap.xml                # canonical public URLs
+robots.txt
+backend/                    # optional chatbot API (not required for GA4)
+AUDIT-AND-RELEASE-NOTES.md # QA findings and deployment checks
+```

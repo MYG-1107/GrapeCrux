@@ -1,5 +1,5 @@
 /* GrapeCrux front-end behaviour. The assistant is a local, rule-based guide; no API key or data backend is included. */
-(() => {
+(async () => {
   const isGithubPages = location.hostname === 'myg-1107.github.io';
   const base = isGithubPages ? '/GrapeCrux' : '';
   const withBase = (path) => `${base}${path.startsWith('/') ? path : `/${path}`}`;
@@ -16,44 +16,68 @@
   const sitePath = location.pathname.replace(/^\/GrapeCrux(?=\/|$)/, '') || '/';
   const normalPath = sitePath.endsWith('/') ? sitePath : `${sitePath}/`;
 
-  const navItems = [
-    ['Services','/services/'], ['Industries','/industries/'], ['Work','/work/'], ['About','/about/'], ['Insights','/insights/']
-  ];
-  const active = (path) => normalPath === path || (path !== '/' && normalPath.startsWith(path));
-  const header = document.getElementById('site-header');
-  if (header) {
-    header.innerHTML = `<div class="site-header"><div class="container nav-wrap"><a class="brand" href="/" aria-label="GrapeCrux home"><span class="brand-mark-wrap"><img class="brand-mark-img" src="https://raw.githubusercontent.com/MYG-1107/GrapeCrux/main/grapecrux_brand_logo.png" alt="" width="48" height="48" onerror="if(this.dataset.fallback){this.onerror=null;}else{this.dataset.fallback='1';this.src='${withBase('/grapecrux_brand_logo.png')}';}"></span><span class="brand-wordmark"><span>Grape</span><span class="brand-wordmark-accent">Crux</span></span></a><button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span></button><nav class="nav-links" id="primary-navigation" aria-label="Main navigation">${navItems.map(([name,path])=>`<a href="${withBase(path)}"${active(path)?' aria-current="page"':''}>${name}</a>`).join('')}<a class="btn btn-primary" href="${withBase('/contact/')}?service=Project%20enquiry">Start a project <span class="arrow" aria-hidden="true">↗</span></a></nav></div></div>`;
-    const toggle = header.querySelector('.menu-toggle');
-    const nav = header.querySelector('.nav-links');
-    toggle?.addEventListener('click', () => {
-      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!isOpen));
-      toggle.setAttribute('aria-label', isOpen ? 'Open navigation' : 'Close navigation');
-      nav?.classList.toggle('open', !isOpen);
+  // Load shared HTML fragments. On GitHub Pages the project site has the /GrapeCrux base path;
+  // on the custom domain it is served from /. Edit includes/header.html or includes/footer.html once
+  // and the change is reflected on every page that contains the corresponding placeholder.
+  const rebaseRootPaths = (scope) => {
+    if (!base) return;
+    scope.querySelectorAll('a[href^="/"], img[src^="/"], link[href^="/"], video[poster^="/"], source[srcset^="/"]').forEach((el) => {
+      const attr = el.tagName === 'VIDEO' ? 'poster' : (el.tagName === 'SOURCE' ? 'srcset' : (el.tagName === 'LINK' ? 'href' : (el.tagName === 'IMG' ? 'src' : 'href')));
+      const value = el.getAttribute(attr);
+      if (value && !value.startsWith('//') && !value.startsWith('/GrapeCrux/')) {
+        el.setAttribute(attr, withBase(value));
+      }
+    });
+  };
+
+  const loadSharedInclude = async (placeholderId, filePath) => {
+    const placeholder = document.getElementById(placeholderId);
+    if (!placeholder) return;
+    try {
+      const response = await fetch(withBase(filePath), { cache: 'no-cache' });
+      if (!response.ok) throw new Error(`HTTP ${response.status} loading ${filePath}`);
+      placeholder.innerHTML = await response.text();
+      rebaseRootPaths(placeholder);
+    } catch (error) {
+      console.error(`GrapeCrux shared include could not be loaded: ${filePath}`, error);
+    }
+  };
+
+  await Promise.all([
+    loadSharedInclude('site-header', '/includes/header.html'),
+    loadSharedInclude('site-footer', '/includes/footer.html')
+  ]);
+
+  // Rebase page-authored root links as well as links inside the shared fragments for GitHub Pages.
+  rebaseRootPaths(document);
+
+  // Highlight the current section and initialise the shared mobile navigation.
+  const navHeader = document.getElementById('site-header');
+  const navPath = location.pathname.replace(/^\/GrapeCrux(?=\/|$)/, '') || '/';
+  const normalNavPath = navPath.endsWith('/') ? navPath : `${navPath}/`;
+  navHeader?.querySelectorAll('[data-nav]').forEach((link) => {
+    const target = link.getAttribute('data-nav');
+    if (target && (normalNavPath === target || normalNavPath.startsWith(target))) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+
+  const toggleBtn = navHeader?.querySelector('.menu-toggle');
+  const navLinks = navHeader?.querySelector('.nav-links');
+  if (toggleBtn && navLinks) {
+    toggleBtn.addEventListener('click', () => {
+      const isOpen = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', String(!isOpen));
+      toggleBtn.setAttribute('aria-label', isOpen ? 'Open navigation' : 'Close navigation');
+      navLinks.classList.toggle('open', !isOpen);
       document.body.classList.toggle('menu-open', !isOpen);
     });
-    nav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      toggle?.setAttribute('aria-expanded','false'); nav.classList.remove('open'); document.body.classList.remove('menu-open');
+    navLinks.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.setAttribute('aria-label', 'Open navigation');
+      navLinks.classList.remove('open');
+      document.body.classList.remove('menu-open');
     }));
-  }
-
-  const footer = document.getElementById('site-footer');
-  if (footer) {
-    footer.innerHTML = `<footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><a class="brand footer-brand-lockup" href="${withBase('/')}" aria-label="GrapeCrux home"><span class="brand-mark-wrap"><img class="brand-mark-img" src="https://raw.githubusercontent.com/MYG-1107/GrapeCrux/main/grapecrux_brand_logo.png" alt="" width="48" height="48" onerror="if(this.dataset.fallback){this.onerror=null;}else{this.dataset.fallback='1';this.src='${withBase('/grapecrux_brand_logo.png')}';}"></span><span class="brand-wordmark"><span>Grape</span><span class="brand-wordmark-accent">Crux</span></span></a><p>Thoughtful design. Modern engineering. Practical digital solutions for businesses ready to move forward.</p><p class="small"><strong>Business enquiries</strong><br><a href="mailto:service@grapecrux.com">service@grapecrux.com</a></p></div><div class="footer-col"><h3>Explore</h3><ul><li><a href="${withBase('/about/')}">About GrapeCrux</a></li><li><a href="${withBase('/services/')}">Services</a></li><li><a href="${withBase('/industries/')}">Industries & use cases</a></li><li><a href="${withBase('/work/')}">Work & concepts</a></li><li><a href="${withBase('/insights/')}">Insights</a></li></ul></div><div class="footer-col"><h3>Capabilities</h3><ul><li><a href="${withBase('/services/web-development/')}">Web & app development</a></li><li><a href="${withBase('/services/ai-automation/')}">AI & automation</a></li><li><a href="${withBase('/services/product-design/')}">Product design</a></li><li><a href="${withBase('/services/digital-growth/')}">Digital growth</a></li></ul></div><div class="footer-col"><h3>Let's talk</h3><ul><li><a href="${withBase('/contact/')}">Start a project</a></li><li><a href="mailto:service@grapecrux.com">Email the team</a></li><li><a href="${withBase('/services/cloud-devops/')}">Cloud & DevOps</a></li><li><a href="${withBase('/services/quality-assurance/')}">QA & consulting</a></li></ul></div></div><div class="footer-bottom"><p>© ${new Date().getFullYear()} GrapeCrux. Operated under Infinite Resource Creators Private Limited.</p><div class="legal-links"><a href="${withBase('/privacy/')}">Privacy notice</a><a href="${withBase('/terms/')}">Terms</a></div><p>Built with clarity and care.</p></div></div></footer>`;
-  }
-
-  // Rebase any authored root links for the GitHub Pages project URL; custom domain remains root-based.
-  if (base) {
-    document.querySelectorAll('a[href^="/"]').forEach(a => {
-      const href = a.getAttribute('href');
-      if (href && !href.startsWith('//') && !href.startsWith('/GrapeCrux/')) a.setAttribute('href', withBase(href));
-    });
-    // The project site lives below /GrapeCrux/ on github.io, unlike the custom domain.
-    document.querySelectorAll('img[src^="/"], video[poster^="/"], source[srcset^="/"], link[rel~="icon"][href^="/"]').forEach(el => {
-      const attr = el.tagName === 'VIDEO' ? 'poster' : (el.tagName === 'SOURCE' ? 'srcset' : (el.tagName === 'LINK' ? 'href' : 'src'));
-      const value = el.getAttribute(attr);
-      if (value && !value.startsWith('//') && !value.startsWith('/GrapeCrux/')) el.setAttribute(attr, withBase(value));
-    });
   }
 
   // Turn contact parameters into helpful form defaults.

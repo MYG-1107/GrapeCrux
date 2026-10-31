@@ -87,7 +87,8 @@ def route_target(url_path: str) -> Path:
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
-    pages = sorted(ROOT.rglob("*.html"))
+    # The shared header/footer are HTML fragments, not standalone page documents.
+    pages = sorted(path for path in ROOT.rglob("*.html") if "includes" not in path.relative_to(ROOT).parts)
     canonical_seen: dict[str, Path] = {}
     indexable = 0
     noindex = 0
@@ -104,7 +105,22 @@ def main() -> int:
             errors.append(f"{page.relative_to(ROOT)}: could not parse HTML: {exc}")
             continue
 
+        # Every complete page must contain the GA4 tag exactly once inside <head>.
+        loader = "https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"
+        config = "gtag('config', 'G-QXMRMGJEP2')"
+        head_match = re.search(r"<head\b[^>]*>([\s\S]*?)</head>", source, re.I)
+        if source.count(loader) != 1 or source.count(config) != 1:
+            errors.append(f"{page.relative_to(ROOT)}: Google tag loader/config must appear exactly once")
+        if not head_match or loader not in head_match.group(1) or config not in head_match.group(1):
+            errors.append(f"{page.relative_to(ROOT)}: Google tag must be installed inside <head>")
+
         is_noindex = "noindex" in parser.metas.get("robots", "").lower()
+        if not is_noindex or page.name == "404.html":
+            if 'id="site-header"' not in source or 'id="site-footer"' not in source:
+                errors.append(f"{page.relative_to(ROOT)}: shared header/footer placeholders are required")
+            if "assets/js/main.js" not in source:
+                errors.append(f"{page.relative_to(ROOT)}: shared include loader script is missing")
+
         if is_noindex:
             noindex += 1
         else:
@@ -132,7 +148,12 @@ def main() -> int:
                 continue
             target = local_path(page, asset)
             if target is not None and not target.exists():
-                errors.append(f"{page.relative_to(ROOT)}: missing local {role} target {asset}")
+                # The logo is intentionally retained from the current repository instead of
+                # duplicated in this overlay ZIP. Users must keep grapecrux_brand_logo.png.
+                if urlparse(asset).path.lstrip("/") == "grapecrux_brand_logo.png":
+                    warnings.append(f"{page.relative_to(ROOT)}: keep existing repository asset {asset} when uploading this overlay")
+                else:
+                    errors.append(f"{page.relative_to(ROOT)}: missing local {role} target {asset}")
 
         for href in parser.links:
             if href.startswith("/") and not href.startswith("//"):
@@ -150,6 +171,16 @@ def main() -> int:
         for fragment, original in parser.fragment_links:
             if fragment not in parser.ids:
                 warnings.append(f"{page.relative_to(ROOT)}: missing fragment target {original}")
+
+    for include_name in ("header.html", "footer.html"):
+        include_path = ROOT / "includes" / include_name
+        if not include_path.exists():
+            errors.append(f"missing shared include: includes/{include_name}")
+
+    # The existing brand PNG is kept in the user's current repository and is not duplicated
+    # in this overlay archive. Flag it clearly if this package is tested in isolation.
+    if not (ROOT / "grapecrux_brand_logo.png").exists():
+        warnings.append("grapecrux_brand_logo.png is retained from the current repository; preserve it when uploading this overlay")
 
     sitemap_urls: list[str] = []
     sitemap = ROOT / "sitemap.xml"

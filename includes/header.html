@@ -1,19 +1,22 @@
-<!-- Header Component -->
-<header class="navbar">
-    <div class="container nav-container">
-        <a href="index.html" class="logo-link">
-            <img src="grapecrux_brand_logo.png" alt="GrapeCrux Logo" class="brand-logo" onerror="this.onerror=null; this.src='assets/images/grapecrux_brand_logo.png';">
-        </a>
-        <nav class="nav-links">
-            <a href="index.html#about">About</a>
-            <a href="index.html#services">Services</a>
-            <a href="index.html#capabilities">Expertise</a>
-            <a href="index.html#contact" class="btn btn-primary">Get in Touch</a>
-        </nav>
-        <button class="mobile-menu-toggle" aria-label="Toggle Navigation">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </div>
+<!-- Shared GrapeCrux header. Edit this file to update the navigation on every content page. -->
+<header class="site-header" id="gc-site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="/" aria-label="GrapeCrux home">
+      <span class="brand-mark-wrap">
+        <img class="brand-mark-img" src="/grapecrux_brand_logo.png" alt="GrapeCrux symbol" width="48" height="48">
+      </span>
+      <span class="brand-wordmark"><span>Grape</span><span class="brand-wordmark-accent">Crux</span></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="primary-navigation">
+      <span></span><span></span>
+    </button>
+    <nav class="nav-links" id="primary-navigation" aria-label="Main navigation">
+      <a href="/services/" data-nav="/services/">Services</a>
+      <a href="/industries/" data-nav="/industries/">Industries</a>
+      <a href="/work/" data-nav="/work/">Work</a>
+      <a href="/about/" data-nav="/about/">About</a>
+      <a href="/insights/" data-nav="/insights/">Insights</a>
+      <a class="btn btn-primary" href="/contact/?service=Project%20enquiry">Start a project <span class="arrow" aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
 </header>

@@ -48,6 +48,9 @@
     loadSharedInclude('site-footer', '/includes/footer.html')
   ]);
 
+  // The year element is inside the asynchronously loaded shared footer.
+  document.querySelectorAll('[data-current-year]').forEach((el) => { el.textContent = String(new Date().getFullYear()); });
+
   // Rebase page-authored root links as well as links inside the shared fragments for GitHub Pages.
   rebaseRootPaths(document);
 
@@ -115,10 +118,52 @@
     window.location.href = mailto;
   });
 
+  // Internship applications are email-prepared; no CV or personal data is stored by this static site.
+  const careersForm = document.getElementById('careers-form');
+  if (careersForm) careersForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!careersForm.reportValidity()) return;
+    const data = new FormData(careersForm);
+    const role = data.get('role') || 'Internship application';
+    const body = [
+      `Applicant: ${data.get('name') || ''}`,
+      `Email: ${data.get('email') || ''}`,
+      `Phone (optional): ${data.get('phone') || 'Not provided'}`,
+      `Role: ${role}`,
+      `Education/status: ${data.get('education') || ''}`,
+      `Portfolio/GitHub/LinkedIn: ${data.get('links') || 'Not provided'}`,
+      '', 'Why this role:', data.get('message') || '', '',
+      'I will attach my resume before sending this email.'
+    ].join('\n');
+    const subject = `[GrapeCrux internship application] ${role}`;
+    const status = document.getElementById('careers-form-status');
+    if (status) { status.textContent = 'Your email application should open in your email app. Attach your resume, review the details and send it to service@grapecrux.com. This website does not store applications.'; status.classList.add('show'); }
+    window.location.href = `mailto:service@grapecrux.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+
+  // Role cards pre-select the application form track and move keyboard focus to it.
+  document.querySelectorAll('.apply-role[data-role]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const roleSelect = document.querySelector('#careers-form [name="role"]');
+      if (!roleSelect) return;
+      const requested = button.getAttribute('data-role') || '';
+      const match = Array.from(roleSelect.options).find((option) =>
+        option.value.trim().toLowerCase() === requested.trim().toLowerCase() ||
+        option.text.trim().toLowerCase() === requested.trim().toLowerCase()
+      );
+      if (match) {
+        roleSelect.value = match.value;
+        roleSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        roleSelect.focus();
+        roleSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  });
+
   // Accessible client-side service assistant. It never pretends to provide confirmed pricing or human support.
   const chatbot = document.getElementById('gc-chatbot');
   if (chatbot) {
-    chatbot.innerHTML = `<button class="chat-launcher" type="button" aria-expanded="false" aria-controls="gc-chat-panel"><span class="chat-bubble-icon" aria-hidden="true">✳</span><span>Ask GrapeCrux</span></button><section class="chat-panel" id="gc-chat-panel" aria-label="GrapeCrux service assistant" aria-hidden="true"><div class="chat-head"><span class="chat-avatar" aria-hidden="true"><img src="https://raw.githubusercontent.com/MYG-1107/GrapeCrux/main/grapecrux_brand_logo.png" alt="" width="38" height="38" onerror="if(this.dataset.fallback){this.onerror=null;}else{this.dataset.fallback='1';this.src='${withBase('/grapecrux_brand_logo.png')}';}"></span><div><strong>GrapeCrux Assistant</strong><small>Service guidance · Replies instantly</small></div><button class="chat-close" type="button" aria-label="Close assistant">×</button></div><div class="chat-messages" role="log" aria-live="polite" aria-relevant="additions text"><div class="chat-msg bot">Hello! I can help you explore GrapeCrux services, understand next steps or prepare a project enquiry. What are you looking to build?</div></div><div class="chat-quick"><button type="button" data-chat="Explore services">Explore services</button><button type="button" data-chat="I need a website">Build a website</button><button type="button" data-chat="Tell me about AI automation">AI automation</button><button type="button" data-chat="I want to start a project">Start a project</button></div><form class="chat-form"><label class="sr-only" for="gc-chat-input">Your message</label><input id="gc-chat-input" name="message" autocomplete="off" placeholder="Tell us what you need…" maxlength="500" required><button type="submit" aria-label="Send message">↑</button></form><div class="chat-footnote">Guided assistant · No pricing or project commitments are confirmed here.</div></section>`;
+    chatbot.innerHTML = `<button class="chat-launcher" type="button" aria-expanded="false" aria-controls="gc-chat-panel"><span class="chat-bubble-icon" aria-hidden="true">✳</span><span>Ask GrapeCrux</span></button><section class="chat-panel" id="gc-chat-panel" aria-label="GrapeCrux service assistant" aria-hidden="true"><div class="chat-head"><span class="chat-avatar" aria-hidden="true"><img src="https://raw.githubusercontent.com/MYG-1107/GrapeCrux/main/grapecrux_brand_logo.png" alt="" width="38" height="38" onerror="if(this.dataset.fallback){this.onerror=null;}else{this.dataset.fallback='1';this.src='${withBase('/grapecrux_brand_logo.png')}';}"></span><div><strong>GrapeCrux Assistant</strong><small>Guided service information · Instant replies</small></div><button class="chat-close" type="button" aria-label="Close assistant">×</button></div><div class="chat-messages" role="log" aria-live="polite" aria-relevant="additions text"><div class="chat-msg bot">Hello! I can explain what GrapeCrux does, where the company is based, how projects are approached, and which services or internship tracks are listed. I am a guided FAQ assistant, not a human agent. What would you like to know?</div></div><div class="chat-quick"><button type="button" data-chat="Explore services">Explore services</button><button type="button" data-chat="I need a website">Build a website</button><button type="button" data-chat="Tell me about AI automation">AI automation</button><button type="button" data-chat="I want to start a project">Start a project</button></div><form class="chat-form"><label class="sr-only" for="gc-chat-input">Your message</label><input id="gc-chat-input" name="message" autocomplete="off" placeholder="Tell us what you need…" maxlength="500" required><button type="submit" aria-label="Send message">↑</button></form><div class="chat-footnote">Guided FAQ assistant · Not a human agent. Pricing and scope require team confirmation.</div></section>`;
     const launch = chatbot.querySelector('.chat-launcher');
     const panel = chatbot.querySelector('.chat-panel');
     const messages = chatbot.querySelector('.chat-messages');
@@ -129,24 +174,9 @@
     const toggleChat = (open) => { panel.classList.toggle('open', open); panel.setAttribute('aria-hidden', String(!open)); launch.setAttribute('aria-expanded', String(open)); if(open) input.focus(); else launch.focus(); };
     launch.addEventListener('click', () => toggleChat(!panel.classList.contains('open')));
     close.addEventListener('click', () => toggleChat(false));
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && panel.classList.contains('open')) toggleChat(false); });
     const addMessage = (text, who='bot', allowHtml=false) => { const div=document.createElement('div'); div.className=`chat-msg ${who}`; if(allowHtml) div.innerHTML=text; else div.textContent=text; messages.appendChild(div); messages.scrollTop=messages.scrollHeight; };
-    const answerFor = (raw) => {
-      const m = raw.toLowerCase();
-      if (/price|pricing|cost|budget|quote|how much/.test(m)) return 'Project cost depends on scope, integrations, content, design complexity and delivery timeline. I can’t confirm a price here. Share a short brief through the project enquiry form and the team can review it.';
-      if (/website|web development|e-commerce|ecommerce|portal|app|application/.test(m)) return 'Our Web & App Development service can cover responsive corporate websites, product interfaces, business portals, e-commerce experiences and API integrations. The next step is to define your audience, must-have features and success criteria.';
-      if (/ai|chatbot|automation|agent|llm|workflow/.test(m)) return 'AI & Automation can include service assistants, internal knowledge tools, document workflows and integrations with business systems. A production AI assistant needs a secure backend, a reviewed knowledge source and privacy controls; each project should be scoped to its use case.';
-      if (/design|ux|ui|prototype|wireframe|experience/.test(m)) return 'Product Design covers discovery, user journeys, wireframes, clickable prototypes, design systems and interface handoff. We start by clarifying the user, the task they need to complete and the business outcome.';
-      if (/brand|logo|identity|visual/.test(m)) return 'Brand Strategy & Visual Identity can include positioning, visual direction, logo systems, brand guidelines and digital collateral. The first step is understanding your market, audience and how you want the brand to be perceived.';
-      if (/seo|marketing|growth|traffic|search/.test(m)) return 'Digital Growth can include technical SEO, content planning, analytics and conversion optimisation. Rankings or traffic increases can’t be guaranteed; the work starts with an audit, a baseline and realistic priorities.';
-      if (/cloud|devops|deploy|hosting|infrastructure|pipeline/.test(m)) return 'Cloud & DevOps can cover deployment automation, CI/CD, monitoring, infrastructure planning and reliability improvements. The right scope depends on your current stack, hosting and availability requirements.';
-      if (/test|qa|quality|bug|audit/.test(m)) return 'Quality Assurance & Technical Consulting can cover functional testing, responsive checks, accessibility review, performance checks and release readiness. We can help define the highest-risk user journeys first.';
-      if (/integration|api|data|dashboard|database/.test(m)) return 'Data & Integration work can include API connections, database-backed features, data processing and business dashboards. It helps to list the systems involved and which information must move between them.';
-      if (/process|how do you work|steps|timeline/.test(m)) return 'A typical engagement follows six steps: discover the need, agree on scope, design the approach, build the solution, validate and launch, then improve under an agreed support plan. Timelines depend on the final scope.';
-      if (/contact|email|talk|human|team|project|start/.test(m)) return 'You can start an enquiry through the contact form. It collects a short project brief and prepares an email to service@grapecrux.com; your email app will need to send it. No enquiry is stored by this static page.';
-      if (/service|offer|help|capabilit/.test(m)) return 'GrapeCrux presents services across web & app development, AI & automation, product design, branding, digital growth & SEO, cloud & DevOps, data integrations, and quality assurance. Tell me which challenge you’re working on and I’ll point you to a relevant service.';
-      if (/hello|hi|hey|good morning|good afternoon/.test(m)) return 'Hello! Tell me a little about your business challenge, or choose a quick option below. I can help you explore services and prepare an enquiry.';
-      return 'I can help with service selection and general project guidance, but I don’t have verified details about every company-specific question. Try asking about web development, AI automation, product design, branding, SEO, cloud, QA or project enquiries.';
-    };
+    const answerFor = (raw) => window.GrapeCruxKnowledge?.answerFor(raw) || 'I can help with published GrapeCrux services and project enquiries. Please contact service@grapecrux.com for details I cannot verify.';
     const serviceFor = (raw) => { const m=raw.toLowerCase(); if(/ai|chatbot|automation|agent/.test(m)) return 'AI & Automation'; if(/website|web development|e-commerce|app|portal/.test(m)) return 'Web & App Development'; if(/design|ux|ui|prototype/.test(m)) return 'Product Design & UX'; if(/brand|logo|identity/.test(m)) return 'Brand Strategy & Visual Identity'; if(/seo|marketing|growth|search/.test(m)) return 'Digital Growth & SEO'; if(/cloud|devops|hosting|pipeline/.test(m)) return 'Cloud & DevOps'; if(/qa|test|bug|quality/.test(m)) return 'Quality Assurance & Consulting'; if(/api|integration|data|dashboard/.test(m)) return 'Data & System Integration'; return 'Project enquiry'; };
     const chatHistory = [];
     const chatApiUrl = String(window.GRAPECRUX_CHAT_API_URL || '').trim().replace(/\/+$/, '');
@@ -192,6 +222,43 @@
       }
     }));
   }
+
+  // Analytics consent: GA4 is configured with denied defaults in the page head.
+  // A page_view is sent only after the visitor opts into analytics measurement.
+  const CONSENT_KEY = 'gc-analytics-consent-v1';
+  const consentRoot = document.createElement('section');
+  consentRoot.className = 'consent-banner';
+  consentRoot.id = 'gc-consent-banner';
+  consentRoot.setAttribute('aria-label', 'Analytics preferences');
+  consentRoot.hidden = true;
+  consentRoot.innerHTML = `<div class="consent-copy"><strong>Privacy preferences</strong><p>GrapeCrux uses Google Analytics to understand aggregate website usage and improve the experience. Optional analytics measurement is off unless you allow it. Read our <a href="${withBase('/privacy/')}">privacy notice</a>.</p></div><div class="consent-actions"><button type="button" class="btn btn-secondary consent-reject">Reject optional analytics</button><button type="button" class="btn btn-primary consent-accept">Allow analytics</button></div>`;
+  document.body.appendChild(consentRoot);
+  const updateAnalyticsConsent = (choice) => {
+    try { localStorage.setItem(CONSENT_KEY, choice); } catch (_error) {}
+    if (typeof window.gtag === 'function') {
+      window.gtag('consent', 'update', {
+        analytics_storage: choice === 'granted' ? 'granted' : 'denied',
+        ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied'
+      });
+      if (choice === 'granted') {
+        window.gtag('event', 'page_view', { page_title: document.title, page_location: location.href, page_path: location.pathname });
+      }
+    }
+    consentRoot.hidden = true;
+  };
+  let storedConsent = null;
+  try { storedConsent = localStorage.getItem(CONSENT_KEY); } catch (_error) {}
+  if (storedConsent === 'granted' || storedConsent === 'denied') {
+    if (storedConsent === 'granted' && typeof window.gtag === 'function') {
+      window.gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+      window.gtag('event', 'page_view', { page_title: document.title, page_location: location.href, page_path: location.pathname });
+    }
+  } else {
+    consentRoot.hidden = false;
+  }
+  consentRoot.querySelector('.consent-accept')?.addEventListener('click', () => updateAnalyticsConsent('granted'));
+  consentRoot.querySelector('.consent-reject')?.addEventListener('click', () => updateAnalyticsConsent('denied'));
+  document.querySelectorAll('[data-open-consent]').forEach(button => button.addEventListener('click', () => { consentRoot.hidden = false; }));
 
   // Mark decorative reveals for browsers that support reduced-motion-aware CSS.
   document.querySelectorAll('.service-card,.benefit,.process-card,.concept-card,.article-card').forEach((el,i)=>{el.classList.add('reveal');if(i%4===1)el.classList.add('delay-1');if(i%4===2)el.classList.add('delay-2');if(i%4===3)el.classList.add('delay-3');});

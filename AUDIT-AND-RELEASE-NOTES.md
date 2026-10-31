@@ -1,43 +1,40 @@
-# GrapeCrux — GA4 & Shared Header/Footer Release Notes
+# GrapeCrux — QA and Content Release Notes
 
-## Changes made
+**Release date:** 31 October 2026  
+**Scope:** client-perspective content audit, chatbot QA, blog expansion, internship careers page, shared layout and analytics verification.
 
-1. Added `includes/header.html` and `includes/footer.html` as single-source shared fragments.
-2. Refactored `assets/js/main.js` to load the fragments into `#site-header` and `#site-footer` on the content pages, including the 404 page.
-3. Moved all header/footer markup out of JavaScript string templates. Header/footer text, links and layout are now edited in the two include files.
-4. Preserved responsive navigation and added active navigation state after the header include loads.
-5. Added the supplied GA4 Google tag `G-QXMRMGJEP2` to the `<head>` of all 29 complete HTML page documents exactly once per page.
-6. Updated `404.html` to use the shared header/footer and the existing site design.
-7. Preserved existing service pages, content pages, clean URL directory structure, SEO metadata, sitemap, robots rules, CNAME and chatbot code.
+## Release changes
 
-## Google tag placement
+- Added a Blogs hub and six original service-aligned articles with primary-source/read-more resources, unique SEO metadata, canonical URLs, Open Graph data and BlogPosting schema.
+- Added Careers with seven remote three-month internship tracks across software development, AI/ML, data analytics, QA/test automation, UI/UX, cloud/DevOps and business/digital marketing.
+- Marked the ₹5,000–₹10,000 monthly stipend as indicative and subject to written offer; added confirmation requirements for seats, schedule, mentor and dates.
+- Connected each Careers card's Apply button to the matching role in the form.
+- Expanded the deterministic FAQ assistant to answer company identity, legal relationship, registered office, services, industries, concept-only portfolio, no published verified testimonials, pricing limits, no SEO ranking guarantees, blogs, internship terms and contact handling.
+- Explicitly disclosed that the current website assistant is a curated FAQ, not a human representative or live generative AI model.
+- Repaired assistant script references, included the GA4 consent configuration on Blogs and Careers, kept the Google tag in each page `<head>`, and left header/footer content in shared include files.
+- Updated Privacy wording to describe the current GA4 consent behaviour and mailto-only forms; clarified that GrapeCrux is a brand initiative of Infinite Resource Creators Private Limited.
+- Updated Work page messaging to say that its examples are concepts and that the site does not currently publish verified case studies or testimonials.
+- Updated the shared footer year after the footer fragment loads.
 
-The tag is in each HTML `<head>` because `includes/header.html` is fetched and inserted inside the page `<body>`. Placing the gtag snippet in the body-level header include would not follow Google's recommended installation placement. All future HTML pages must carry the snippet once in their own `<head>`.
+## Automated QA summary
 
-## Layout include loading
+- 37 HTML documents scanned.
+- 29 full content pages with shared header/footer placeholders.
+- 28 canonical, indexable routes in sitemap.
+- 0 static validation errors and 0 warnings.
+- Chatbot knowledge tests: 23/23 passed.
+- Main JavaScript and assistant knowledge module: syntax checks passed.
+- Optional backend Python compile check: passed.
 
-The header/footer fragments are fetched at runtime from `/includes/header.html` and `/includes/footer.html`. `main.js` adds `/GrapeCrux` to asset and link paths only when hosted on `myg-1107.github.io`; custom-domain paths remain root-based.
+Full findings and the manual post-deployment test plan are in `QA-TEST-REPORT.md`.
 
-Legacy root `.html` documents are redirect stubs; they redirect visitors to canonical directory URLs and do not display a content layout. The canonical destination pages all use the shared header/footer.
+## Known limitations / approval items
 
-## Static QA performed
-
-- Verified all 29 complete HTML page documents (including 404 and legacy redirects) include `G-QXMRMGJEP2` exactly once. Shared fragments in `includes/` are not standalone pages and do not carry a separate tag.
-- Verified canonical content pages include both `#site-header` and `#site-footer` placeholders.
-- Verified 404 page uses the shared header/footer loader.
-- Verified shared fragments exist at `includes/header.html` and `includes/footer.html`.
-- Verified no duplicate hard-coded header/footer template remains in `main.js`.
-- Verified the main JavaScript parses with Node.js syntax checker.
-- Verified all root navigation hrefs in shared fragments are compatible with custom domain and GitHub Pages project path rebasing.
-
-## Tests still required after deployment
-
-- Use Tag Assistant / GA4 Realtime to confirm the measurement ID receives page views on `/`, `/about/`, `/services/`, and at least one nested service URL.
-- Verify network requests for `/includes/header.html` and `/includes/footer.html` return HTTP 200.
-- Test desktop and mobile navigation and current-page highlighting.
-- Confirm the `grapecrux_brand_logo.png` asset is preserved in the repository root and loads from both the custom domain and GitHub Pages fallback.
-- Review privacy disclosure and consent requirements. Consent Mode is not configured by this package.
-
-## Limitation
-
-The live site could not be independently fetched through the available browser inspection service during this run. The audit and changes were based on the current `main` branch source tree and its actual HTML/JS/CSS files. Static checks do not prove the deployed site or real-time analytics stream is working; the post-deployment checks above are necessary.
+- The root `grapecrux_brand_logo.png` is retained in the existing repository and is not duplicated in this archive. Preserve it during upload.
+- Contact and internship forms prepare `mailto:` messages; they do not persist data or submit to a CRM. A server-side lead/application workflow is a future enhancement.
+- The chatbot is a local rules-based FAQ. A live generative assistant requires separate backend hosting, secure secret configuration, model evaluation and privacy review.
+- The Work page has concept directions, not verified public client case studies or testimonials. Do not invent proof.
+- Internship stipend/schedule/slots are indicative and must be approved in the written offer before announcing confirmed vacancies.
+- Privacy and terms pages should be reviewed against the company's actual processes and applicable laws.
+- SEO improvements do not guarantee indexing or a top ranking. Search Console verification and post-deployment monitoring remain necessary.
+- The live domain could not be fetched by the available browser/network tools in this run. Live visual checks, actual GA4 Realtime events, mail-client handoff and Lighthouse/Core Web Vitals scores remain post-deployment checks.

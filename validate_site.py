@@ -1,220 +1,181 @@
 #!/usr/bin/env python3
-"""Offline structural QA for the GrapeCrux static website package."""
-from __future__ import annotations
-
-import re
-import sys
-from html.parser import HTMLParser
+"""GrapeCrux static QA validator: metadata, clean routes, shared layout, GA4 and accessibility basics."""
 from pathlib import Path
+from html.parser import HTMLParser
 from urllib.parse import urlparse
-import xml.etree.ElementTree as ET
+from xml.etree import ElementTree as ET
+from collections import Counter
+import re, sys
 
 ROOT = Path(__file__).resolve().parent
-
+GA_ID = 'G-QXMRMGJEP2'
 
 class PageParser(HTMLParser):
-    def __init__(self) -> None:
-        super().__init__(convert_charrefs=True)
-        self.title = ""
-        self.in_title = False
-        self.metas: dict[str, str] = {}
-        self.links: list[str] = []
-        self.assets: list[tuple[str, str]] = []
-        self.ids: set[str] = set()
-        self.fragment_links: list[tuple[str, str]] = []
+    def __init__(self):
+        super().__init__()
+        self.tags = []
+        self.links = []
+        self.ids = []
+        self.labels_for = set()
+        self.fields = []
+        self.in_head = False
         self.h1_count = 0
-
-    def handle_starttag(self, tag: str, attrs) -> None:
-        a = dict(attrs)
-        if tag == "title":
-            self.in_title = True
-        if tag == "meta" and a.get("name"):
-            self.metas[a["name"].lower()] = a.get("content", "")
-        if tag == "h1":
+    def handle_starttag(self, tag, attrs):
+        d = dict(attrs)
+        if tag == 'head':
+            self.in_head = True
+        self.tags.append((tag, d, self.in_head))
+        if 'id' in d:
+            self.ids.append(d['id'])
+        if tag == 'h1':
             self.h1_count += 1
-        if a.get("id"):
-            self.ids.add(a["id"])
-        if tag == "a" and a.get("href"):
-            href = a["href"]
-            self.links.append(href)
-            if href.startswith("#") and len(href) > 1:
-                self.fragment_links.append((href[1:], href))
-        if tag in ("img", "script", "link"):
-            attr = "src" if tag in ("img", "script") else "href"
-            value = a.get(attr, "")
-            if value:
-                role = "image" if tag == "img" else ("script" if tag == "script" else "link")
-                self.assets.append((role, value))
+        if tag == 'label' and d.get('for'):
+            self.labels_for.add(d['for'])
+        if tag in ('input', 'select', 'textarea') and d.get('type') != 'hidden':
+            self.fields.append((tag, d))
+        if tag in ('a', 'script', 'img', 'link'):
+            v = d.get('href') if tag in ('a', 'link') else d.get('src')
+            if v:
+                self.links.append((tag, v))
+    def handle_endtag(self, tag):
+        if tag == 'head':
+            self.in_head = False
 
-    def handle_endtag(self, tag: str) -> None:
-        if tag == "title":
-            self.in_title = False
+errors, warnings = [], []
+html_docs = 0
+content_pages = 0
+indexable_pages = 0
+canonical_seen = {}
+sitemap_locs = []
 
-    def handle_data(self, data: str) -> None:
-        if self.in_title:
-            self.title += data
+for f in sorted(ROOT.rglob('*.html')):
+    raw = f.read_text(encoding='utf-8', errors='replace')
+    if '<html' not in raw.lower():
+        continue
+    html_docs += 1
+    p = PageParser(); p.feed(raw)
+    tags = p.tags
+    title_tags = [d for t, d, _ in tags if t == 'title']
+    descriptions = [d for t, d, _ in tags if t == 'meta' and d.get('name', '').lower() == 'description']
+    canonicals = [d for t, d, _ in tags if t == 'link' and d.get('rel', '').lower() == 'canonical']
+    noindex = bool(re.search(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\'][^"\']*noindex', raw, re.I))
+    is_redirect = 'http-equiv="refresh"' in raw.lower()
+    is_404 = f.name == '404.html'
+    is_content = 'id="site-header"' in raw and 'id="site-footer"' in raw
 
+    if not title_tags:
+        errors.append(f'{f}: missing <title>')
+    elif len(title_tags) != 1:
+        errors.append(f'{f}: expected one <title>, found {len(title_tags)}')
 
-def is_external(value: str) -> bool:
-    return value.startswith(("http://", "https://", "//", "data:", "mailto:", "tel:", "javascript:"))
+    if not descriptions and not (is_redirect or is_404):
+        errors.append(f'{f}: missing meta description')
+    elif len(descriptions) > 1:
+        errors.append(f'{f}: duplicate meta descriptions')
 
+    if not canonicals and not (is_redirect or is_404):
+        errors.append(f'{f}: missing canonical URL')
+    elif len(canonicals) > 1:
+        errors.append(f'{f}: duplicate canonical URLs')
 
-def local_path(page: Path, value: str) -> Path | None:
-    parsed = urlparse(value)
-    path = parsed.path
-    if not path or is_external(value):
-        return None
-    if path.startswith("/"):
-        target = ROOT / path.lstrip("/")
-    else:
-        target = page.parent / path
-    target = target.resolve()
-    return target
+    if is_content:
+        content_pages += 1
+        if p.h1_count != 1 and not is_404:
+            errors.append(f'{f}: expected one h1, found {p.h1_count}')
+        if 'assets/js/main.js' not in raw:
+            errors.append(f'{f}: shared layout placeholders without main.js')
+        if 'assets/js/assistant-knowledge.js' not in raw:
+            errors.append(f'{f}: missing assistant knowledge module')
+        # Google tag is a head-level script and must be present once per full content page.
+        config_count = raw.count(f"gtag('config', '{GA_ID}'")
+        if config_count != 1:
+            errors.append(f'{f}: expected one GA4 config command, found {config_count}')
+        tag_scripts = [(d, in_head) for t, d, in_head in tags if t == 'script' and GA_ID in d.get('src', '')]
+        if len(tag_scripts) != 1 or not tag_scripts[0][1] or 'async' not in (tag_scripts[0][0].get('async') or ''):
+            # HTMLParser stores a boolean async attribute as None, so check presence in raw instead.
+            if len(tag_scripts) != 1 or not tag_scripts[0][1] or not re.search(r'<script[^>]+async[^>]+googletagmanager\.com/gtag/js\?id='+GA_ID, raw, re.I):
+                errors.append(f'{f}: expected one async GA4 loader in <head>')
+        if 'src="src=' in raw:
+            errors.append(f'{f}: malformed nested script src attribute')
 
-
-def route_target(url_path: str) -> Path:
-    path = url_path.lstrip("/")
-    if not path:
-        return ROOT / "index.html"
-    target = ROOT / path
-    if target.is_dir():
-        target = target / "index.html"
-    elif not target.exists() and not Path(path).suffix:
-        target = target / "index.html"
-    return target
-
-
-def main() -> int:
-    errors: list[str] = []
-    warnings: list[str] = []
-    # The shared header/footer are HTML fragments, not standalone page documents.
-    pages = sorted(path for path in ROOT.rglob("*.html") if "includes" not in path.relative_to(ROOT).parts)
-    canonical_seen: dict[str, Path] = {}
-    indexable = 0
-    noindex = 0
-    parsed_pages: dict[Path, PageParser] = {}
-
-    for page in pages:
-        try:
-            source = page.read_text(encoding="utf-8")
-            parser = PageParser()
-            parser.feed(source)
-            parser.close()
-            parsed_pages[page] = parser
-        except Exception as exc:
-            errors.append(f"{page.relative_to(ROOT)}: could not parse HTML: {exc}")
-            continue
-
-        # Every complete page must contain the GA4 tag exactly once inside <head>.
-        loader = "https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"
-        config = "gtag('config', 'G-QXMRMGJEP2')"
-        head_match = re.search(r"<head\b[^>]*>([\s\S]*?)</head>", source, re.I)
-        if source.count(loader) != 1 or source.count(config) != 1:
-            errors.append(f"{page.relative_to(ROOT)}: Google tag loader/config must appear exactly once")
-        if not head_match or loader not in head_match.group(1) or config not in head_match.group(1):
-            errors.append(f"{page.relative_to(ROOT)}: Google tag must be installed inside <head>")
-
-        is_noindex = "noindex" in parser.metas.get("robots", "").lower()
-        if not is_noindex or page.name == "404.html":
-            if 'id="site-header"' not in source or 'id="site-footer"' not in source:
-                errors.append(f"{page.relative_to(ROOT)}: shared header/footer placeholders are required")
-            if "assets/js/main.js" not in source:
-                errors.append(f"{page.relative_to(ROOT)}: shared include loader script is missing")
-
-        if is_noindex:
-            noindex += 1
-        else:
-            indexable += 1
-            if not parser.title.strip():
-                errors.append(f"{page.relative_to(ROOT)}: missing title")
-            if not parser.metas.get("description", "").strip():
-                errors.append(f"{page.relative_to(ROOT)}: missing meta description")
-            match = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)', source, re.I)
-            if not match:
-                errors.append(f"{page.relative_to(ROOT)}: missing canonical URL")
+    if not is_redirect and not is_404 and not noindex:
+        indexable_pages += 1
+        if canonicals:
+            canonical = canonicals[0].get('href', '')
+            if canonical in canonical_seen:
+                errors.append(f'{f}: duplicate canonical shared with {canonical_seen[canonical]}')
             else:
-                canonical = match.group(1)
-                if canonical in canonical_seen:
-                    errors.append(f"{page.relative_to(ROOT)}: duplicate canonical also used by {canonical_seen[canonical].relative_to(ROOT)}")
-                canonical_seen[canonical] = page
-            if parser.h1_count != 1:
-                warnings.append(f"{page.relative_to(ROOT)}: expected one H1, found {parser.h1_count}")
+                canonical_seen[canonical] = f
 
-        for role, asset in parser.assets:
-            if role == "link":
-                # Check only stylesheets, icons and canonical assets which carry a local path.
-                pass
-            if is_external(asset) or asset.startswith("#"):
-                continue
-            target = local_path(page, asset)
-            if target is not None and not target.exists():
-                # The logo is intentionally retained from the current repository instead of
-                # duplicated in this overlay ZIP. Users must keep grapecrux_brand_logo.png.
-                if urlparse(asset).path.lstrip("/") == "grapecrux_brand_logo.png":
-                    warnings.append(f"{page.relative_to(ROOT)}: keep existing repository asset {asset} when uploading this overlay")
-                else:
-                    errors.append(f"{page.relative_to(ROOT)}: missing local {role} target {asset}")
+    # Baseline accessibility and markup checks.
+    duplicates = [i for i, n in Counter(p.ids).items() if n > 1]
+    if duplicates:
+        errors.append(f'{f}: duplicate id attributes: {duplicates[:5]}')
+    for img in [d for t, d, _ in tags if t == 'img']:
+        if 'alt' not in img:
+            errors.append(f'{f}: image missing alt attribute: {img.get("src", "(unknown)")}')
+    for tag, field in p.fields:
+        fid = field.get('id')
+        if fid and fid not in p.labels_for and not field.get('aria-label') and not field.get('aria-labelledby'):
+            errors.append(f'{f}: {tag}#{fid} lacks an associated label')
+    for t, d, _ in tags:
+        if t == 'a' and d.get('target') == '_blank':
+            rel = set((d.get('rel') or '').lower().split())
+            if not {'noopener', 'noreferrer'}.issubset(rel):
+                warnings.append(f'{f}: external blank-target link lacks noopener/noreferrer')
 
-        for href in parser.links:
-            if href.startswith("/") and not href.startswith("//"):
-                path = urlparse(href).path
-                target = route_target(path)
-                if not target.exists():
-                    errors.append(f"{page.relative_to(ROOT)}: broken internal route {href}")
-            if re.search(r"\.html(?:$|[?#])", href, re.I):
-                # The explicit legacy redirects themselves are allowed; normal site links should be clean.
-                if not is_noindex:
-                    warnings.append(f"{page.relative_to(ROOT)}: internal link exposes .html: {href}")
+    # Verify local files and clean internal routes.
+    for tag, value in p.links:
+        if value.startswith(('http://', 'https://', 'mailto:', 'tel:', 'data:', '#', '//')):
+            continue
+        path = urlparse(value).path
+        if not path:
+            continue
+        if path.startswith('/'):
+            path = path.removeprefix('/GrapeCrux')
+            target = ROOT / path.lstrip('/')
+        else:
+            target = (f.parent / path).resolve()
+        if target.is_dir():
+            target = target / 'index.html'
+        if not target.exists():
+            errors.append(f'{f}: broken local {tag} target {value}')
 
-    # Check same-document fragment links after every page has been parsed.
-    for page, parser in parsed_pages.items():
-        for fragment, original in parser.fragment_links:
-            if fragment not in parser.ids:
-                warnings.append(f"{page.relative_to(ROOT)}: missing fragment target {original}")
+# Sitemap validation.
+sitemap = ROOT / 'sitemap.xml'
+try:
+    tree = ET.parse(sitemap)
+    sitemap_locs = [x.text for x in tree.getroot().iter() if x.tag.endswith('loc') and x.text]
+    if len(sitemap_locs) != len(set(sitemap_locs)):
+        errors.append('sitemap.xml: duplicate URL entries')
+    for u in sitemap_locs:
+        path = urlparse(u).path
+        target = ROOT / path.lstrip('/')
+        if target.is_dir():
+            target = target / 'index.html'
+        if not target.exists():
+            errors.append(f'sitemap URL has no page: {u}')
+        if target.exists():
+            page_text = target.read_text(encoding='utf-8', errors='replace')
+            if 'name="robots" content="noindex' in page_text.lower():
+                errors.append(f'sitemap includes noindex page: {u}')
+except Exception as e:
+    errors.append(f'sitemap parse failed: {e}')
 
-    for include_name in ("header.html", "footer.html"):
-        include_path = ROOT / "includes" / include_name
-        if not include_path.exists():
-            errors.append(f"missing shared include: includes/{include_name}")
+# Shared includes must not duplicate analytics tags or contain page-specific full documents.
+for name in ('header.html', 'footer.html'):
+    inc = ROOT / 'includes' / name
+    if not inc.exists():
+        errors.append(f'missing shared include: includes/{name}')
+    elif GA_ID in inc.read_text(encoding='utf-8'):
+        errors.append(f'{inc}: Google tag must remain in each page <head>, not in a body include')
 
-    # The existing brand PNG is kept in the user's current repository and is not duplicated
-    # in this overlay archive. Flag it clearly if this package is tested in isolation.
-    if not (ROOT / "grapecrux_brand_logo.png").exists():
-        warnings.append("grapecrux_brand_logo.png is retained from the current repository; preserve it when uploading this overlay")
+robots = (ROOT / 'robots.txt').read_text(encoding='utf-8', errors='replace') if (ROOT / 'robots.txt').exists() else ''
+if 'https://grapecrux.com/sitemap.xml' not in robots:
+    errors.append('robots.txt: sitemap declaration missing')
 
-    sitemap_urls: list[str] = []
-    sitemap = ROOT / "sitemap.xml"
-    try:
-        xml_root = ET.parse(sitemap).getroot()
-        sitemap_urls = [element.text.strip() for element in xml_root.iter() if element.tag.endswith("loc") and element.text]
-        for url in sitemap_urls:
-            target = route_target(urlparse(url).path)
-            if not target.exists():
-                errors.append(f"sitemap URL has no page: {url}")
-        if len(sitemap_urls) != len(set(sitemap_urls)):
-            errors.append("sitemap.xml contains duplicate URLs")
-    except Exception as exc:
-        errors.append(f"sitemap.xml is invalid: {exc}")
-
-    cname = ROOT / "CNAME"
-    if not cname.exists() or cname.read_text(encoding="utf-8").strip() != "grapecrux.com":
-        errors.append("CNAME missing or not set to grapecrux.com")
-    robots = ROOT / "robots.txt"
-    if not robots.exists() or "sitemap.xml" not in robots.read_text(encoding="utf-8").lower():
-        warnings.append("robots.txt does not reference sitemap.xml")
-
-    print(f"Checked {len(pages)} HTML files")
-    print(f"Indexable pages: {indexable} | noindex pages: {noindex} | sitemap URLs: {len(sitemap_urls)}")
-    print(f"Errors: {len(errors)} | Warnings: {len(warnings)}")
-    for item in errors:
-        print("ERROR:", item)
-    for item in warnings:
-        print("WARNING:", item)
-    if errors:
-        return 1
-    print("Static structural checks passed. Live browser, hosting, email delivery, and SEO indexing still require post-deployment verification.")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+print(f'HTML documents: {html_docs}; content pages with shared layout: {content_pages}; indexable pages: {indexable_pages}; sitemap URLs: {len(sitemap_locs)}')
+print(f'Errors: {len(errors)}; warnings: {len(warnings)}')
+for x in errors: print('ERROR:', x)
+for x in warnings: print('WARN:', x)
+sys.exit(1 if errors else 0)

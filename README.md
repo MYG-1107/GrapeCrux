@@ -1,62 +1,65 @@
-# GrapeCrux Website — Shared Layout & GA4 Update
+# GrapeCrux Website — QA, Blogs, Careers and SEO Release
 
-This is a static GitHub Pages website for **GrapeCrux**, a creative initiative of **Infinite Resource Creators Private Limited**.
+This is the complete static GitHub Pages source package for GrapeCrux. It includes the existing corporate site structure plus a Blogs hub, six original blog posts, a Careers page, chatbot knowledge refinements, shared navigation/footer loading and consent-aware GA4 configuration.
+
+## Upload to GitHub Pages
+
+1. Back up the repository or create a branch before replacing files.
+2. Extract this ZIP and open the `grapecrux-v4` folder.
+3. Upload the **contents** of that folder to the root of `MYG-1107/GrapeCrux`.
+4. Preserve the existing root file `grapecrux_brand_logo.png`. It is used by the shared header, footer and chatbot and is intentionally not duplicated in this source archive. Do not delete or rename it during replacement.
+5. Preserve `CNAME` and `.nojekyll`.
+6. Keep GitHub Pages configured to publish from `main` and `/ (root)`.
+7. After deployment, verify the clean canonical routes directly in a browser.
 
 ## Shared header and footer
 
-The website now has a single source of truth for its shared navigation and footer:
+- `includes/header.html` is the only shared navigation source.
+- `includes/footer.html` is the only shared footer source.
+- All full content pages contain `#site-header` and `#site-footer` placeholders.
+- `assets/js/main.js` loads these files once per page. On GitHub Pages it rebases root links under `/GrapeCrux/`; on `grapecrux.com` it uses root paths.
+- To change the shared navigation or footer, edit only the respective include file. Google Analytics belongs in each document's `<head>`, not inside these body fragments.
 
-- `includes/header.html` — edit this file to change the header/navigation across content pages.
-- `includes/footer.html` — edit this file to change the footer across content pages.
-- `assets/js/main.js` — fetches these fragments into each page's `#site-header` and `#site-footer` placeholders, then wires up active navigation and the mobile menu.
+## Google Analytics
 
-This is the correct pattern for a static GitHub Pages site: GitHub Pages does not process PHP/server-side includes. The fragments are fetched in the browser. Do not open pages by double-clicking them with `file://`; use a local HTTP server or the deployed site so browser `fetch()` can load the fragments.
+GA4 measurement ID: `G-QXMRMGJEP2`.
 
-### Local preview
+The tag is configured on each HTML page. Analytics and advertising storage start as denied. A page-view event is sent only after the visitor accepts optional analytics in the preference banner. The footer's **Cookie preferences** link reopens the setting. After deployment, test consent and page views with Google Tag Assistant and GA4 Realtime.
 
-From the repository root run:
+## Blogs
+
+`/blogs/` contains six original editorial articles on trustworthy AI assistants, AI application security, Core Web Vitals, service-page SEO, reliable API integrations and quality engineering. Each article includes page-specific metadata, canonical URL, BlogPosting structured data and further-reading links to primary technical sources.
+
+## Careers
+
+`/careers/` describes seven remote, three-month internship tracks: Software Development, AI / Machine Learning, Data Analytics, QA & Test Automation, UI / UX, Cloud & DevOps, and Business & Digital Marketing.
+
+The page displays an indicative stipend of ₹5,000–₹10,000 per month and an indicative commitment of around 20 hours/week. Confirm budget, available seats, mentor capacity, dates, schedule and final stipend before announcing openings or issuing offers. The amount is not guaranteed until it is in the written offer. Internship completion does not guarantee a permanent job.
+
+The application form prepares an email to `service@grapecrux.com`; it does not store applications or upload CVs. Applicants attach their resume to the email that opens. Role-card Apply buttons select the matching role in the form.
+
+## Chatbot
+
+`assets/js/assistant-knowledge.js` contains curated, deterministic FAQ answers. The current front-end assistant is not a generative AI model or human agent. The optional FastAPI backend in `backend/` is separate, not hosted by GitHub Pages and not enabled by default; deploy and configure it securely before using a live model. Do not expose provider API keys in front-end code.
+
+## Forms and privacy
+
+Contact and internship forms use `mailto:`. They validate required fields and prepare an email; the visitor's email app must send it. The static website does not store these submissions. The Privacy page describes this and the consent-aware GA4 behaviour. Have privacy/terms wording reviewed for the company's markets before treating it as legal advice or a contract.
+
+## QA commands
+
+Run from the extracted folder:
 
 ```bash
-python -m http.server 8000
+python validate_site.py
+node --check assets/js/main.js
+node --check assets/js/assistant-knowledge.js
+node tests/chatbot-intents.test.cjs
+python -m py_compile backend/main.py
 ```
 
-Then open `http://localhost:8000/`.
+See `QA-TEST-REPORT.md` and `AUDIT-AND-RELEASE-NOTES.md` for source-level findings, checks, limitations and manual post-deployment test cases.
 
-## Google Analytics 4
+## SEO note
 
-The Google tag supplied for this site is **G-QXMRMGJEP2**. The exact gtag.js loader and configuration snippet has been placed once in the `<head>` of every complete HTML page (29 page documents), including the 404 and legacy redirect pages. The two files in `includes/` are HTML fragments, not standalone pages, and correctly do not carry their own tag. It is intentionally **not** placed in `includes/header.html`: that fragment is inserted inside `<body>`, while Google recommends installing the tag high in each page's `<head>`.
-
-Do not add another copy of the same tag to `main.js`, the footer, or `includes/header.html`, or page views may be duplicated. If new HTML pages are added, copy the existing snippet into their `<head>` once.
-
-To test measurement:
-
-1. Deploy the updated files.
-2. Open the site in a clean browser session and accept/reject any consent control if one is later implemented.
-3. In GA4 open **Reports → Realtime** or **Admin → DebugView** and browse several pages.
-4. Use Google's **Test installation** tool or Tag Assistant to confirm the `G-QXMRMGJEP2` tag is detected on the homepage and at least one nested page.
-
-Note: this package adds the Google tag as requested. It does not implement a consent banner or Consent Mode. Review applicable privacy requirements for visitors in the EEA/UK and other relevant regions before using analytics; configure consent before measurement where required.
-
-## Clean URLs and deployment
-
-Content pages use directory index files, for example `/about/index.html` is served as `/about/`. Root `.html` pages remain as compatibility redirects. Keep `CNAME` and `.nojekyll` when deploying to the repository root.
-
-GitHub Pages settings should publish from `main` and `/ (root)`. The repository contains a custom domain in `CNAME`.
-
-## Important deployment note
-
-Preserve the existing root file `grapecrux_brand_logo.png`. The shared header/footer reference that company logo file. This update package includes all site source and shared components; the logo file is retained from the existing repository rather than re-created.
-
-## Files of interest
-
-```text
-includes/
-  header.html              # shared header
-  footer.html              # shared footer
-assets/js/main.js          # include loader, nav, form and chat behaviour
-404.html                   # uses shared layout too
-sitemap.xml                # canonical public URLs
-robots.txt
-backend/                    # optional chatbot API (not required for GA4)
-AUDIT-AND-RELEASE-NOTES.md # QA findings and deployment checks
-```
+The package includes page-specific metadata, canonical clean URLs, internal links, XML sitemap, robots directives and BlogPosting metadata. These improve clarity and crawlability; they do not guarantee crawling, indexing or first-place rankings. Verify Search Console ownership, submit the sitemap and monitor search performance after deployment.

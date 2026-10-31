@@ -2,14 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <!-- Google tag (gtag.js) — installed once per HTML page for GrapeCrux GA4. -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+  <!-- Google tag (gtag.js) — GA4 G-QXMRMGJEP2; analytics measurement is gated by visitor preference. -->
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){window.dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update': 500
+    });
     gtag('js', new Date());
-    gtag('config', 'G-QXMRMGJEP2');
+    gtag('config', 'G-QXMRMGJEP2', {
+      'send_page_view': false,
+      'allow_google_signals': false,
+      'allow_ad_personalization_signals': false
+    });
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f8f5">
   <title>Digital Growth &amp; SEO | GrapeCrux</title>
@@ -26,7 +37,7 @@
   <link rel="stylesheet" href="../../assets/css/style.css">
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "GrapeCrux", "url": "https://grapecrux.com/", "email": "service@grapecrux.com", "parentOrganization": {"@type": "Organization", "name": "Infinite Resource Creators Private Limited"}}</script>
   <script defer src="../../assets/js/config.js"></script>
-  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/assistant-knowledge.js"></script><script defer src="../../assets/js/main.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>

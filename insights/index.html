@@ -2,14 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <!-- Google tag (gtag.js) — installed once per HTML page for GrapeCrux GA4. -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+  <!-- Google tag (gtag.js) — GA4 G-QXMRMGJEP2; analytics measurement is gated by visitor preference. -->
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){window.dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update': 500
+    });
     gtag('js', new Date());
-    gtag('config', 'G-QXMRMGJEP2');
+    gtag('config', 'G-QXMRMGJEP2', {
+      'send_page_view': false,
+      'allow_google_signals': false,
+      'allow_ad_personalization_signals': false
+    });
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f8f5">
   <title>Digital Insights &amp; Practical Guides | GrapeCrux</title>
@@ -26,12 +37,12 @@
   <link rel="stylesheet" href="../assets/css/style.css">
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "GrapeCrux", "url": "https://grapecrux.com/", "email": "service@grapecrux.com", "parentOrganization": {"@type": "Organization", "name": "Infinite Resource Creators Private Limited"}}</script>
   <script defer src="../assets/js/config.js"></script>
-  <script defer src="../assets/js/main.js"></script>
+  <script defer src="../assets/js/assistant-knowledge.js"></script><script defer src="../assets/js/main.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
 <div id="site-header"></div>
-<main id="main-content"><section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><span>Insights</span></div><span class="section-kicker">Ideas & practical guides</span><h1>Clear thinking for<br>better digital decisions.</h1><p class="lead">Practical guidance for planning websites, AI experiences and digital products—focused on useful questions rather than technology hype.</p></div></section><section class="section"><div class="container"><div class="article-list"><article class="article-card"><div class="article-icon" aria-hidden="true">↗</div><div><div class="article-meta"><span>WEBSITE STRATEGY</span><span>•</span><span>PLANNING GUIDE</span></div><h3>What to define before starting a company website</h3><p>Clarify the audience, key user tasks, required pages, content owner and enquiry process before choosing a visual theme or development stack.</p><a class="text-link" href="/insights/website-project-planning/">Read the guide <span class="arrow">↗</span></a></div></article><article class="article-card"><div class="article-icon" aria-hidden="true">✳</div><div><div class="article-meta"><span>AI & AUTOMATION</span><span>•</span><span>DECISION GUIDE</span></div><h3>How to scope a useful AI assistant</h3><p>Start with an explicit user task, approved information sources, escalation rules and measurable acceptance tests—not a chatbot widget alone.</p><a class="text-link" href="/insights/ai-assistant-readiness/">Read the guide <span class="arrow">↗</span></a></div></article><article class="article-card"><div class="article-icon" aria-hidden="true">✓</div><div><div class="article-meta"><span>QUALITY</span><span>•</span><span>QA CHECKLIST</span></div><h3>What to test before a website launch</h3><p>Check the most important journeys, mobile layouts, form handling, URL behaviour, accessibility basics and search metadata before launch.</p><a class="text-link" href="/insights/website-launch-qa/">Read the guide <span class="arrow">↗</span></a></div></article></div><div class="divider"></div><section class="section-header" style="margin:42px auto 0;max-width:760px"><span class="section-kicker">Use the guides</span><h2>Make the next decision clearer.</h2><p class="lead">Each guide provides questions and checks you can take into a project discussion. They are educational resources, not a substitute for requirements specific to your organisation.</p><a class="btn btn-primary" href="/contact/">Discuss your project <span class="arrow" aria-hidden="true">↗</span></a></section></div></section></main>
+<main id="main-content"><section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><span>Insights</span></div><span class="section-kicker">Ideas & practical guides</span><h1>Clear thinking for<br>better digital decisions.</h1><p class="lead">The original GrapeCrux guide collection remains available here. For new technical articles and current resources, visit the Blogs section.</p></div></section><section class="section"><div class="container"><div class="article-list"><article class="article-card"><div class="article-icon" aria-hidden="true">↗</div><div><div class="article-meta"><span>WEBSITE STRATEGY</span><span>•</span><span>PLANNING GUIDE</span></div><h3>What to define before starting a company website</h3><p>Clarify the audience, key user tasks, required pages, content owner and enquiry process before choosing a visual theme or development stack.</p><a class="text-link" href="/insights/website-project-planning/">Read the guide <span class="arrow">↗</span></a></div></article><article class="article-card"><div class="article-icon" aria-hidden="true">✳</div><div><div class="article-meta"><span>AI & AUTOMATION</span><span>•</span><span>DECISION GUIDE</span></div><h3>How to scope a useful AI assistant</h3><p>Start with an explicit user task, approved information sources, escalation rules and measurable acceptance tests—not a chatbot widget alone.</p><a class="text-link" href="/insights/ai-assistant-readiness/">Read the guide <span class="arrow">↗</span></a></div></article><article class="article-card"><div class="article-icon" aria-hidden="true">✓</div><div><div class="article-meta"><span>QUALITY</span><span>•</span><span>QA CHECKLIST</span></div><h3>What to test before a website launch</h3><p>Check the most important journeys, mobile layouts, form handling, URL behaviour, accessibility basics and search metadata before launch.</p><a class="text-link" href="/insights/website-launch-qa/">Read the guide <span class="arrow">↗</span></a></div></article></div><div class="divider"></div><section class="section-header" style="margin:42px auto 0;max-width:760px"><span class="section-kicker">Use the guides</span><h2>Make the next decision clearer.</h2><p class="lead">Each guide provides questions and checks you can take into a project discussion. They are educational resources, not a substitute for requirements specific to your organisation.</p><a class="btn btn-primary" href="/contact/">Discuss your project <span class="arrow" aria-hidden="true">↗</span></a></section></div></section><section class="section"><div class="container"><a class="btn btn-primary" href="/blogs/">Explore the GrapeCrux Blogs ↗</a></div></section></main>
 <div id="site-footer"></div>
 <div id="gc-chatbot"></div>
 </body>

@@ -2,23 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <!-- Google tag (gtag.js) — installed once per HTML page for GrapeCrux GA4. -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+  <!-- Google tag (gtag.js) — GA4 G-QXMRMGJEP2; analytics measurement is gated by visitor preference. -->
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){window.dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update': 500
+    });
     gtag('js', new Date());
-    gtag('config', 'G-QXMRMGJEP2');
+    gtag('config', 'G-QXMRMGJEP2', {
+      'send_page_view': false,
+      'allow_google_signals': false,
+      'allow_ad_personalization_signals': false
+    });
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f8f5">
-  <title>Privacy Notice | GrapeCrux</title>
-  <meta name="description" content="Read the GrapeCrux website privacy notice template and review what information the static site handles.">
+  <title>Privacy Notice &amp; Analytics Choices | GrapeCrux</title>
+  <meta name="description" content="Understand how the GrapeCrux website handles project enquiries, the guided assistant and optional Google Analytics measurement.">
   <link rel="canonical" href="https://grapecrux.com/privacy/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="GrapeCrux">
   <meta property="og:title" content="Privacy Notice | GrapeCrux">
-  <meta property="og:description" content="Read the GrapeCrux website privacy notice template and review what information the static site handles.">
+  <meta property="og:description" content="Understand how the GrapeCrux website handles project enquiries, the guided assistant and optional Google Analytics measurement.">
   <meta property="og:url" content="https://grapecrux.com/privacy/">
   <meta property="og:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
   <meta name="twitter:card" content="summary_large_image">
@@ -26,12 +37,12 @@
   <link rel="stylesheet" href="../assets/css/style.css">
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "GrapeCrux", "url": "https://grapecrux.com/", "email": "service@grapecrux.com", "parentOrganization": {"@type": "Organization", "name": "Infinite Resource Creators Private Limited"}}</script>
   <script defer src="../assets/js/config.js"></script>
-  <script defer src="../assets/js/main.js"></script>
+  <script defer src="../assets/js/assistant-knowledge.js"></script><script defer src="../assets/js/main.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to content</a>
 <div id="site-header"></div>
-<main id="main-content"><section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><span>Privacy notice</span></div><span class="section-kicker">Legal information</span><h1>Privacy notice</h1><p class="lead">A plain-language summary of how this static website currently handles information. This draft must be reviewed against the company's actual practices before production use.</p></div></section><section class="section"><div class="container prose"><div class="badge-note"><strong>Publication note:</strong> This is a starter template, not legal advice. Confirm applicable privacy law, the responsible legal entity, contact details, analytics, hosting logs, retention and all third-party services before relying on it.</div><h2>Information you provide</h2><p>The project enquiry form in this package is client-side only. When you submit it, the website attempts to open your default email application with the details you entered addressed to service@grapecrux.com. The page does not submit that form to a website server or store it in a website database.</p><h2>Email and third-party handling</h2><p>If you send the email, your email service and the recipient's email environment will process it according to their own systems and policies. Do not include passwords, payment credentials or other sensitive information in a project brief.</p><h2>Chat assistant</h2><p>The included GrapeCrux Assistant uses simple, local rules in your browser. In this package, it does not call a generative AI provider or send chat messages to a chatbot server. If a hosted AI provider, analytics tool, CRM or form service is added later, this notice must be updated to describe the service, purpose, legal basis where applicable, sharing and retention accurately.</p><h2>Cookies and analytics</h2><p>This template does not intentionally set analytics or advertising cookies. Hosting providers may keep technical logs as part of operating their service. Verify the actual hosting configuration and any services added before publication.</p><h2>Your choices and contact</h2><p>For questions about a project enquiry or personal information, contact <a href="mailto:service@grapecrux.com">service@grapecrux.com</a>. Add the company's approved privacy contact and any legally required rights, processes and jurisdiction-specific disclosures before the website is used commercially.</p><h2>Review before launch</h2><p>Review this notice whenever form handling, analytics, chat integrations, hosting, storage or other data practices change.</p></div></section></main>
+<main id="main-content"><section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><span>Privacy notice</span></div><span class="section-kicker">Legal information</span><h1>Privacy notice</h1><p class="lead">A plain-language summary of how this website currently handles project enquiries, the guided assistant and optional analytics measurement.</p></div></section><section class="section"><div class="container prose"><div class="badge-note"><strong>Who operates this website:</strong> GrapeCrux is a creative initiative of Infinite Resource Creators Private Limited. This notice describes the current static website setup and should be updated whenever the company changes its data practices or adds a third-party service.</div><h2>Information you provide</h2><p>The project enquiry form in this package is client-side only. When you submit it, the website attempts to open your default email application with the details you entered addressed to service@grapecrux.com. The page does not submit that form to a website server or store it in a website database.</p><h2>Email and third-party handling</h2><p>If you send the email, your email service and the recipient's email environment will process it according to their own systems and policies. Do not include passwords, payment credentials or other sensitive information in a project brief.</p><h2>Chat assistant</h2><p>The default GrapeCrux Assistant uses a limited set of local, rule-based answers in the browser and does not send chat messages to a server. A separately configured hosted AI backend may process messages if the company enables it; the notice, provider details and retention practices must be reviewed and updated before that integration is activated.</p><h2>Google Analytics</h2><p>This website is configured with Google Analytics 4 (measurement ID G-QXMRMGJEP2) to understand aggregate website usage, such as page views and interactions. Optional analytics measurement is configured as denied by default. A page-view event is sent only after a visitor selects “Allow analytics” in the privacy preferences. If analytics is allowed, Google Analytics may use cookies or similar technologies and process information such as browser/device information, approximate location derived from network information, pages viewed and interaction events. Google processes this information under its own terms and policies. Review <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a> for details.</p><p>Visitors can reject optional analytics or reopen “Cookie preferences” from the footer. The preference is stored in the browser on that device. Clearing browser storage may reset the choice. Advertising storage and advertising personalisation signals are configured as denied in this website package.</p><h2>Cookies and hosting</h2><p>Essential technical storage may be used to remember the analytics preference. The hosting provider may maintain server logs necessary to operate and secure the website. Verify the active hosting, analytics property settings, data-retention period and any additional integrations before publication.</p><h2>Your choices and contact</h2><p>For questions about a project enquiry or personal information, contact <a href="mailto:service@grapecrux.com">service@grapecrux.com</a>. Add the company's approved privacy contact and any legally required rights, processes and jurisdiction-specific disclosures before the website is used commercially.</p><h2>Updates to this notice</h2><p>This notice should be reviewed whenever form handling, analytics, chat integrations, hosting, storage or other data practices change. The company should also confirm that the stated contact and privacy processes reflect its current operations.</p></div></section></main>
 <div id="site-footer"></div>
 <div id="gc-chatbot"></div>
 </body>

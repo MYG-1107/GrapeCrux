@@ -2,21 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <!-- Google tag (gtag.js) — installed once per HTML page for GrapeCrux GA4. -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+  <!-- Google tag (gtag.js) — GA4 G-QXMRMGJEP2; analytics measurement is gated by visitor preference. -->
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){window.dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update': 500
+    });
     gtag('js', new Date());
-    gtag('config', 'G-QXMRMGJEP2');
-  </script><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f7f8f5">
+    gtag('config', 'G-QXMRMGJEP2', {
+      'send_page_view': false,
+      'allow_google_signals': false,
+      'allow_ad_personalization_signals': false
+    });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f7f8f5">
   <title>What to test before a website launch | GrapeCrux Insights</title>
   <meta name="description" content="A practical pre-launch QA checklist for navigation, clean URLs, forms, responsive layouts, accessibility, metadata, security and performance.">
   <link rel="canonical" href="https://grapecrux.com/insights/website-launch-qa/">
   <meta property="og:type" content="article"><meta property="og:site_name" content="GrapeCrux"><meta property="og:title" content="What to test before a website launch | GrapeCrux Insights"><meta property="og:description" content="A practical pre-launch QA checklist for navigation, clean URLs, forms, responsive layouts, accessibility, metadata, security and performance."><meta property="og:url" content="https://grapecrux.com/insights/website-launch-qa/"><meta property="og:image" content="https://grapecrux.com/assets/images/hero-orbit.svg"><meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/MYG-1107/GrapeCrux/main/grapecrux_brand_logo.png"><link rel="stylesheet" href="../../assets/css/style.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What to test before a website launch","description":"A practical pre-launch QA checklist for navigation, clean URLs, forms, responsive layouts, accessibility, metadata, security and performance.","mainEntityOfPage":"https://grapecrux.com/insights/website-launch-qa/","publisher":{"@type":"Organization","name":"GrapeCrux","url":"https://grapecrux.com/"}}</script>
-  <script defer src="../../assets/js/config.js"></script><script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/config.js"></script><script defer src="../../assets/js/assistant-knowledge.js"></script><script defer src="../../assets/js/main.js"></script>
 </head><body>
 <a class="skip-link" href="#main-content">Skip to content</a><div id="site-header"></div>
 <main id="main-content">

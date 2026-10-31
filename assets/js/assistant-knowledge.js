@@ -2,6 +2,17 @@
    Deterministic, curated FAQ content. This is not a generative AI model or a human agent. */
 (() => {
   const answers = [
+
+    [/\b(postgresql|postgres|query plan|explain analyze|slow sql|database performance)\b/i,
+      'Our PostgreSQL guide explains how to investigate slow queries with EXPLAIN, choose indexes for real workloads, maintain statistics and monitor connections. Read https://grapecrux.com/blogs/postgresql-query-performance-explained/ or explore Data & System Integration at https://grapecrux.com/services/data-integration/.'],
+    [/\b(wcag|accessibility|accessible website|screen reader|keyboard navigation)\b/i,
+      'Our accessibility guide covers WCAG 2.2, keyboard access, semantic structure, accessible forms, contrast, touch targets and human testing. Read https://grapecrux.com/blogs/wcag-22-accessible-business-websites/ or explore Software Testing at https://grapecrux.com/services/software-testing/.'],
+    [/\b(owasp|top 10 2025|web application security|secure web application|application security)\b/i,
+      'Our OWASP Top 10:2025 guide covers access control, supply-chain risk, identity, data handling, injection, logging and security testing. Read https://grapecrux.com/blogs/owasp-top-10-2025-web-application-security/ or discuss an authorised QA/security scope at https://grapecrux.com/services/software-testing/.'],
+    [/\b(ai evaluation|llm evaluation|evaluate ai|evaluate an ai|evaluate an ai product|model evaluation|ai accuracy|ai quality|latency and cost)\b/i,
+      'Our AI evaluation guide explains test datasets, task success, groundedness, safety, latency, cost per successful task and human review. Read https://grapecrux.com/blogs/evaluating-ai-products-quality-latency-and-cost/ or explore AI & Automation at https://grapecrux.com/services/ai-automation/.'],
+    [/\b(ci.?cd|deployment pipeline|github actions|devsecops|release pipeline|software release)\b/i,
+      'Our CI/CD guide covers least-privilege workflows, secure secrets, trusted dependencies, build provenance, release checks and rollback planning. Read https://grapecrux.com/blogs/secure-cicd-pipelines-for-reliable-releases/ or explore Cloud & DevOps at https://grapecrux.com/services/cloud-devops/.'],
     [/\b(what is grapecrux|who are you|about grapecrux|what does grapecrux do)\b/i,
       'GrapeCrux is a creative initiative of Infinite Resource Creators Private Limited, an Indian private limited company incorporated in Pune on 27 November 2019. GrapeCrux brings creativity, technology, strategic thinking and purposeful execution together to explore practical digital solutions.'],
     [/\b(where are you|where is grapecrux|location|office|based|registered office)\b/i,
@@ -17,7 +28,7 @@
     [/\b(how long|duration|fixed term|end date|permanent|ongoing employment)\b/i,
       'The full-time roles on the Careers page are ongoing opportunities and do not have a pre-set end date. Role expectations and applicable employment terms are discussed during recruitment and provided in the written terms. Internship arrangements are explained to shortlisted applicants.'],
     [/\b(blog|blogs|article|articles|resources|read more)\b/i,
-      'The GrapeCrux Blogs section covers PHP 8.5, agentic AI workflows, RAG, big data, Python AI services, CRM implementation, SaaS MVP engineering, software testing, secure API integrations, cloud observability, AI security, website performance, SEO and quality engineering. Read them at https://grapecrux.com/blogs/.'],
+      'The GrapeCrux Blogs page features a curated reading list on AI evaluation, agentic automation, RAG, PHP, PostgreSQL, accessibility, application security and reliable software delivery. Other published article pages remain available at their own URLs and in the XML sitemap, even when they are not featured on the Blogs page. Start at https://grapecrux.com/blogs/ or ask me about a specific topic.'],
     [/\b(php|pipe operator|uri extension|php 8\.5|php 8\.6)\b/i,
       'Our PHP article explains PHP 8.5 features such as the URI extension, pipe operator (|>), clone() property updates and the #[\NoDiscard] attribute. It also discusses patch updates and why beta versions should not be used in production. Read: https://grapecrux.com/blogs/php-85-practical-upgrade-guide/.'],
     [/\b(projects|portfolio|case studies|work examples|what have you built|show me your work|client work)\b/i,

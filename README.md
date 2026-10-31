@@ -51,3 +51,26 @@ Also inspect responsive layouts at 360px, 390px, 768px, 1024px and 1440px widths
 ## Form and assistant behaviour
 
 Careers applications continue to prepare a `mailto:` draft to `yaswanth@grapecrux.com`; the applicant must attach their CV and press Send. The static website does not silently transmit or store applications. The local chatbot is a curated FAQ and can describe the new services and blog topics. The optional hosted model remains disabled unless a backend URL and secure server configuration are supplied.
+
+
+## Brand lockup and curated Blogs hub (31 October 2026)
+
+- Restored the original GrapeCrux symbol + two-tone wordmark in both shared header and footer. The logo mark uses a medium responsive size (44–50px) and the wordmark retains the previous dark-green “Grape” and moss-green “Crux” treatment.
+- The Blogs landing page now features eight selected articles rather than listing every article. The remaining published article pages remain live, indexable (`index,follow`) and included in `sitemap.xml`; the landing page is a curated editorial selection, not an archive of every URL.
+- Added five in-depth guides: PostgreSQL query performance, WCAG 2.2 accessibility, OWASP Top 10:2025, AI product evaluation, and secure CI/CD pipelines. Each new page includes a unique SEO title, meta description, keywords, canonical URL, Open Graph metadata, BlogPosting JSON-LD and primary-source links.
+- Expanded the local chatbot with answers for all five topics and a clear explanation that the Blogs page is curated while other published articles remain available by URL and sitemap.
+
+QA commands:
+```bash
+node --check assets/js/assistant-knowledge.js
+node tests/chatbot-intents.test.cjs
+node tests/brand-blog-qa.test.cjs
+python -m py_compile backend/main.py
+```
+
+Search engines can discover sitemap URLs, but crawl frequency, indexing and rankings are determined by each search engine. Submit the sitemap in Search Console and monitor indexing; no ranking position is guaranteed.
+
+
+### SEO note on keywords and discovery
+
+Each new article includes a concise keyword metadata field because you requested topic tags, but Google Search does not use the `meta name="keywords"` tag for indexing or ranking. The stronger signals are the article's useful original content, clear title and description, crawlable links, canonical URL and structured data. All 21 article detail URLs remain in the sitemap even though eight are featured on the Blogs landing page. Search engines may discover them through the sitemap, but crawling, indexing and ranking are not guaranteed. Submit the sitemap and inspect representative URLs in Google Search Console after deployment.

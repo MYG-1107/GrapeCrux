@@ -86,3 +86,17 @@ In addition, the package includes the home `index.html`, 8 legacy `.html` redire
 ## Live testing limitation
 
 The automated web page fetch did not provide a readable live HTML response in this environment, and a headless Chromium smoke-test attempt timed out. Therefore the checks above are local/static checks, not proof of live production navigation, visual rendering, live contact email delivery, deployed chatbot API availability, Lighthouse scores, or search-engine indexing. Run those checks after deployment.
+
+## Corporate profile update (2026-10-31)
+
+The About page now presents GrapeCrux as a creative initiative of Infinite Resource Creators Private Limited, not a separate legal entity. It includes the supplied vision, mission, philosophy, incorporation date, CIN, registered office and ROC information. The Organization JSON-LD also includes the parent-company identifier, founding date and address based on the information supplied by the company.
+
+**Publication note:** The corporate details above were supplied by the company representative and were not independently verified against MCA records. Confirm spelling, punctuation and current registered-office details against official company documents before publishing. Avoid describing GrapeCrux as a separately incorporated company.
+
+## Remaining site-wide checks
+
+- Confirm the legal entity/brand relationship is consistent on Contact, footer, Terms, Privacy and chatbot disclosures; About page now carries the full corporate information.
+- Confirm contact email, phone and enquiry handling are current and monitored.
+- Test the actual deployed routes, mobile navigation, form mailto flow and chatbot on the live domain after upload.
+- Confirm all external assets load reliably and use a branded social preview image.
+- Review privacy notice against the actual analytics, cookies, form and chatbot data collection in production.

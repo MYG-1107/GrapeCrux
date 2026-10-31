@@ -53,3 +53,7 @@ The current package has 20 clean, indexable route pages: Home; About; Services o
 - Replace concept mock-ups with approved work only when verified evidence is available.
 - Run the included validator, then test all links and forms in a browser across desktop/mobile sizes.
 - Run Lighthouse and inspect console/network errors. Static checks do not establish live hosting, performance or SEO rankings.
+
+## Company profile and legal identity
+
+GrapeCrux is presented as a creative initiative of **Infinite Resource Creators Private Limited**, not as a separate legal entity. The About page includes company details supplied by the company representative. Please verify the CIN, incorporation date and registered office against current official company records before publication. Update the Privacy and Terms pages to reflect the actual production data collection, form handling and chatbot configuration.

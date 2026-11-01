@@ -25,15 +25,14 @@ Discover the challenge. Define the opportunity. Design with purpose. Build with 
 
 We believe meaningful innovation is not just about imagining what is possible — it is about having the expertise, creativity, and commitment to make it happen.
 
-Website
+**Website**
 https://grapecrux.com/
-Industry
+
+**Industry**
 IT System Custom Software Development
-Company size
-11-50 employees
-Headquarters
-Pune, Maharashtra
-Founded
+
+**Founded**
 2019
-Specialties
+
+**Specialties**
 Applied AI, Data Engineering, Intelligent Agents, NLP, AI - Assisted Engineering, Autonomous Systems, AI-Driven Process Automation, IT Consulting , Agentic AI, Technology and Outsourcing Services, Development, Digital Engineering, GenAI, Cloud Transformation, and Platform Engineering

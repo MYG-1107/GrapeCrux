@@ -34,5 +34,5 @@ IT System Custom Software Development
 **Founded**
 2019
 
-**Specialties**
+**Specialties:**
 Applied AI, Data Engineering, Intelligent Agents, NLP, AI - Assisted Engineering, Autonomous Systems, AI-Driven Process Automation, IT Consulting , Agentic AI, Technology and Outsourcing Services, Development, Digital Engineering, GenAI, Cloud Transformation, and Platform Engineering

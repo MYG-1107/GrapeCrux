@@ -2,7 +2,7 @@ name: Site quality checks
 
 on:
   push:
-    branches: [main, qa-hardening-2026-11-02]
+    branches: [main, qa-hardening-2026-11-02, careers-role-detail-pages-2026-11-02]
   pull_request:
     branches: [main]
   workflow_dispatch:

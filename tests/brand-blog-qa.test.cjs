@@ -14,7 +14,7 @@ for (const [name, html] of [['header', header], ['footer', footer]]) {
   assert.ok(html.includes('brand-wordmark'), `${name} must render the brand wordmark`);
   assert.ok(html.includes('<span>Grape</span>'), `${name} must show Grape`);
   assert.ok(html.includes('brand-wordmark-accent') && html.includes('>Crux</span>'), `${name} must show Crux in the accent colour`);
-  assert.ok(html.includes('width:clamp(44px,3.6vw,50px)'), `${name} logo must be medium and responsive`);
+  assert.ok(html.includes('width:clamp(40px,3.4vw,46px)'), `${name} logo must be consistently sized and responsive`);
   assert.ok(html.includes('background:transparent;border:0;box-shadow:none;border-radius:0'), `${name} logo must not have a square background card`);
   assert.ok(html.includes('aria-label="GrapeCrux home"'), `${name} lockup must be accessible`);
 }

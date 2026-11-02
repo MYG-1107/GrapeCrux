@@ -13,7 +13,7 @@ const logoBytes=fs.readFileSync(logoPath);
 assert.ok(header.includes('/grapecrux_brand_logo.png?v=20261102-original-png') && header.includes('brand-wordmark'), 'Shared header must use original repository PNG and wordmark');
 assert.ok(footer.includes('/grapecrux_brand_logo.png?v=20261102-original-png') && footer.includes('brand-wordmark'), 'Shared footer must use the same original PNG and wordmark');
 assert.deepEqual([...logoBytes.subarray(0,8)],[137,80,78,71,13,10,26,10],'Original logo asset must be a valid PNG file');
-assert.ok(!header.includes('grapecrux_brand_logo.png') && !footer.includes('grapecrux_brand_logo.png'), 'Legacy logo must not remain in shared includes');
+assert.ok(header.includes('alt="Original GrapeCrux logo"') && footer.includes('alt="Original GrapeCrux logo"'), 'Original logo must have descriptive alt text in shared includes');
 const jobs=[
 ['GC-FT-001','full-time/senior-full-stack-developer','Senior Full-stack Developer','full-time'],
 ['GC-FT-002','full-time/ai-engineer','AI Engineer','full-time'],

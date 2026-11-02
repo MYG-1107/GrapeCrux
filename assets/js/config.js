@@ -99,6 +99,22 @@ window.GRAPECRUX_CHAT_API_URL = '';
       return;
     }
 
+    const fileNameRaw = path.split('/').filter(Boolean).pop() || 'resource';
+    let fileName = fileNameRaw;
+    try { fileName = decodeURIComponent(fileNameRaw); } catch (_error) {}
+    const fileExtension = (fileName.includes('.') ? fileName.split('.').pop() : '').toLowerCase();
+    const downloadExtensions = new Set(['pdf', 'zip', 'csv', 'xlsx', 'xls', 'docx', 'doc', 'pptx', 'ppt', 'ics']);
+    if (targetUrl && (action.hasAttribute('download') || downloadExtensions.has(fileExtension))) {
+      track('file_download', {
+        file_name: fileName.slice(0, 100),
+        file_extension: fileExtension || 'unknown',
+        link_domain: targetUrl.hostname.slice(0, 100),
+        cta_location: section,
+        cta_label: label
+      });
+      return;
+    }
+
     if (targetUrl && /^https?:$/.test(targetUrl.protocol) && targetUrl.origin !== window.location.origin) {
       track('outbound_link_click', {
         link_domain: targetUrl.hostname.slice(0, 100),

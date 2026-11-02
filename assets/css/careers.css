@@ -76,3 +76,20 @@
  .career-detail-job-id{margin-top:14px}
  .career-detail-hero .hero-actions .btn{width:100%;justify-content:center}
 }
+
+
+/* Applicant-form and reference layout hardening for the dedicated job pages. */
+.career-job-id{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.career-job-id strong{display:inline-block}
+.career-detail-job-id{display:inline-flex;align-items:center;gap:12px}
+.career-detail-job-id span{display:inline-block}
+.career-detail-job-id strong{display:inline-block;margin-left:2px}
+.career-detail-facts article span{display:block;margin-bottom:6px}
+.career-detail-facts article strong{display:block}
+.career-role-questions{margin-top:24px}
+.career-role-questions .field textarea{min-height:142px}
+@media(max-width:640px){
+  .career-detail-facts article{min-height:92px}
+  .career-detail-job-id{gap:10px}
+  .career-role-questions{padding:14px}
+}

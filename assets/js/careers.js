@@ -123,7 +123,7 @@
       '', 'Additional role-related questions:',
       `Why this role at GrapeCrux: ${String(data.get('role_interest') || 'Not provided').trim()}`,
       `Hands-on tools and technologies: ${String(data.get('role_skills') || 'Not provided').trim()}`,
-      `${(questionLabel?.textContent || 'Role-specific question').replace(/\\s*\\*$/, '')}: ${String(data.get('role_specific_response') || 'Not provided').trim()}`,
+      `${(questionLabel?.textContent || 'Role-specific question').replace(/\s*\*$/, '')}: ${String(data.get('role_specific_response') || 'Not provided').trim()}`,
       '', 'Professional links:',
       ...links.map(([label,value]) => `${label}: ${String(value || 'Not provided').trim()}`),
       '', 'I have attached my resume / CV to this email.','Submitted using the GrapeCrux Careers page.'

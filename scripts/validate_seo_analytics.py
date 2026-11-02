@@ -23,6 +23,7 @@ class Audit(HTMLParser):
         if tag == 'head': self.in_head=False
 
 errors=[]; warnings=[]; pages=0; canonical_map={}
+config_js=(ROOT/'assets/js/config.js').read_text(encoding='utf-8',errors='replace') if (ROOT/'assets/js/config.js').exists() else ''
 for file in sorted(ROOT.rglob('*.html')):
     raw=file.read_text(encoding='utf-8',errors='replace')
     if '<html' not in raw.lower(): continue
@@ -43,7 +44,7 @@ for file in sorted(ROOT.rglob('*.html')):
         if p.h1 != 1: errors.append(f'{file}: expected exactly one H1, got {p.h1}')
         if not re.search(r'<script[^>]+src=["\'][^"\']*assets/js/config\.js',raw): errors.append(f'{file}: config.js missing')
         if not re.search(r'<script[^>]+src=["\'][^"\']*assets/js/main\.js',raw): errors.append(f'{file}: main.js missing')
-        if raw.count("gtag('config', '"+GA_ID+"'") != 1: errors.append(f'{file}: GA config call missing or duplicated')
+        if raw.count("gtag('config', '"+GA_ID+"'") > 1: errors.append(f'{file}: duplicate inline GA config calls')
         if not re.search(r"gtag\(['\"]consent['\"],\s*['\"]default['\"]",raw): errors.append(f'{file}: Consent Mode default missing')
         if canon:
             c=canon[0].get('href','')
@@ -56,6 +57,9 @@ for file in sorted(ROOT.rglob('*.html')):
         if tag=='a' and d.get('target')=='_blank':
             rel=set((d.get('rel') or '').lower().split())
             if not {'noopener','noreferrer'}.issubset(rel): warnings.append(f'{file}: target=_blank should use noopener noreferrer')
+
+if GA_ID not in config_js or "gtag('consent', 'default'" not in config_js or 'gaScript.async = true' not in config_js:
+    errors.append('assets/js/config.js does not initialize GA4 with denied consent before async loading')
 
 try:
     xml=ET.parse(ROOT/'sitemap.xml').getroot()

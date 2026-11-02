@@ -19,7 +19,11 @@ for (const [name, html] of [['header', header], ['footer', footer]]) {
   assert.ok(html.includes('aria-label="GrapeCrux home"'), `${name} lockup must be accessible`);
 }
 
-const featured = [...blog.matchAll(new RegExp('href="/blogs/([a-z0-9-]+)/"', 'g'))].map(m => m[1]);
+const featuredStart = blog.indexOf('<div class="article-list">');
+const topicsStart = blog.indexOf('<section class="blog-topic-section">', featuredStart);
+assert.ok(featuredStart >= 0 && topicsStart > featuredStart, 'Selected-reading section must exist before topic archives');
+const featuredSection = blog.slice(featuredStart, topicsStart);
+const featured = [...featuredSection.matchAll(new RegExp('href="/blogs/([a-z0-9-]+)/"', 'g'))].map(m => m[1]);
 const featuredUnique = [...new Set(featured)];
 assert.equal(featuredUnique.length, 8, 'Blogs hub should feature exactly eight curated articles');
 assert.ok(blog.includes('Selected reading'), 'Curated page should be identified as selected reading');

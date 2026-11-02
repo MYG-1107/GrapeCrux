@@ -39,12 +39,12 @@ const htmlFiles = walk(root).filter(file => !file.split(path.sep).includes('incl
 const iconPages = [];
 for (const file of htmlFiles) {
   const html = fs.readFileSync(file, 'utf8');
-  const iconTags = [...html.matchAll(/<link\\b[^>]*\\brel=["']icon["'][^>]*>/gi)].map(match => match[0]);
+  const iconTags = [...html.matchAll(/<link[^>]*rel=["']icon["'][^>]*>/gi)].map(match => match[0]);
   if (!iconTags.length) continue;
   iconPages.push(file);
   for (const tag of iconTags) {
-    assert.ok(/grapecrux_brand_logo\\.png/i.test(tag), path.relative(root, file) + ' must use the original PNG as its browser icon');
-    assert.ok(!/favicon\\.svg|grapecrux-mark\\.svg/i.test(tag), path.relative(root, file) + ' must not use the substitute SVG mark');
+    assert.ok(tag.includes('grapecrux_brand_logo.png'), path.relative(root, file) + ' must use the original PNG as its browser icon');
+    assert.ok(!tag.includes('favicon.svg') && !tag.includes('grapecrux-mark.svg'), path.relative(root, file) + ' must not use the substitute SVG mark');
   }
 }
 assert.ok(iconPages.length >= 70, 'Expected the original favicon to be present on all current indexable/redirect pages');

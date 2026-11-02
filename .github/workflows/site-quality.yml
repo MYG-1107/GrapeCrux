@@ -44,6 +44,8 @@ jobs:
         run: node tests/analytics-events-static.test.cjs
       - name: Run brand and blog tests
         run: node tests/brand-blog-qa.test.cjs
+      - name: Validate original GrapeCrux PNG branding
+        run: node tests/sitewide-original-logo.test.cjs
       - name: Run Careers role-page tests
         run: node tests/careers-role-pages.test.cjs
       - name: Compile optional API

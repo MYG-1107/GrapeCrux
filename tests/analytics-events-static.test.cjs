@@ -5,6 +5,9 @@ const source = fs.readFileSync(path.join(__dirname, '../assets/js/config.js'), '
 
 for (const eventName of [
   'chat_open',
+  'explore_services_click',
+  'start_project_click',
+  'outbound_link_click',
   'chat_contact_click',
   'contact_cta_click',
   'service_page_click',
@@ -20,5 +23,7 @@ assert.ok(source.includes("gc-analytics-consent-v1"), 'Must reuse the existing c
 assert.ok(source.includes("localStorage.getItem(CONSENT_KEY) === 'granted'"), 'Events must require analytics consent');
 assert.ok(source.includes("form.id === 'project-form'"), 'Project enquiry form must be tracked');
 assert.ok(source.includes("form.id === 'gc-careers-application-form'"), 'Careers form must be tracked');
-assert.ok(!/data\.get\(['"](?:name|email|phone|message|past_impact|future_impact)['"]\)/.test(source), 'Do not send applicant PII or free-text content to analytics');
-console.log('GrapeCrux GA4 event static checks passed.');
+assert.ok(source.includes('new URL(href, window.location.href)'), 'Relative and absolute links must be resolved safely');
+assert.ok(source.includes('targetUrl.origin !== window.location.origin'), 'Outbound links must be attributed separately');
+assert.ok(!/data\\.get\\(['"](?:name|email|phone|message|past_impact|future_impact)['"]\\)/.test(source), 'Do not send applicant PII or free text to analytics');
+console.log('GrapeCrux GA4 event tests passed.');

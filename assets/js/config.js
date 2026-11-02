@@ -13,6 +13,36 @@ window.GRAPECRUX_CHAT_API_URL = '';
   'use strict';
 
   const CONSENT_KEY = 'gc-analytics-consent-v1';
+  const GA_ID = 'G-QXMRMGJEP2';
+
+  // Some legacy content pages do not contain an inline GA4 snippet.
+  // Bootstrap tracking here through the shared deferred script instead.
+  if (typeof window.gtag !== 'function') {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    window.gtag('js', new Date());
+    window.gtag('config', GA_ID, {
+      send_page_view: false,
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false
+    });
+  }
+
+  const gaScriptUrl = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+  const hasGaLoader = Array.from(document.scripts).some((script) => script.src === gaScriptUrl);
+  if (!hasGaLoader) {
+    const gaScript = document.createElement('script');
+    gaScript.async = true;
+    gaScript.src = gaScriptUrl;
+    document.head.appendChild(gaScript);
+  }
   const hasAnalyticsConsent = () => {
     try { return window.localStorage.getItem(CONSENT_KEY) === 'granted'; }
     catch (_error) { return false; }

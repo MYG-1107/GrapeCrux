@@ -17,6 +17,22 @@
     'full-time': ['Senior Full-stack Developer','AI Engineer','Forward Deployment Engineer','Quality Assurance Tester','DevOps Engineer','Big Data Engineer'],
     internship: ['Software Developer Intern','Prompt Engineer Intern','AI Engineer Intern','Python Developer Intern','.NET Developer Intern','Machine Learning Engineer Intern','Data Analytics Intern']
   };
+  const roleQuestions = {
+    'Senior Full-stack Developer': 'Describe a web application or feature you helped deliver across frontend and backend. What design decision or trade-off did you make?',
+    'AI Engineer': 'Describe an AI or machine-learning feature, workflow or experiment you built or evaluated. How did you measure quality and handle failure cases?',
+    'Forward Deployment Engineer': 'Give an example of how you turned an unclear user or business need into a working technical solution. How did you validate it with the people involved?',
+    'Quality Assurance Tester': 'Describe a difficult defect or quality risk you found. How did you reproduce it, communicate it and verify the fix?',
+    'DevOps Engineer': 'Describe a deployment, infrastructure or reliability problem you helped solve. What did you change and how did you verify the result?',
+    'Big Data Engineer': 'Describe a data pipeline or data-quality challenge you worked on. How did you validate correctness and monitor the workflow?',
+    'Software Developer Intern': 'Describe a software project or feature you built. What did you personally implement, debug and test?',
+    'Prompt Engineer Intern': 'Give an example of a prompt or AI workflow you improved. How did you compare outputs and decide whether the result was better?',
+    'AI Engineer Intern': 'Describe an AI experiment or model/API integration you have tried. What did you test, what did you learn and what limitations did you notice?',
+    'Python Developer Intern': 'Describe a Python script, API or application you built. How did you structure, debug and test it?',
+    '.NET Developer Intern': 'Describe any C# or .NET coursework or project. Which parts did you implement and how did you test them?',
+    'Machine Learning Engineer Intern': 'Describe a dataset or machine-learning experiment you completed. How did you prepare or split the data and evaluate the model?',
+    'Data Analytics Intern': 'Describe an analysis you completed. Which tools, metrics and data checks helped you reach a reliable conclusion?'
+  };
+
   const jobIds = {
     'Senior Full-stack Developer':'GC-FT-001','AI Engineer':'GC-FT-002','Forward Deployment Engineer':'GC-FT-003',
     'Quality Assurance Tester':'GC-FT-004','DevOps Engineer':'GC-FT-005','Big Data Engineer':'GC-FT-006',
@@ -30,6 +46,17 @@
     if (internshipFields) { internshipFields.hidden = fulltime || kind !== 'internship'; internshipFields.disabled = fulltime || kind !== 'internship'; }
   };
   const updateJobId = () => { if (jobIdField && roleSelect) jobIdField.value = jobIds[roleSelect.value] || ''; };
+  const questionLabel = document.getElementById('career-specific-question-label');
+  const questionField = document.getElementById('career-specific-response');
+  const updateRoleQuestion = (role) => {
+    const question = roleQuestions[role] || 'Select a role above to see a question tailored to that opportunity.';
+    if (questionLabel) questionLabel.textContent = question + ' *';
+    if (questionField) {
+      questionField.placeholder = role
+        ? 'Use a specific example. Explain the challenge, your contribution, tools or approach, and the result or lesson.'
+        : 'Choose a role above to load its question before answering.';
+    }
+  };
   const populateRoles = (kind, selectedRole = '') => {
     if (!(roleSelect instanceof HTMLSelectElement)) return;
     roleSelect.replaceChildren(new Option('Choose a role',''));
@@ -37,6 +64,7 @@
     roleSelect.disabled = !roles[kind];
     roleSelect.value = selectedRole && (roles[kind] || []).includes(selectedRole) ? selectedRole : '';
     updateJobId();
+    updateRoleQuestion(roleSelect.value);
   };
 
   const detailMode = form.dataset.jobDetail === 'true';
@@ -51,10 +79,11 @@
     typeSelect.value = kind;
     roleSelect.value = role;
     if (jobIdField) jobIdField.value = suppliedId;
+    updateRoleQuestion(role);
     setFieldGroup(kind);
   } else {
     if (typeSelect instanceof HTMLSelectElement) typeSelect.addEventListener('change',() => { setFieldGroup(typeSelect.value); populateRoles(typeSelect.value); });
-    if (roleSelect instanceof HTMLSelectElement) roleSelect.addEventListener('change',updateJobId);
+    if (roleSelect instanceof HTMLSelectElement) roleSelect.addEventListener('change',() => { updateJobId(); updateRoleQuestion(roleSelect.value); });
     setFieldGroup('');
     populateRoles('');
   }
@@ -84,13 +113,17 @@
     ];
     const roleSpecific = kind === 'full-time'
       ? [['Total relevant experience',data.get('experience_years')],['Current / most recent organisation',data.get('current_employer')],['Designation',data.get('designation')],['Time worked in that role',data.get('employment_duration')],['Availability / notice period',data.get('notice_period')],['Relevant experience and responsibilities',data.get('experience_summary')],['Previous work impact',data.get('past_impact')],['Potential impact at GrapeCrux',data.get('future_impact')]]
-      : [['Expected / completed graduation year',data.get('graduation_year')],['Projects, coursework or practical experience',data.get('project_summary')],['Project learning or outcome',data.get('past_impact')],['Potential contribution and learning goals',data.get('future_impact')]];
+      : [['Expected / completed graduation year',data.get('graduation_year')],['Projects, coursework or practical experience',data.get('project_summary')],['Project learning or outcome',data.get('past_impact')],['Potential contribution and learning goals',data.get('future_impact')],['Typical weekly availability',data.get('weekly_availability')],['Internship start availability',data.get('internship_start_availability')]];
     const links = [['GitHub profile',data.get('github')],['Portfolio',data.get('portfolio')],['LinkedIn profile',data.get('linkedin')]];
     const lines = [
       'GrapeCrux Careers Application','--------------------------------',
       ...common.map(([label,value]) => `${label}: ${String(value || 'Not provided').trim()}`),
       '', 'Role-specific details:',
       ...roleSpecific.map(([label,value]) => `${label}: ${String(value || 'Not provided').trim()}`),
+      '', 'Additional role-related questions:',
+      `Why this role at GrapeCrux: ${String(data.get('role_interest') || 'Not provided').trim()}`,
+      `Hands-on tools and technologies: ${String(data.get('role_skills') || 'Not provided').trim()}`,
+      `${(questionLabel?.textContent || 'Role-specific question').replace(/\s*\*$/, '')}: ${String(data.get('role_specific_response') || 'Not provided').trim()}`,
       '', 'Professional links:',
       ...links.map(([label,value]) => `${label}: ${String(value || 'Not provided').trim()}`),
       '', 'I have attached my resume / CV to this email.','Submitted using the GrapeCrux Careers page.'

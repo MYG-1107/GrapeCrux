@@ -14,6 +14,8 @@ for (const eventName of [
   'service_page_click',
   'blog_article_click',
   'careers_page_click',
+  'career_job_detail_click',
+  'career_apply_cta_click',
   'careers_apply_click',
   'project_enquiry_email_draft_requested',
   'careers_application_email_draft_requested'
@@ -24,6 +26,7 @@ assert.ok(source.includes("gc-analytics-consent-v1"), 'Must reuse the existing c
 assert.ok(source.includes("localStorage.getItem(CONSENT_KEY) === 'granted'"), 'Events must require analytics consent');
 assert.ok(source.includes("form.id === 'project-form'"), 'Project enquiry form must be tracked');
 assert.ok(source.includes("form.id === 'gc-careers-application-form'"), 'Careers form must be tracked');
+assert.ok(source.includes("form.querySelector('[name=\"job_id\"]')"), 'Careers application events must include the job reference');
 assert.ok(source.includes('new URL(href, window.location.href)'), 'Relative and absolute links must be resolved safely');
 assert.ok(source.includes('targetUrl.origin !== window.location.origin'), 'Outbound links must be attributed separately');
 assert.ok(source.includes('action.hasAttribute(\'download\')'), 'Download links must be tracked as file downloads');

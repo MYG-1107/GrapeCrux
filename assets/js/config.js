@@ -89,6 +89,15 @@ window.GRAPECRUX_CHAT_API_URL = '';
     const label = (action.getAttribute('aria-label') || action.textContent || 'unnamed action')
       .replace(/\s+/g, ' ').trim().slice(0, 80);
 
+    if (action.matches('.job-detail-link[data-job-id]')) {
+      track('career_job_detail_click',{job_id:action.dataset.jobId || 'unspecified',role_name:action.dataset.role || 'unspecified',cta_location:section});
+      return;
+    }
+    if (action.matches('.job-apply-cta[data-job-id]')) {
+      track('career_apply_cta_click',{job_id:action.dataset.jobId || 'unspecified',role_name:action.dataset.role || 'unspecified',cta_location:section});
+      return;
+    }
+
     if (action.matches('.apply-career-role[data-kind][data-role]')) {
       track('careers_apply_click', {
         application_type: action.dataset.kind || 'unspecified',
@@ -176,9 +185,11 @@ window.GRAPECRUX_CHAT_API_URL = '';
     if (form.id === 'gc-careers-application-form') {
       const type = form.querySelector('[name="application_type"]')?.value || 'unspecified';
       const role = form.querySelector('[name="role"]')?.value || 'unspecified';
+      const jobId = form.querySelector('[name="job_id"]')?.value || 'unspecified';
       track('careers_application_email_draft_requested', {
         application_type: type,
         role_name: role,
+        job_id: jobId,
         submission_method: 'mailto_draft'
       });
     }

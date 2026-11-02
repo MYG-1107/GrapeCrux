@@ -36,7 +36,7 @@ for file in sorted(ROOT.rglob('*.html')):
     redirect='http-equiv="refresh"' in raw.lower()
     noindex=bool(re.search(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\'][^"\']*noindex',raw,re.I))
     if not title: errors.append(f'{file}: missing title')
-    if index_page:
+    if index_page and file.name != '404.html':
         pages += 1
         if len(title)!=1: errors.append(f'{file}: expected one title')
         if len(desc)!=1: errors.append(f'{file}: expected one description')
@@ -67,8 +67,8 @@ try:
     urls=[e.text for e in xml.findall('.//s:loc',ns)]
     if len(urls)!=len(set(urls)): errors.append('sitemap.xml contains duplicate URLs')
     for url in urls:
-        path=url.replace('https://grapecrux.com/','').strip('/')
-        target=ROOT/(path/'index.html' if path else 'index.html')
+        path=Path(url.replace('https://grapecrux.com/','').strip('/'))
+        target=(ROOT/path/'index.html') if str(path) != '.' else (ROOT/'index.html')
         if not target.exists(): errors.append(f'sitemap URL has no matching file: {url}')
 except Exception as exc:
     errors.append(f'sitemap.xml could not be parsed: {exc}')

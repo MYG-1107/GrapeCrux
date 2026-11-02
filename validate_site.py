@@ -42,6 +42,7 @@ class PageParser(HTMLParser):
             self.in_head = False
 
 errors, warnings = [], []
+analytics_config = (ROOT / 'assets/js/config.js').read_text(encoding='utf-8', errors='replace') if (ROOT / 'assets/js/config.js').exists() else ''
 html_docs = 0
 content_pages = 0
 indexable_pages = 0
@@ -86,15 +87,12 @@ for f in sorted(ROOT.rglob('*.html')):
             errors.append(f'{f}: shared layout placeholders without main.js')
         if 'assets/js/assistant-knowledge.js' not in raw:
             errors.append(f'{f}: missing assistant knowledge module')
-        # Google tag is a head-level script and must be present once per full content page.
+        # Shared deferred config.js handles consent-first GA4 across every content page.
         config_count = raw.count(f"gtag('config', '{GA_ID}'")
-        if config_count != 1:
-            errors.append(f'{f}: expected one GA4 config command, found {config_count}')
-        tag_scripts = [(d, in_head) for t, d, in_head in tags if t == 'script' and GA_ID in d.get('src', '')]
-        if len(tag_scripts) != 1 or not tag_scripts[0][1] or 'async' not in (tag_scripts[0][0].get('async') or ''):
-            # HTMLParser stores a boolean async attribute as None, so check presence in raw instead.
-            if len(tag_scripts) != 1 or not tag_scripts[0][1] or not re.search(r'<script[^>]+async[^>]+googletagmanager\.com/gtag/js\?id='+GA_ID, raw, re.I):
-                errors.append(f'{f}: expected one async GA4 loader in <head>')
+        if config_count > 1:
+            errors.append(f'{f}: duplicate inline GA4 config commands')
+        if 'assets/js/config.js' not in raw:
+            errors.append(f'{f}: shared analytics configuration script missing')
         if 'src="src=' in raw:
             errors.append(f'{f}: malformed nested script src attribute')
 
@@ -140,6 +138,10 @@ for f in sorted(ROOT.rglob('*.html')):
             target = target / 'index.html'
         if not target.exists():
             errors.append(f'{f}: broken local {tag} target {value}')
+
+# Shared GA4 bootstrap must deny consent before appending the async loader.
+if GA_ID not in analytics_config or "gtag('consent', 'default'" not in analytics_config or 'gaScript.async = true' not in analytics_config or 'googletagmanager.com/gtag/js' not in analytics_config:
+    errors.append('assets/js/config.js: shared consent-first GA4 bootstrap is incomplete')
 
 # Sitemap validation.
 sitemap = ROOT / 'sitemap.xml'

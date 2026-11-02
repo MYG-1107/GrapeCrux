@@ -61,6 +61,24 @@ for file in sorted(ROOT.rglob('*.html')):
 if GA_ID not in config_js or "gtag('consent', 'default'" not in config_js or 'gaScript.async = true' not in config_js:
     errors.append('assets/js/config.js does not initialize GA4 with denied consent before async loading')
 
+core_share_pages = [
+    'index.html', 'about/index.html', 'services/index.html',
+    'industries/index.html', 'work/index.html', 'contact/index.html',
+    'careers/index.html', 'blogs/index.html', 'insights/index.html'
+]
+for relative in core_share_pages:
+    page_path = ROOT / relative
+    if not page_path.exists():
+        errors.append(f'missing core share page: {relative}')
+        continue
+    source = page_path.read_text(encoding='utf-8', errors='replace')
+    for prop in ('og:title', 'og:description', 'og:url', 'og:image'):
+        if not re.search(r'<meta[^>]+property=["\\\']' + re.escape(prop) + r'["\\\'][^>]+content=["\\\'][^"\\\']+["\\\']', source, re.I):
+            errors.append(f'{relative}: missing {prop}')
+    for name in ('twitter:card', 'twitter:title', 'twitter:description', 'twitter:image'):
+        if not re.search(r'<meta[^>]+name=["\\\']' + re.escape(name) + r'["\\\'][^>]+content=["\\\'][^"\\\']+["\\\']', source, re.I):
+            errors.append(f'{relative}: missing {name}')
+
 try:
     xml=ET.parse(ROOT/'sitemap.xml').getroot()
     ns={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}

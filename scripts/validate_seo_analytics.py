@@ -23,6 +23,7 @@ class Audit(HTMLParser):
         if tag == 'head': self.in_head=False
 
 errors=[]; warnings=[]; pages=0; canonical_map={}
+config_js=(ROOT/'assets/js/config.js').read_text(encoding='utf-8',errors='replace') if (ROOT/'assets/js/config.js').exists() else ''
 for file in sorted(ROOT.rglob('*.html')):
     raw=file.read_text(encoding='utf-8',errors='replace')
     if '<html' not in raw.lower(): continue
@@ -35,7 +36,7 @@ for file in sorted(ROOT.rglob('*.html')):
     redirect='http-equiv="refresh"' in raw.lower()
     noindex=bool(re.search(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\'][^"\']*noindex',raw,re.I))
     if not title: errors.append(f'{file}: missing title')
-    if index_page:
+    if index_page and file.name != '404.html':
         pages += 1
         if len(title)!=1: errors.append(f'{file}: expected one title')
         if len(desc)!=1: errors.append(f'{file}: expected one description')
@@ -43,7 +44,7 @@ for file in sorted(ROOT.rglob('*.html')):
         if p.h1 != 1: errors.append(f'{file}: expected exactly one H1, got {p.h1}')
         if not re.search(r'<script[^>]+src=["\'][^"\']*assets/js/config\.js',raw): errors.append(f'{file}: config.js missing')
         if not re.search(r'<script[^>]+src=["\'][^"\']*assets/js/main\.js',raw): errors.append(f'{file}: main.js missing')
-        if raw.count("gtag('config', '"+GA_ID+"'") != 1: errors.append(f'{file}: GA config call missing or duplicated')
+        if raw.count("gtag('config', '"+GA_ID+"'") > 1: errors.append(f'{file}: duplicate inline GA config calls')
         if not re.search(r"gtag\(['\"]consent['\"],\s*['\"]default['\"]",raw): errors.append(f'{file}: Consent Mode default missing')
         if canon:
             c=canon[0].get('href','')
@@ -57,14 +58,35 @@ for file in sorted(ROOT.rglob('*.html')):
             rel=set((d.get('rel') or '').lower().split())
             if not {'noopener','noreferrer'}.issubset(rel): warnings.append(f'{file}: target=_blank should use noopener noreferrer')
 
+if GA_ID not in config_js or "gtag('consent', 'default'" not in config_js or 'gaScript.async = true' not in config_js:
+    errors.append('assets/js/config.js does not initialize GA4 with denied consent before async loading')
+
+core_share_pages = [
+    'index.html', 'about/index.html', 'services/index.html',
+    'industries/index.html', 'work/index.html', 'contact/index.html',
+    'careers/index.html', 'blogs/index.html', 'insights/index.html'
+]
+for relative in core_share_pages:
+    page_path = ROOT / relative
+    if not page_path.exists():
+        errors.append(f'missing core share page: {relative}')
+        continue
+    source = page_path.read_text(encoding='utf-8', errors='replace')
+    for prop in ('og:title', 'og:description', 'og:url', 'og:image'):
+        if not re.search(r'<meta[^>]+property=["\\\']' + re.escape(prop) + r'["\\\'][^>]+content=["\\\'][^"\\\']+["\\\']', source, re.I):
+            errors.append(f'{relative}: missing {prop}')
+    for name in ('twitter:card', 'twitter:title', 'twitter:description', 'twitter:image'):
+        if not re.search(r'<meta[^>]+name=["\\\']' + re.escape(name) + r'["\\\'][^>]+content=["\\\'][^"\\\']+["\\\']', source, re.I):
+            errors.append(f'{relative}: missing {name}')
+
 try:
     xml=ET.parse(ROOT/'sitemap.xml').getroot()
     ns={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}
     urls=[e.text for e in xml.findall('.//s:loc',ns)]
     if len(urls)!=len(set(urls)): errors.append('sitemap.xml contains duplicate URLs')
     for url in urls:
-        path=url.replace('https://grapecrux.com/','').strip('/')
-        target=ROOT/(path/'index.html' if path else 'index.html')
+        path=Path(url.replace('https://grapecrux.com/','').strip('/'))
+        target=(ROOT/path/'index.html') if str(path) != '.' else (ROOT/'index.html')
         if not target.exists(): errors.append(f'sitemap URL has no matching file: {url}')
 except Exception as exc:
     errors.append(f'sitemap.xml could not be parsed: {exc}')

@@ -1,0 +1,48 @@
+name: Site quality checks
+
+on:
+  push:
+    branches: [main, qa-hardening-2026-11-02]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate routes and accessibility basics
+        run: python validate_site.py
+      - name: Validate SEO, structured data and analytics
+        run: python scripts/validate_seo_analytics.py
+      - name: Check JavaScript syntax
+        run: |
+          node --check assets/js/config.js
+          node --check assets/js/main.js
+          node --check assets/js/assistant-knowledge.js
+          node --check assets/js/careers.js
+      - name: Run chatbot tests
+        run: node tests/chatbot-intents.test.cjs
+      - name: Run analytics event tests
+        run: node tests/analytics-events-static.test.cjs
+      - name: Run brand and blog tests
+        run: node tests/brand-blog-qa.test.cjs
+      - name: Compile optional API
+        run: python -m py_compile backend/main.py

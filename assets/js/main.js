@@ -12,7 +12,6 @@
   }
 
   document.documentElement.classList.add('js-ready');
-  const pathDepth = (location.pathname.replace(/^\/+|\/+$/g, '').match(/\//g) || []).length;
   const sitePath = location.pathname.replace(/^\/GrapeCrux(?=\/|$)/, '') || '/';
   const normalPath = sitePath.endsWith('/') ? sitePath : `${sitePath}/`;
 
@@ -34,7 +33,7 @@
     const placeholder = document.getElementById(placeholderId);
     if (!placeholder) return;
     try {
-      const response = await fetch(withBase(filePath), { cache: 'no-cache' });
+      const response = await fetch(withBase(filePath), { cache: 'default' });
       if (!response.ok) throw new Error(`HTTP ${response.status} loading ${filePath}`);
       placeholder.innerHTML = await response.text();
       rebaseRootPaths(placeholder);
@@ -75,12 +74,22 @@
       navLinks.classList.toggle('open', !isOpen);
       document.body.classList.toggle('menu-open', !isOpen);
     });
-    navLinks.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+    const closeNavigation = () => {
       toggleBtn.setAttribute('aria-expanded', 'false');
       toggleBtn.setAttribute('aria-label', 'Open navigation');
       navLinks.classList.remove('open');
       document.body.classList.remove('menu-open');
-    }));
+    };
+    navLinks.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeNavigation));
+    document.addEventListener('pointerdown', (event) => {
+      if (navLinks.classList.contains('open') && !navHeader.contains(event.target)) closeNavigation();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && navLinks.classList.contains('open')) {
+        closeNavigation();
+        toggleBtn.focus();
+      }
+    });
   }
 
   // Turn contact parameters into helpful form defaults.
@@ -160,68 +169,82 @@
     });
   });
 
-  // Accessible client-side service assistant. It never pretends to provide confirmed pricing or human support.
-  const chatbot = document.getElementById('gc-chatbot');
-  if (chatbot) {
-    chatbot.innerHTML = `<button class="chat-launcher" type="button" aria-expanded="false" aria-controls="gc-chat-panel"><span class="chat-bubble-icon" aria-hidden="true">✳</span><span>Ask GrapeCrux</span></button><section class="chat-panel" id="gc-chat-panel" aria-label="GrapeCrux service assistant" aria-hidden="true"><div class="chat-head"><span class="chat-avatar" aria-hidden="true"><img src="https://raw.githubusercontent.com/MYG-1107/GrapeCrux/main/grapecrux_brand_logo.png" alt="" width="38" height="38" onerror="if(this.dataset.fallback){this.onerror=null;}else{this.dataset.fallback='1';this.src='${withBase('/grapecrux_brand_logo.png')}';}"></span><div><strong>GrapeCrux Assistant</strong><small>Guided service information · Instant replies</small></div><button class="chat-close" type="button" aria-label="Close assistant">×</button></div><div class="chat-messages" role="log" aria-live="polite" aria-relevant="additions text"><div class="chat-msg bot">Hello! I can explain what GrapeCrux does, where the company is based, how projects are approached, and which services or internship tracks are listed. I am a guided FAQ assistant, not a human agent. What would you like to know?</div></div><div class="chat-quick"><button type="button" data-chat="Explore services">Explore services</button><button type="button" data-chat="I need a website">Build a website</button><button type="button" data-chat="Tell me about AI automation">AI automation</button><button type="button" data-chat="I want to start a project">Start a project</button></div><form class="chat-form"><label class="sr-only" for="gc-chat-input">Your message</label><input id="gc-chat-input" name="message" autocomplete="off" placeholder="Tell us what you need…" maxlength="500" required><button type="submit" aria-label="Send message">↑</button></form><div class="chat-footnote">Guided FAQ assistant · Not a human agent. Pricing and scope require team confirmation.</div></section>`;
-    const launch = chatbot.querySelector('.chat-launcher');
-    const panel = chatbot.querySelector('.chat-panel');
-    const messages = chatbot.querySelector('.chat-messages');
-    const input = chatbot.querySelector('#gc-chat-input');
-    const form = chatbot.querySelector('.chat-form');
-    const quick = chatbot.querySelector('.chat-quick');
-    const close = chatbot.querySelector('.chat-close');
-    const toggleChat = (open) => { panel.classList.toggle('open', open); panel.setAttribute('aria-hidden', String(!open)); launch.setAttribute('aria-expanded', String(open)); if(open) input.focus(); else launch.focus(); };
-    launch.addEventListener('click', () => toggleChat(!panel.classList.contains('open')));
-    close.addEventListener('click', () => toggleChat(false));
-    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && panel.classList.contains('open')) toggleChat(false); });
-    const addMessage = (text, who='bot', allowHtml=false) => { const div=document.createElement('div'); div.className=`chat-msg ${who}`; if(allowHtml) div.innerHTML=text; else div.textContent=text; messages.appendChild(div); messages.scrollTop=messages.scrollHeight; };
-    const answerFor = (raw) => window.GrapeCruxKnowledge?.answerFor(raw) || 'I can help with published GrapeCrux services and project enquiries. Please contact service@grapecrux.com for details I cannot verify.';
-    const serviceFor = (raw) => { const m=raw.toLowerCase(); if(/ai|chatbot|automation|agent/.test(m)) return 'AI & Automation'; if(/website|web development|e-commerce|app|portal/.test(m)) return 'Web & App Development'; if(/design|ux|ui|prototype/.test(m)) return 'Product Design & UX'; if(/brand|logo|identity/.test(m)) return 'Brand Strategy & Visual Identity'; if(/seo|marketing|growth|search/.test(m)) return 'Digital Growth & SEO'; if(/cloud|devops|hosting|pipeline/.test(m)) return 'Cloud & DevOps'; if(/qa|test|bug|quality/.test(m)) return 'Quality Assurance & Consulting'; if(/api|integration|data|dashboard/.test(m)) return 'Data & System Integration'; return 'Project enquiry'; };
-    const chatHistory = [];
-    const chatApiUrl = String(window.GRAPECRUX_CHAT_API_URL || '').trim().replace(/\/+$/, '');
-    const send = async (text) => {
-      const clean = text.trim();
-      if (!clean) return;
-      addMessage(clean, 'user');
-      let reply = '';
-      if (chatApiUrl) {
-        const thinking = document.createElement('div');
-        thinking.className = 'chat-msg bot';
-        thinking.textContent = 'Thinking…';
-        messages.appendChild(thinking);
-        messages.scrollTop = messages.scrollHeight;
-        try {
-          const response = await fetch(`${chatApiUrl}/api/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'omit',
-            body: JSON.stringify({ messages: [...chatHistory.slice(-8), { role: 'user', content: clean }] })
-          });
-          const payload = await response.json().catch(() => ({}));
-          if (!response.ok) throw new Error(`Assistant request failed (${response.status})`);
-          reply = String(payload.reply || '').trim();
-          if (!reply) throw new Error('Empty assistant response');
-        } catch (_error) {
-          reply = `${answerFor(clean)}\n\n(The hosted assistant is unavailable right now, so I’m using the built-in guide.)`;
-        } finally {
-          thinking.remove();
+  // Build the optional chatbot during an idle period, not on the critical rendering path.
+  // A first user interaction initializes it immediately; the panel remains closed by default.
+  let chatbotInitialized = false;
+  const initializeChatbot = () => {
+    if (chatbotInitialized) return;
+    chatbotInitialized = true;
+    // Accessible client-side service assistant. It never pretends to provide confirmed pricing or human support.
+    const chatbot = document.getElementById('gc-chatbot');
+    if (chatbot) {
+      chatbot.innerHTML = `<button class="chat-launcher" type="button" aria-expanded="false" aria-controls="gc-chat-panel"><span class="chat-bubble-icon" aria-hidden="true">✳</span><span>Ask GrapeCrux</span></button><section class="chat-panel" id="gc-chat-panel" aria-label="GrapeCrux service assistant" aria-hidden="true"><div class="chat-head"><span class="chat-avatar" aria-hidden="true"><img src="${withBase('/grapecrux_brand_logo.png')}" alt="" width="38" height="38" loading="lazy" decoding="async"></span><div><strong>GrapeCrux Assistant</strong><small>Guided service information · Instant replies</small></div><button class="chat-close" type="button" aria-label="Close assistant">×</button></div><div class="chat-messages" role="log" aria-live="polite" aria-relevant="additions text"><div class="chat-msg bot">Hello! I can explain what GrapeCrux does, where the company is based, how projects are approached, and which services or internship tracks are listed. I am a guided FAQ assistant, not a human agent. What would you like to know?</div></div><div class="chat-quick"><button type="button" data-chat="Explore services">Explore services</button><button type="button" data-chat="I need a website">Build a website</button><button type="button" data-chat="Tell me about AI automation">AI automation</button><button type="button" data-chat="I want to start a project">Start a project</button></div><form class="chat-form"><label class="sr-only" for="gc-chat-input">Your message</label><input id="gc-chat-input" name="message" autocomplete="off" placeholder="Tell us what you need…" maxlength="500" required><button type="submit" aria-label="Send message">↑</button></form><div class="chat-footnote">Guided FAQ assistant · Not a human agent. Pricing and scope require team confirmation.</div></section>`;
+      const launch = chatbot.querySelector('.chat-launcher');
+      const panel = chatbot.querySelector('.chat-panel');
+      const messages = chatbot.querySelector('.chat-messages');
+      const input = chatbot.querySelector('#gc-chat-input');
+      const form = chatbot.querySelector('.chat-form');
+      const quick = chatbot.querySelector('.chat-quick');
+      const close = chatbot.querySelector('.chat-close');
+      const toggleChat = (open) => { panel.classList.toggle('open', open); panel.setAttribute('aria-hidden', String(!open)); launch.setAttribute('aria-expanded', String(open)); if(open) input.focus(); else launch.focus(); };
+      launch.addEventListener('click', () => toggleChat(!panel.classList.contains('open')));
+      close.addEventListener('click', () => toggleChat(false));
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && panel.classList.contains('open')) toggleChat(false); });
+      const addMessage = (text, who='bot', allowHtml=false) => { const div=document.createElement('div'); div.className=`chat-msg ${who}`; if(allowHtml) div.innerHTML=text; else div.textContent=text; messages.appendChild(div); messages.scrollTop=messages.scrollHeight; };
+      const answerFor = (raw) => window.GrapeCruxKnowledge?.answerFor(raw) || 'I can help with published GrapeCrux services and project enquiries. Please contact service@grapecrux.com for details I cannot verify.';
+      const serviceFor = (raw) => { const m=raw.toLowerCase(); if(/ai|chatbot|automation|agent/.test(m)) return 'AI & Automation'; if(/website|web development|e-commerce|app|portal/.test(m)) return 'Web & App Development'; if(/design|ux|ui|prototype/.test(m)) return 'Product Design & UX'; if(/brand|logo|identity/.test(m)) return 'Brand Strategy & Visual Identity'; if(/seo|marketing|growth|search/.test(m)) return 'Digital Growth & SEO'; if(/cloud|devops|hosting|pipeline/.test(m)) return 'Cloud & DevOps'; if(/qa|test|bug|quality/.test(m)) return 'Quality Assurance & Consulting'; if(/api|integration|data|dashboard/.test(m)) return 'Data & System Integration'; return 'Project enquiry'; };
+      const chatHistory = [];
+      const chatApiUrl = String(window.GRAPECRUX_CHAT_API_URL || '').trim().replace(/\/+$/, '');
+      const send = async (text) => {
+        const clean = text.trim();
+        if (!clean) return;
+        addMessage(clean, 'user');
+        let reply = '';
+        if (chatApiUrl) {
+          const thinking = document.createElement('div');
+          thinking.className = 'chat-msg bot';
+          thinking.textContent = 'Thinking…';
+          messages.appendChild(thinking);
+          messages.scrollTop = messages.scrollHeight;
+          try {
+            const response = await fetch(`${chatApiUrl}/api/chat`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'omit',
+              body: JSON.stringify({ messages: [...chatHistory.slice(-8), { role: 'user', content: clean }] })
+            });
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(`Assistant request failed (${response.status})`);
+            reply = String(payload.reply || '').trim();
+            if (!reply) throw new Error('Empty assistant response');
+          } catch (_error) {
+            reply = `${answerFor(clean)}\n\n(The hosted assistant is unavailable right now, so I’m using the built-in guide.)`;
+          } finally {
+            thinking.remove();
+          }
+        } else {
+          reply = answerFor(clean);
         }
-      } else {
-        reply = answerFor(clean);
-      }
-      chatHistory.push({ role: 'user', content: clean }, { role: 'assistant', content: reply });
-      if (chatHistory.length > 12) chatHistory.splice(0, chatHistory.length - 12);
-      addMessage(reply, 'bot');
-    };
-    form.addEventListener('submit', e => { e.preventDefault(); const text=input.value.trim(); if(!text) return; input.value=''; send(text); });
-    quick.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
-      const text=button.dataset.chat || button.textContent; send(text);
-      if (/start a project|need a website/i.test(text)) {
-        const service=serviceFor(text); const link=document.createElement('a'); link.className='btn btn-primary'; link.style.margin='2px 0 5px'; link.href=withBase('/contact/')+`?service=${encodeURIComponent(service)}`; link.textContent='Prepare project enquiry ↗'; link.addEventListener('click',()=>toggleChat(false)); messages.appendChild(link); messages.scrollTop=messages.scrollHeight;
-      }
-    }));
+        chatHistory.push({ role: 'user', content: clean }, { role: 'assistant', content: reply });
+        if (chatHistory.length > 12) chatHistory.splice(0, chatHistory.length - 12);
+        addMessage(reply, 'bot');
+      };
+      form.addEventListener('submit', e => { e.preventDefault(); const text=input.value.trim(); if(!text) return; input.value=''; send(text); });
+      quick.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+        const text=button.dataset.chat || button.textContent; send(text);
+        if (/start a project|need a website/i.test(text)) {
+          const service=serviceFor(text); const link=document.createElement('a'); link.className='btn btn-primary'; link.style.margin='2px 0 5px'; link.href=withBase('/contact/')+`?service=${encodeURIComponent(service)}`; link.textContent='Prepare project enquiry ↗'; link.addEventListener('click',()=>toggleChat(false)); messages.appendChild(link); messages.scrollTop=messages.scrollHeight;
+        }
+      }));
+    }
+  };
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(initializeChatbot, { timeout: 1400 });
+  } else {
+    window.setTimeout(initializeChatbot, 800);
   }
+  window.addEventListener('pointerdown', initializeChatbot, { once: true, passive: true });
+  window.addEventListener('keydown', initializeChatbot, { once: true });
 
   // Analytics consent: GA4 is configured with denied defaults in the page head.
   // A page_view is sent only after the visitor opts into analytics measurement.

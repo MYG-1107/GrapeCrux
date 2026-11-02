@@ -38,7 +38,7 @@ for(const [id,slug,title,kind] of jobs){
  assert.ok(page.includes('G-QXMRMGJEP2')&&page.includes('googletagmanager.com/gtag/js'),id+' GA4 head snippet missing');
  assert.ok(page.includes('id="site-header"')&&page.includes('id="site-footer"')&&page.includes('id="gc-chatbot"'),id+' shared layout missing');
  assert.ok(page.includes('id="gc-careers-application-form"'),id+' application form missing');
- assert.ok(sitemap.includes('https://grapecrux.com/'+slug+'/'),id+' sitemap entry missing');
+ assert.ok(sitemap.includes('https://grapecrux.com/careers/'+slug+'/'),id+' sitemap entry missing');
  assert.ok(careers.includes('href="/careers/'+slug+'/" data-job-id="'+id+'"')&&careers.includes('target="_blank" rel="noopener noreferrer"'),id+' new-tab Careers link missing');
 }
 assert.ok(js.includes("['Job ID',jobId]"),'Email body must contain Job ID');

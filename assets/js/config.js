@@ -102,7 +102,6 @@ window.GRAPECRUX_CHAT_API_URL = '';
     if (targetUrl && /^https?:$/.test(targetUrl.protocol) && targetUrl.origin !== window.location.origin) {
       track('outbound_link_click', {
         link_domain: targetUrl.hostname.slice(0, 100),
-        link_url: targetUrl.href.slice(0, 100),
         cta_location: section,
         cta_label: label
       });

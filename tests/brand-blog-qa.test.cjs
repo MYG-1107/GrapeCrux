@@ -20,8 +20,8 @@ for (const [name, html] of [['header', header], ['footer', footer]]) {
 }
 
 const featuredStart = blog.indexOf('<div class="article-list">');
-const topicsStart = blog.indexOf('<section class="blog-topic-section">', featuredStart);
-assert.ok(featuredStart >= 0 && topicsStart > featuredStart, 'Selected-reading section must exist before topic archives');
+const topicsStart = blog.indexOf('<p class="blog-archive-note"', featuredStart);
+assert.ok(featuredStart >= 0 && topicsStart > featuredStart, 'Selected-reading section and archive note must exist');
 const featuredSection = blog.slice(featuredStart, topicsStart);
 const featured = [...featuredSection.matchAll(new RegExp('href="/blogs/([a-z0-9-]+)/"', 'g'))].map(m => m[1]);
 const featuredUnique = [...new Set(featured)];

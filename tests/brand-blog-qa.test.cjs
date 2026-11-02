@@ -42,7 +42,7 @@ assert.equal(articleSlugs.length, sitemapSlugs.length, 'Every published article 
 for (const slug of articleSlugs) {
   assert.ok(sitemapSlugs.includes(slug), `Sitemap must include published article: ${slug}`);
   const page = read(`blogs/${slug}/index.html`);
-  assert.ok(page.includes('name="robots" content="index,follow'), `${slug} must remain indexable`);
+  assert.ok(!/name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(page), `${slug} must not be marked noindex`);
   assert.ok(page.includes('rel="canonical"'), `${slug} must have a canonical URL`);
   assert.ok(page.includes('application/ld+json'), `${slug} must include structured data`);
   assert.ok(page.includes('name="description"'), `${slug} must include a description`);

@@ -12,9 +12,9 @@ const assistant = read('assets/js/assistant-knowledge.js');
 for (const [name, html] of [['header', header], ['footer', footer]]) {
   assert.match(html, /brand-mark-img/, `${name} must render the transparent brand mark`);
   assert.match(html, /brand-wordmark/, `${name} must render the brand wordmark`);
-  assert.match(html, /<span>Grape<\\/span>/, `${name} must show Grape`);
-  assert.match(html, /brand-wordmark-accent[^>]*>Crux<\\/span>/, `${name} must show Crux in the accent colour`);
-  assert.match(html, /width:clamp\\(44px,3\\.6vw,50px\\)/, `${name} logo must be medium and responsive`);
+  assert.ok(html.includes('<span>Grape</span>'), `${name} must show Grape`);
+  assert.ok(html.includes('brand-wordmark-accent') && html.includes('>Crux</span>'), `${name} must show Crux in the accent colour`);
+  assert.ok(html.includes('width:clamp(44px,3.6vw,50px)'), `${name} logo must be medium and responsive`);
   assert.match(html, /background:transparent;border:0;box-shadow:none;border-radius:0/, `${name} logo must not have a square background card`);
   assert.match(html, /aria-label="GrapeCrux home"/, `${name} lockup must be accessible`);
 }

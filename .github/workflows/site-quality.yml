@@ -48,6 +48,8 @@ jobs:
         run: node tests/sitewide-original-logo.test.cjs
       - name: Validate new blogs, curation and Google tag
         run: node tests/new-blogs-ga4-curation.test.cjs
+      - name: Validate additive topic hubs and internal discovery
+        run: node tests/additive-topic-hubs.test.cjs
       - name: Run Careers role-page tests
         run: node tests/careers-role-pages.test.cjs
       - name: Compile optional API

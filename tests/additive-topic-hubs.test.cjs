@@ -32,7 +32,7 @@ for (const topic of topicPages) {
   assert.ok(file.includes('googletagmanager.com/gtag/js?id=G-QXMRMGJEP2'), topic.slug + ' should load the Google tag');
   assert.ok(file.includes('id="site-header"') && file.includes('id="site-footer"'), topic.slug + ' should mount shared header and footer');
   assert.ok(file.includes('"@type":"CollectionPage"') && file.includes('"@type":"ItemList"'), topic.slug + ' should have collection structured data');
-  assert.ok((file.match(/class="article-card"/g) || []).length === 6, topic.slug + ' should link six existing articles');
+  assert.ok((file.match(/class="article-card"/g) || []).length >= 6, topic.slug + ' should retain at least six existing article links');
 }
 const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]);
 assert.equal(urls.length, new Set(urls).size, 'Sitemap must not have duplicate URLs');

@@ -52,5 +52,7 @@ jobs:
         run: node tests/additive-topic-hubs.test.cjs
       - name: Run Careers role-page tests
         run: node tests/careers-role-pages.test.cjs
+      - name: Validate client conversion and 24 new articles
+        run: node tests/client-conversion-24-blogs.test.cjs
       - name: Compile optional API
         run: python -m py_compile backend/main.py

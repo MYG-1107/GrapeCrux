@@ -118,6 +118,10 @@
       `Budget range: ${data.get('budget') || 'Not specified'}`,
       `Budget currency: ${data.get('currency') || 'Not specified'}`,
       `Preferred timeline: ${data.get('timeline') || 'Not specified'}`,
+      `Project stage: ${data.get('project_stage') || 'Not specified'}`,
+      `Primary desired outcome: ${data.get('project_outcome') || 'Not specified'}`,
+      `Current website/product: ${data.get('existing_website') || 'Not provided'}`,
+      `Current systems/tools: ${data.get('existing_systems') || 'Not provided'}`,
       '', 'Project details:', data.get('message') || '', '',
       'Submitted via the GrapeCrux website.'
     ].join('\n');

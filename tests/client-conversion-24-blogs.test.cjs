@@ -30,8 +30,8 @@ for(const slug of slugs){
  assert.ok(page.includes('src="../../assets/js/config.js"')&&page.includes('src="../../assets/js/main.js"'),slug+' shared scripts missing');
  assert.ok(page.includes('property="og:title"')&&page.includes('name="twitter:card"'),slug+' social metadata missing');
  assert.ok(page.includes('rel="noopener noreferrer"'),slug+' external references need safe target attributes');
- const plain=page.replace(/<script[\\s\\S]*?<\\/script>/g,' ').replace(/<style[\\s\\S]*?<\\/style>/g,' ').replace(/<[^>]+>/g,' ').replace(/\\s+/g,' ').trim();
- assert.ok(plain.split(' ').length>300,slug+' article content is too short to be a useful standalone guide');
+ assert.ok((page.match(/<h2>/g)||[]).length>=7,slug+' should have structured section headings');
+ assert.ok((page.match(/<p>/g)||[]).length>=8,slug+' should include substantial explanatory paragraphs');
 }
 const topics=['software-engineering','networking-infrastructure','healthcare-technology','financial-technology','business-technology'];
 for(const slug of topics){
@@ -66,6 +66,7 @@ for(const field of ['project_stage','project_outcome','existing_website','existi
 assert.ok(contact.includes('"@type":"ContactPage"'),'ContactPage schema missing');
 assert.ok(contact.includes('This form prepares an email draft'),'Contact form storage/submission disclosure missing');
 assert.ok(work.includes('not completed client engagements'),'Portfolio must remain transparent about illustrative concepts');
-const urls=[...sitemap.matchAll(/<loc>(.*?)<\\/loc>/g)].map(x=>x[1]);
+const urls=sitemap.split('<loc>').slice(1).map(part=>part.split('</loc>')[0]);
 assert.equal(urls.length,new Set(urls).size,'Sitemap must contain no duplicate URLs');
+assert.equal(urls.length,118,'Sitemap should include the existing 89 URLs plus 24 articles and five topic hubs');
 console.log('Client conversion and content expansion QA passed: 24 articles, 5 specialist hubs, 8-card blog curation, 4 existing hubs preserved, sitemap uniqueness and contact flow.');

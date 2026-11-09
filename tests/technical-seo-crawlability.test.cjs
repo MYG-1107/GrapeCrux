@@ -78,7 +78,7 @@ for (const file of contentPages) {
   canonicals.set(canonical, file);
   routeMap.set(route, file);
 
-  const ids = [...source.matchAll(/\bid="([^"]+)"/gi)].map(match => match[1]);
+  const ids = [...source.matchAll(/(?:^|\s)id="([^"]+)"/gi)].map(match => match[1]);
   assert.equal(ids.length, new Set(ids).size, file + ': duplicate HTML id');
   for (const image of source.matchAll(/<img\b([^>]*)>/gi)) {
     assert.match(image[1], /\balt\s*=/i, file + ': image missing alt attribute');

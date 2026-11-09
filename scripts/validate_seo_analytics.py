@@ -42,6 +42,12 @@ for file in sorted(ROOT.rglob('*.html')):
         if len(desc)!=1: errors.append(f'{file}: expected one description')
         if len(canon)!=1: errors.append(f'{file}: expected one canonical')
         if p.h1 != 1: errors.append(f'{file}: expected exactly one H1, got {p.h1}')
+        for prop in ('og:title', 'og:description', 'og:url', 'og:image', 'og:image:alt', 'og:image:width', 'og:image:height', 'og:locale'):
+            if not any(t == 'meta' and d.get('property', '').lower() == prop for t, d, _ in tags):
+                errors.append(f'{file}: missing {prop}')
+        for name in ('twitter:card', 'twitter:title', 'twitter:description', 'twitter:url', 'twitter:image'):
+            if not any(t == 'meta' and d.get('name', '').lower() == name for t, d, _ in tags):
+                errors.append(f'{file}: missing {name}')
         if not re.search(r'<script[^>]+src=["\'][^"\']*assets/js/config\.js',raw): errors.append(f'{file}: config.js missing')
         if not re.search(r'<script[^>]+src=["\'][^"\']*assets/js/main\.js',raw): errors.append(f'{file}: main.js missing')
         if raw.count("gtag('config', '"+GA_ID+"'") > 1: errors.append(f'{file}: duplicate inline GA config calls')

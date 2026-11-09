@@ -88,6 +88,14 @@ Older .html addresses remain compatibility pages with noindex and a clean-route 
 - Weekly/manual live audit: checks HTTP statuses, redirect hops, X-Robots-Tag, meta robots, canonicals, duplicate titles, H1/main content, sitemap, live internal links and a soft-404 probe.
 - The live audit is separate from PR CI because the branch is not yet deployed. Run it manually after merge or let its weekly schedule run.
 
+## Metadata hardening in this release
+
+- Standardised author, Open Graph locale, image alternative text and image dimensions across all 118 indexable content pages.
+- Added canonical `twitter:url`, `twitter:title`, `twitter:description` and `twitter:image` values so shared links have complete preview metadata.
+- Kept the existing canonical host, crawlable HTML navigation, JSON-LD, sitemap and robots directives unchanged.
+- Corrected the static duplicate-ID check so `data-*` attributes are not mistaken for HTML `id` attributes.
+- Extended the SEO validator to fail if any public page loses required Open Graph or Twitter metadata.
+
 ## Limits
 
 The live domain did not resolve from the audit environment while preparing this PR, so live HTTP results are not claimed. The new GitHub Action will run against the public site after merge. No source-code change can force Google to index pages or guarantee rankings.

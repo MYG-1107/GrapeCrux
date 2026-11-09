@@ -1,0 +1,31 @@
+name: Live technical SEO audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 2 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: grapecrux-live-technical-seo
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Audit published pages, crawl directives, links and redirects
+        env:
+          SITE_URL: https://grapecrux.com
+          CONCURRENCY: '6'
+          MAX_LINK_CHECKS: '500'
+        run: node scripts/audit_live_seo.mjs

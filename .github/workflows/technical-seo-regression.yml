@@ -1,0 +1,26 @@
+name: Technical SEO regression checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  technical-seo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check live audit script syntax
+        run: node --check scripts/audit_live_seo.mjs
+      - name: Check sitemap, canonicals, titles and crawlable links
+        run: node tests/technical-seo-crawlability.test.cjs

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 'use strict';
+import { findMetaContent, findCanonicalHref } from './html_meta_parser.mjs';
 /* Live technical SEO audit for GrapeCrux. Node.js 22+, no third-party dependencies. */
 const BASE = new URL((process.env.SITE_URL || 'https://grapecrux.com').replace(/\/+$/, '') + '/');
 const TIMEOUT = Number(process.env.TIMEOUT_MS || 20000);
@@ -135,12 +136,11 @@ async function main() {
 
     const html = await res.text();
     const title = extract(html, /<title\b[^>]*>([\s\S]*?)<\/title>/i);
-    const descTag = (html.match(/<meta\b[^>]*name=["']description["'][^>]*>/i) || [,''])[1];
-    const description = extract(descTag, /content=["']([^"']*)["']/i);
-    const canonTag = (html.match(/<link\b[^>]*rel=["']canonical["'][^>]*>/i) || [,''])[1];
-    const canonical = extract(canonTag, /href=["']([^"']+)["']/i);
-    const robotsTag = (html.match(/<meta\b[^>]*name=["']robots["'][^>]*>/i) || [,''])[1];
-    const robotsMeta = extract(robotsTag, /content=["']([^"']*)["']/i);
+    // HTML attributes are unordered. Read attributes by name instead of
+    // indexing a capture group from a tag regex that has no capture group.
+    const description = findMetaContent(html, 'description');
+    const canonical = findCanonicalHref(html);
+    const robotsMeta = findMetaContent(html, 'robots');
     const mainHtml = (html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i) || [,''])[1];
     const h1s = [...mainHtml.matchAll(/<h1\b[^>]*>/gi)];
 

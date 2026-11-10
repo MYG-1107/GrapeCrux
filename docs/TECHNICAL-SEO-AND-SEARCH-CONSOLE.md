@@ -99,3 +99,21 @@ Older .html addresses remain compatibility pages with noindex and a clean-route 
 ## Limits
 
 The live domain did not resolve from the audit environment while preparing this PR, so live HTTP results are not claimed. The new GitHub Action will run against the public site after merge. No source-code change can force Google to index pages or guarantee rankings.
+
+
+## Follow-up: first live-audit workflow failure (10 November 2026)
+
+The first manual run of the live audit (run ID 42856513736) failed before it completed page-level SEO checks. The job log showed the same parser exception for all 118 sitemap pages: `Cannot read properties of undefined (reading 'match')`. As a result, the run reported 0 unique titles and 0 internal link targets. This was an audit-script failure, not evidence that all 118 pages were broken.
+
+The parser helper now normalizes optional/missing HTML fragments to an empty string before calling `match()`. Missing metadata is therefore reported as a specific SEO finding instead of aborting the page check. Unexpected exceptions now include a short stack location in the job log to make future diagnosis actionable.
+
+The two SEO workflows now use:
+- `actions/checkout@v7`
+- `actions/setup-node@v7`
+- Node.js 24
+- `ubuntu-24.04` for a stable runner image
+- `package-manager-cache: false`, since these audit jobs do not install packages or require a package cache
+
+The deprecation warning in the original run concerned the Node 20 runtime bundled inside the v4 GitHub Actions; it was separate from the parser error. The runner-image migration notice was informational and not the cause of the failed job.
+
+After this fix is merged, rerun **Actions → Live technical SEO audit**. The expected confirmation is that the audit reports all sitemap URLs as processed and counts page titles/internal link targets, with any real HTTP or SEO defects listed separately. A successful script run does not itself prove Google has indexed the pages.

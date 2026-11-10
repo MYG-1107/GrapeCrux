@@ -18,8 +18,13 @@ function decode(value) {
     .replace(/&#39;|&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 }
 function extract(source, regex) {
-  const match = source.match(regex);
-  return match ? decode(match[1]).trim() : '';
+  // Optional HTML elements/attributes may be absent. Normalize the input before
+  // parsing so a missing match becomes an explicit SEO finding, not a TypeError
+  // that aborts every remaining page check.
+  const input = typeof source === 'string' ? source : '';
+  if (!input) return '';
+  const match = input.match(regex);
+  return match && typeof match[1] === 'string' ? decode(match[1]).trim() : '';
 }
 async function request(url, method) {
   let current = new URL(url);
@@ -49,7 +54,11 @@ async function parallel(items, limit, fn) {
       const i = next++;
       if (i >= items.length) return;
       try { results[i] = await fn(items[i]); }
-      catch (e) { fail('Request failed for ' + items[i] + ': ' + (e.message || String(e))); results[i] = null; }
+      catch (e) {
+        const detail = e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : (e.message || String(e));
+        fail('Request failed for ' + items[i] + ': ' + detail);
+        results[i] = null;
+      }
     }
   }
   await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));

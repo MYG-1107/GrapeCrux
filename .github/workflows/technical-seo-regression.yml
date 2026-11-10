@@ -10,16 +10,21 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: technical-seo-regression-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   technical-seo:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: '24'
+          package-manager-cache: false
       - name: Check live audit script syntax
         run: node --check scripts/audit_live_seo.mjs
       - name: Check sitemap, canonicals, titles and crawlable links

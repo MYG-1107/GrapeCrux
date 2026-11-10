@@ -27,5 +27,7 @@ jobs:
           package-manager-cache: false
       - name: Check live audit script syntax
         run: node --check scripts/audit_live_seo.mjs
+      - name: Test HTML metadata parser (attribute order variants)
+        run: node --test tests/live-seo-meta-parser.test.mjs
       - name: Check sitemap, canonicals, titles and crawlable links
         run: node tests/technical-seo-crawlability.test.cjs

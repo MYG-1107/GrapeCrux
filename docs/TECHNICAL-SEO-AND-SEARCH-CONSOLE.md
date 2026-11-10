@@ -117,3 +117,19 @@ The two SEO workflows now use:
 The deprecation warning in the original run concerned the Node 20 runtime bundled inside the v4 GitHub Actions; it was separate from the parser error. The runner-image migration notice was informational and not the cause of the failed job.
 
 After this fix is merged, rerun **Actions → Live technical SEO audit**. The expected confirmation is that the audit reports all sitemap URLs as processed and counts page titles/internal link targets, with any real HTTP or SEO defects listed separately. A successful script run does not itself prove Google has indexed the pages.
+
+
+## Follow-up: second live-audit failure — HTML attribute parsing (10 November 2026)
+
+The next live audit run (run ID 42862406884) completed all 118 sitemap page requests and discovered 101 unique internal-link targets and 118 distinct page titles. It then reported 236 errors: a missing meta description and a missing canonical URL for each page.
+
+Inspection of the published source and repository HTML showed that the metadata is present. The parser caused the false positives: it matched a full `<meta>` or `<link>` tag using a regular expression with no capture groups, then read `match[1]` instead of the complete tag at `match[0]`. The audit therefore passed an undefined fragment to the attribute reader for every page.
+
+The correction extracts HTML attributes by name and does not rely on attribute order:
+- `findMetaContent(html, "description")` locates the meta tag by its `name` attribute, then reads `content`.
+- `findMetaContent(html, "robots")` reads robots directives using the same parser.
+- `findCanonicalHref(html)` reads a `link` tag whose `rel` contains `canonical`, regardless of whether `rel` or `href` appears first.
+
+A dedicated Node test suite covers nine cases: both metadata attribute orders, single quotes, HTML entity decoding, canonical token matching, unquoted values, missing metadata and robots tags. These tests run in the technical SEO regression workflow.
+
+This failure was an audit-code defect, not proof that all 118 live pages lacked metadata. Once the correction is merged, rerun the live audit to reveal any genuine missing metadata or other HTTP/SEO issues individually.

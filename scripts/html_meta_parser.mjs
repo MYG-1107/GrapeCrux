@@ -16,7 +16,7 @@ export function readHtmlAttribute(tag, attributeName) {
   if (typeof tag !== 'string' || !tag) return '';
   const safeName = String(attributeName).replace(/[^a-z0-9_-]/gi, '');
   const pattern = new RegExp(
-    '(?:^|\\s)' + safeName + '\\s*=\\s*(?:"([^"]*)"|\\'([^\\']*)\\'|([^\\s>]+))',
+    '(?:^|\\s)' + safeName + '\\s*=\\s*(?:"([^"]*)"|\\x27([^\\x27]*)\\x27|([^\\s>]+))',
     'i'
   );
   const match = tag.match(pattern);

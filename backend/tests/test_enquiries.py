@@ -41,6 +41,8 @@ class EnquiryApiTests(unittest.TestCase):
         self.assertEqual(first.status_code,201)
         self.assertEqual(second.status_code,201)
         self.assertEqual(first.json()["reference"],second.json()["reference"])
+        self.assertTrue(first.json()["created"])
+        self.assertFalse(second.json()["created"])
     def test_admin_auth_and_status_update(self):
         self.assertEqual(self.client.get("/api/admin/summary").status_code,401)
         summary=self.client.get("/api/admin/summary",headers=self.admin_headers())
@@ -58,5 +60,6 @@ class EnquiryApiTests(unittest.TestCase):
         response=self.post("test-request-honeypot",data)
         after=self.client.get("/api/admin/summary",headers=self.admin_headers()).json()["total"]
         self.assertEqual(response.status_code,201)
+        self.assertFalse(response.json()["created"])
         self.assertEqual(before,after)
 if __name__=="__main__": unittest.main()

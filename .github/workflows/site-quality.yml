@@ -16,18 +16,19 @@ concurrency:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: '24'
+          package-manager-cache: false
       - name: Validate routes and accessibility basics
         run: python validate_site.py
       - name: Validate SEO, structured data and analytics
@@ -38,6 +39,10 @@ jobs:
           node --check assets/js/main.js
           node --check assets/js/assistant-knowledge.js
           node --check assets/js/careers.js
+          node --check assets/js/blog-archive.js
+          node --check assets/js/project-assessment.js
+          node --check assets/js/lead-management.js
+          node --check backend/main.py
       - name: Run chatbot tests
         run: node tests/chatbot-intents.test.cjs
       - name: Run analytics event tests
@@ -54,5 +59,7 @@ jobs:
         run: node tests/careers-role-pages.test.cjs
       - name: Validate client conversion and 24 new articles
         run: node tests/client-conversion-24-blogs.test.cjs
+      - name: Validate business visibility and enquiry platform
+        run: node tests/business-platform-qa.test.cjs
       - name: Compile optional API
         run: python -m py_compile backend/main.py

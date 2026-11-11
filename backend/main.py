@@ -25,7 +25,7 @@ ORIGINS = [x.strip().rstrip("/") for x in os.getenv(
 ).split(",") if x.strip()]
 ADMIN_TOKEN = os.getenv("ADMIN_API_TOKEN", "")
 SALES_EMAIL = os.getenv("SALES_NOTIFICATION_EMAIL", "service@grapecrux.com")
-SALT = os.getenv("IP_HASH_SALT", "configure-a-random-secret-before-production")
+SALT = os.getenv("IP_HASH_SALT", "").strip() or secrets.token_urlsafe(32)
 STATUSES = {"New","Under Review","Qualified","Proposal Sent","Discussion","Won","Lost","Spam"}
 SERVICES = {
  "Custom Software Development","Web & App Development","AI & Automation","AI Integration & Development",
@@ -102,6 +102,8 @@ def enforce_limit(store: dict[str, deque[float]], key: str, limit: int, window: 
     q.append(t)
 
 def host_key(request: Request) -> str:
+    # Trust the ASGI client address. Configure Uvicorn proxy headers with only the
+    # hosting provider trusted proxy CIDRs; never accept arbitrary X-Forwarded-For.
     return request.client.host if request.client else "unknown"
 
 def require_origin(request: Request) -> None:

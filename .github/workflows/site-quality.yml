@@ -42,7 +42,6 @@ jobs:
           node --check assets/js/blog-archive.js
           node --check assets/js/project-assessment.js
           node --check assets/js/lead-management.js
-          node --check backend/main.py
       - name: Run chatbot tests
         run: node tests/chatbot-intents.test.cjs
       - name: Run analytics event tests

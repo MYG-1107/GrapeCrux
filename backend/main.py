@@ -153,7 +153,7 @@ class EnquiryInput(BaseModel):
     @classmethod
     def email_valid(cls, value: str) -> str:
         v = value.strip().lower()
-        if not re.fullmatch(r"[A-Z0-9.!#$%&'*+/=?^_{|}~-]+@[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?(?:\\.[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?)+", v, re.I):
+        if not re.fullmatch(r"[A-Z0-9.!#$%&'*+/=?^_{|}~-]+@[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?(?:\.[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?)+", v, re.I):
             raise ValueError("Enter a valid email address.")
         return v
 

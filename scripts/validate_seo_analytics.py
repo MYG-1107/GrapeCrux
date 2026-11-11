@@ -51,7 +51,7 @@ for file in sorted(ROOT.rglob('*.html')):
         if not re.search(r'<script[^>]+src=["\'][^"\']*assets/js/config\.js',raw): errors.append(f'{file}: config.js missing')
         if not re.search(r'<script[^>]+src=["\'][^"\']*assets/js/main\.js',raw): errors.append(f'{file}: main.js missing')
         if raw.count("gtag('config', '"+GA_ID+"'") > 1: errors.append(f'{file}: duplicate inline GA config calls')
-        if not re.search(r"gtag\(['\"]consent['\"],\s*['\"]default['\"]",raw): errors.append(f'{file}: Consent Mode default missing')
+        if not re.search(r"gtag\(\s*['\"]consent['\"]\s*,\s*['\"]default['\"]",raw) and not re.search(r"gtag\(\s*['\"]consent['\"]\s*,\s*['\"]default['\"]",config_js): errors.append(f'{file}: Consent Mode default missing from page and shared config.js')
         if canon:
             c=canon[0].get('href','')
             if c in canonical_map: errors.append(f'{file}: duplicate canonical with {canonical_map[c]}')

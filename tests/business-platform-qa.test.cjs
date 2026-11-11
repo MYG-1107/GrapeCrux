@@ -90,6 +90,16 @@ for(const route of ['/project-assessment/','/how-we-work/','/technologies/','/ca
 }
 
 const backend = read('backend/main.py');
+const serviceBlock = backend.match(/SERVICES = \\{([\\s\\S]*?)\\n\\}/);
+assert.ok(serviceBlock, 'Backend service allowlist missing');
+const allowedServices = [...serviceBlock[1].matchAll(/"([^"]+)"/g)].map(match => match[1]);
+const formServices = [...contact.matchAll(/<option(?:\\s+value="[^"]*")?>([\\s\\S]*?)<\\/option>/gi)]
+  .map(match => match[1].replace(/&amp;/g, '&').trim())
+  .filter(value => value && value !== 'Choose a service');
+for (const service of formServices) {
+  assert.ok(allowedServices.includes(service), 'Contact option is rejected by backend: ' + service);
+}
+
 for(const item of ['@app.post("/api/enquiries"','idempotency_key','privacy_consent','notification_email_status','acknowledgement_email_status','@app.get("/api/admin/enquiries"','@app.patch("/api/admin/enquiries/{reference}"','@app.get("/api/admin/enquiries/export.csv"','hmac.compare_digest','TURNSTILE_SECRET_KEY','@app.get("/health")']) {
   assert.ok(backend.includes(item),'Backend feature missing: '+item);
 }

@@ -3,6 +3,23 @@
  * Never place private API keys or SMTP credentials in this public file.
  */
 window.GRAPECRUX_CHAT_API_URL = '';
+/* Set this to the deployed HTTPS FastAPI origin after backend deployment. */
+window.GRAPECRUX_API_BASE_URL = '';
+/* Optional GTM support is intentionally disabled until the real container ID is supplied.
+   Do not add a GA4 tag in GTM while direct GA4 is active, or page/event data may duplicate. */
+window.GRAPECRUX_GTM_ID = '';
+
+/* Load extra page components as a shared stylesheet on the custom domain and GitHub Pages. */
+(() => {
+  const prefix = location.hostname === 'myg-1107.github.io' ? '/GrapeCrux' : '';
+  if (!document.querySelector('link[href*="business-platform.css"]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = prefix + '/assets/css/business-platform.css';
+    link.dataset.gcBusinessPlatform = 'true';
+    document.head.appendChild(link);
+  }
+})();
 
 /* Consent-aware GA4 intent tracking.
  * The site currently opens email drafts for enquiries/applications; it cannot
@@ -157,16 +174,34 @@ window.GRAPECRUX_CHAT_API_URL = '';
       });
       return;
     }
-    if (path.startsWith('/contact/') || (targetUrl && targetUrl.protocol === 'mailto:')) {
-      if (section === 'chatbot') {
-        track('chat_contact_click', { cta_location: section, cta_label: label });
-      } else {
-        const startsProject = /start a project|tell us about your project|discuss a project/i.test(label);
-        track(startsProject ? 'start_project_click' : 'contact_cta_click', {
-          cta_location: section,
-          cta_label: label
-        });
-      }
+    if (targetUrl && targetUrl.protocol === 'mailto:') {
+      track('email_click', { cta_location: section, cta_label: label });
+      if (section === 'chatbot') track('chat_contact_click', { cta_location: section, cta_label: label });
+    }
+    if (targetUrl && targetUrl.protocol === 'tel:') {
+      track('phone_click', { cta_location: section, cta_label: label });
+    }
+    if (targetUrl && /(^|\.)wa\.me$/i.test(targetUrl.hostname)) {
+      track('whatsapp_click', { cta_location: section, cta_label: label });
+    }
+    if (path.startsWith('/contact/')) {
+      const startsProject = /start a project|tell us about your project|discuss a project/i.test(label);
+      track(startsProject ? 'start_project_click' : 'contact_cta_click', {
+        cta_location: section,
+        cta_label: label
+      });
+    }
+    if (action.matches('.btn, [data-track-cta]')) {
+      track('cta_click', { cta_location: section, cta_label: label, destination_path: path || 'none' });
+    }
+  }, true);
+
+  let enquiryFormStarted = false;
+  document.addEventListener('focusin', (event) => {
+    if (enquiryFormStarted) return;
+    if (event.target instanceof Element && event.target.closest('#project-form')) {
+      enquiryFormStarted = true;
+      track('form_start', { form_name: 'project_enquiry' });
     }
   }, true);
 
@@ -176,9 +211,10 @@ window.GRAPECRUX_CHAT_API_URL = '';
 
     if (form.id === 'project-form') {
       const service = form.querySelector('[name="service"]')?.value || 'unspecified';
-      track('project_enquiry_email_draft_requested', {
+      track('form_submit', {
+        form_name: 'project_enquiry',
         service_name: service,
-        submission_method: 'mailto_draft'
+        submission_method: window.GRAPECRUX_API_BASE_URL ? 'server_api' : 'email_fallback'
       });
     }
 
@@ -194,4 +230,10 @@ window.GRAPECRUX_CHAT_API_URL = '';
       });
     }
   }, true);
+
+  const pagePath = window.location.pathname.replace(/\/+$/, '/') || '/';
+  if (pagePath === '/contact/') track('contact_view');
+  if (pagePath.startsWith('/services/')) track('service_view', { service_slug: pagePath.split('/').filter(Boolean).pop() || 'services' });
+  if (pagePath.startsWith('/blogs/') && pagePath !== '/blogs/') track('blog_view', { article_slug: pagePath.split('/').filter(Boolean).pop() });
+  if (pagePath.startsWith('/case-studies/')) track('case_study_view');
 })();

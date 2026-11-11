@@ -80,6 +80,9 @@ def init_db() -> None:
           follow_up_date TEXT NOT NULL DEFAULT '', notification_email_status TEXT NOT NULL DEFAULT 'pending',
           acknowledgement_email_status TEXT NOT NULL DEFAULT 'pending',
           created_at TEXT NOT NULL, updated_at TEXT NOT NULL)""")
+        existing_columns = {row[1] for row in c.execute("PRAGMA table_info(enquiries)").fetchall()}
+        if "privacy_consent_at" not in existing_columns:
+            c.execute("ALTER TABLE enquiries ADD COLUMN privacy_consent_at TEXT NOT NULL DEFAULT ''")
         c.execute("CREATE INDEX IF NOT EXISTS idx_enquiries_date ON enquiries(created_at DESC)")
         c.execute("CREATE INDEX IF NOT EXISTS idx_enquiries_status ON enquiries(status)")
         c.commit()
@@ -330,7 +333,7 @@ async def startup():
         c.execute("PRAGMA journal_mode=WAL")
         c.execute("""CREATE TABLE IF NOT EXISTS enquiries(
           id INTEGER PRIMARY KEY AUTOINCREMENT, reference TEXT UNIQUE NOT NULL,
-          idempotency_key TEXT UNIQUE NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL,
+          idempotency_key TEXT UNIQUE NOT NULL, privacy_consent_at TEXT NOT NULL DEFAULT '', name TEXT NOT NULL, email TEXT NOT NULL,
           company TEXT NOT NULL DEFAULT '', country TEXT NOT NULL, phone TEXT NOT NULL DEFAULT '',
           service TEXT NOT NULL, project_type TEXT NOT NULL, budget_range TEXT NOT NULL DEFAULT '',
           budget_currency TEXT NOT NULL DEFAULT '', expected_start_date TEXT NOT NULL DEFAULT '',
@@ -378,11 +381,11 @@ async def create_enquiry(payload: EnquiryInput,request: Request,background_tasks
     values=payload.model_dump(exclude={"website","turnstile_token","privacy_consent"})
     values["expected_start_date"]=payload.expected_start_date.isoformat() if payload.expected_start_date else ""
     values["ip_hash"]=hashlib.sha256((SALT+host_key(request)).encode()).hexdigest()
-    columns=["reference","idempotency_key","name","email","company","country","phone","service",
+    columns=["reference","idempotency_key","privacy_consent_at","name","email","company","country","phone","service",
       "project_type","budget_range","budget_currency","expected_start_date","message","existing_website",
       "preferred_contact_method","landing_page","referrer","utm_source","utm_medium","utm_campaign",
       "utm_content","utm_term","ip_hash","created_at","updated_at"]
-    vals=[ref,idempotency_key,values["name"],values["email"],values["company"],values["country"],
+    vals=[ref,idempotency_key,now,values["name"],values["email"],values["company"],values["country"],
       values["phone"],values["service"],values["project_type"],values["budget_range"],
       values["budget_currency"],values["expected_start_date"],values["message"],values["existing_website"],
       values["preferred_contact_method"],values["landing_page"],values["referrer"],values["utm_source"],

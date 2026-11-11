@@ -12,7 +12,7 @@ window.GRAPECRUX_GTM_ID = '';
 /* Load extra page components as a shared stylesheet on the custom domain and GitHub Pages. */
 (() => {
   const prefix = location.hostname === 'myg-1107.github.io' ? '/GrapeCrux' : '';
-  if (!document.querySelector('link[data-gc-business-platform]')) {
+  if (!document.querySelector('link[href*="business-platform.css"]')) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = prefix + '/assets/css/business-platform.css';

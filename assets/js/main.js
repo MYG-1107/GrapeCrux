@@ -178,14 +178,6 @@
       const submit = contactForm.querySelector('button[type="submit"]');
       if (fallback) { fallback.hidden = true; fallback.replaceChildren(); }
       if (status) { status.textContent = 'Submitting your enquiry securely…'; status.classList.remove('is-error'); status.classList.add('show'); }
-      if (window.GrapeCruxAnalytics?.track) {
-        window.GrapeCruxAnalytics.track('form_submit', {
-          form_name: 'project_enquiry',
-          service_name: data.service || 'unspecified',
-          submission_method: window.GRAPECRUX_API_BASE_URL ? 'server_api' : 'email_fallback'
-        });
-      }
-
       const apiBase = String(window.GRAPECRUX_API_BASE_URL || '').trim().replace(/\/+$/,'');
       if (!apiBase) {
         addContactFallback(contactForm,data,status);

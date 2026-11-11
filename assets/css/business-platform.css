@@ -95,3 +95,28 @@ button:disabled{cursor:not-allowed;opacity:.55}
 .lead-admin-stat{display:grid;gap:4px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff;min-width:0}
 .lead-admin-stat strong{font-size:1.35rem;color:var(--ink);font-variant-numeric:tabular-nums}
 @media(max-width:700px){.lead-admin-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Spam-trap honeypot: keep the input in the DOM for bot detection without
+   exposing it visually, to keyboard users or assistive technology. */
+.honeypot{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  clip-path:inset(50%)!important;
+  white-space:nowrap!important;
+  border:0!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+.honeypot input,
+.honeypot label{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  left:-10000px!important;
+  top:auto!important;
+}

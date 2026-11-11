@@ -42,6 +42,11 @@ for(const service of ['Custom Software Development','Web &amp; App Development',
   assert.ok(contact.includes(service),'Contact form service missing: '+service);
 }
 assert.match(contact,/privacy-consent/);
+assert.match(contact,/<div class="honeypot" aria-hidden="true" hidden>/);
+const businessCss = read('assets/css/business-platform.css');
+assert.match(businessCss, /\.honeypot\s*\{/);
+assert.match(businessCss, /clip-path:\s*inset\(50%\)/);
+assert.match(businessCss, /pointer-events:\s*none/);
 assert.doesNotMatch(contact,/email-draft-only|prepares an email draft/i);
 
 const mainJs = read('assets/js/main.js');

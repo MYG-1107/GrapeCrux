@@ -50,7 +50,20 @@
     const selected = $('#lead-filter-status')?.value || '';
     const query = new URLSearchParams({ limit: '100', offset: '0' });
     if (selected) query.set('status', selected);
-    const result = await api('/api/admin/enquiries?' + query.toString());
+    const [summary, result] = await Promise.all([
+      api('/api/admin/summary'),
+      api('/api/admin/enquiries?' + query.toString())
+    ]);
+    const summaryHost = $('#lead-admin-summary');
+    if (summaryHost) {
+      summaryHost.replaceChildren();
+      const entries = [['All enquiries', summary.total], ...Object.entries(summary.by_status || {})];
+      entries.forEach(([name, value]) => {
+        const tile = element('div','lead-admin-stat');
+        tile.append(element('span','small',name),element('strong','',String(value)));
+        summaryHost.appendChild(tile);
+      });
+    }
     list.replaceChildren();
     $('#lead-admin-count').textContent = result.total + ' enquiry record(s).';
     if (!result.items?.length) {
@@ -68,7 +81,10 @@
     const heading = element('h3', '', item.name + ' · ' + item.service);
     const email = element('p', '', item.email + (item.phone ? ' · ' + item.phone : ''));
     const company = element('p', 'small', [item.company, item.country, item.project_type].filter(Boolean).join(' · '));
-    top.append(ref, heading, email, company);
+    const delivery = element('p','small',
+      'Company notification: ' + (item.notification_email_status || 'unknown') +
+      ' · Customer acknowledgement: ' + (item.acknowledgement_email_status || 'unknown'));
+    top.append(ref, heading, email, company, delivery);
     card.appendChild(top);
 
     const details = element('details', 'lead-record-details');

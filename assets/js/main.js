@@ -170,6 +170,7 @@
       event.preventDefault();
       if (!contactForm.reportValidity()) return;
       const data = Object.fromEntries(new FormData(contactForm).entries());
+      data.expected_start_date = data.expected_start_date || null;
       data.privacy_consent = Boolean(contactForm.querySelector('[name="privacy_consent"]')?.checked);
       Object.assign(data, contactAttribution);
       const status = document.getElementById('form-status');

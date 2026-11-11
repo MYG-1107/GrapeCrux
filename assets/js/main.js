@@ -209,8 +209,8 @@
           status.classList.remove('is-error');
           status.classList.add('show');
         }
-        if (window.GrapeCruxAnalytics?.track) {
-          // This event is sent only after the API confirms that the record was stored.
+        if (result.created !== false && result.reference !== 'GC-IGNORED' && window.GrapeCruxAnalytics?.track) {
+          // Emit only for a newly stored record; idempotent retries and honeypots are not new leads.
           // Never include personal information or the free-text project description.
           window.GrapeCruxAnalytics.track('generate_lead', {
             service_name: data.service || 'unspecified',

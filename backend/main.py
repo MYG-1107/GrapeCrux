@@ -197,6 +197,7 @@ class EnquiryAccepted(BaseModel):
     received: bool
     reference: str
     message: str
+    created: bool = True
 
 class EnquiryPatch(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -370,7 +371,7 @@ async def create_enquiry(payload: EnquiryInput,request: Request,background_tasks
     origin=request.headers.get("origin")
     if origin and origin.rstrip("/") not in ORIGINS: raise HTTPException(403,"Website origin is not allowed.")
     if payload.website:
-        return EnquiryAccepted(received=True,reference="GC-IGNORED",message="Thank you. Your enquiry has been received.")
+        return EnquiryAccepted(received=True,reference="GC-IGNORED",message="Thank you. Your enquiry has been received.",created=False)
     if not payload.privacy_consent: raise HTTPException(400,"Please acknowledge the privacy notice.")
     if payload.expected_start_date and payload.expected_start_date < date.today():
         raise HTTPException(422,"Expected start date cannot be in the past.")
@@ -405,7 +406,7 @@ async def create_enquiry(payload: EnquiryInput,request: Request,background_tasks
         raise HTTPException(503,"The enquiry could not be stored. Please try again or email service@grapecrux.com.")
     if not existing: raise HTTPException(503,"The enquiry receipt could not be confirmed.")
     if inserted: background_tasks.add_task(deliver_emails,existing["reference"])
-    return EnquiryAccepted(received=True,reference=existing["reference"],message="Your project enquiry has been received successfully.")
+    return EnquiryAccepted(received=True,reference=existing["reference"],message="Your project enquiry has been received successfully.",created=inserted)
 
 @app.get("/api/admin/summary")
 async def admin_summary(_admin: str = Depends(admin_auth)):

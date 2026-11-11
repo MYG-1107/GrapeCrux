@@ -28,7 +28,7 @@ SALES_EMAIL = os.getenv("SALES_NOTIFICATION_EMAIL", "service@grapecrux.com")
 SALT = os.getenv("IP_HASH_SALT", "configure-a-random-secret-before-production")
 STATUSES = {"New","Under Review","Qualified","Proposal Sent","Discussion","Won","Lost","Spam"}
 SERVICES = {
- "Web & App Development","AI & Automation","AI Integration & Development",
+ "Custom Software Development","Web & App Development","AI & Automation","AI Integration & Development",
  "Business Process Automation","Mobile Application Development","Product Design & UX",
  "Brand Strategy & Visual Identity","Digital Growth & SEO","Cloud & DevOps",
  "Data & System Integration","Data Engineering & Analytics","Quality Assurance & Consulting",

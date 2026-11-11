@@ -317,6 +317,9 @@ async def security_headers(request: Request, call_next):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
     response.headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none'; base-uri 'none'"
+    if request.url.path.startswith("/api/"):
+        response.headers["Cache-Control"] = "no-store, max-age=0"
+        response.headers["Pragma"] = "no-cache"
     if request.url.scheme == "https": response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
 
@@ -432,6 +435,12 @@ async def admin_update(reference: str,payload: EnquiryPatch,_admin: str = Depend
     if result.rowcount==0: raise HTTPException(404,"Enquiry reference not found.")
     return {"updated":True,"reference":reference}
 
+def safe_csv_cell(value) -> str:
+    text_value = "" if value is None else str(value)
+    if text_value.startswith(("=", "+", "-", "@", "\t", "\r")):
+        return "'" + text_value
+    return text_value
+
 @app.get("/api/admin/enquiries/export.csv")
 async def admin_export(_admin: str = Depends(admin_auth)):
     columns=["reference","created_at","status","name","email","company","country","phone","service",
@@ -442,7 +451,7 @@ async def admin_export(_admin: str = Depends(admin_auth)):
     writer=csv.writer(output); writer.writerow(columns)
     with closing(connect()) as c:
         rows=c.execute("SELECT "+",".join(columns)+" FROM enquiries ORDER BY created_at DESC").fetchall()
-    for row in rows: writer.writerow([row[column] for column in columns])
+    for row in rows: writer.writerow([safe_csv_cell(row[column]) for column in columns])
     output.seek(0)
     filename="grapecrux-enquiries-"+datetime.now(timezone.utc).strftime("%Y%m%d")+".csv"
     return StreamingResponse(iter([output.getvalue()]),media_type="text/csv; charset=utf-8",

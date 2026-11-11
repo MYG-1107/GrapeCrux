@@ -87,6 +87,28 @@
       'Hello! I can help explain GrapeCrux, services, project enquiries, work examples, blogs and current careers opportunities. What would you like to explore?']
   ];
 
+    [/\b(project assessment|what does my business need|which service do i need|recommend a service|not sure what service)\b/i,
+      'Use the guided Project Assessment to identify a possible starting point based on your business challenge, current systems and project stage: https://grapecrux.com/project-assessment/. The recommendations are a guide, not a quote or a technical feasibility decision.'],
+    [/\b(how we work|delivery process|project process|scope|proposal|handover|milestones)\b/i,
+      'GrapeCrux typically starts with an initial consultation, requirements and technical feasibility, a written proposal, agreement on scope and responsibilities, iterative delivery, validation, deployment and handover. Any ongoing maintenance is defined separately. See https://grapecrux.com/how-we-work/.'],
+    [/\b(technology|tech stack|technologies|frameworks|platforms|what languages)\b/i,
+      'GrapeCrux describes engineering capabilities across application and API development, frontend and UX, data and databases, AI and knowledge systems, cloud and delivery operations, and testing. Specific tools and versions are selected for each project after discovery. The public page does not claim certifications or partnership status: https://grapecrux.com/technologies/.'],
+    [/\b(demonstration|demo|case study|case studies|portfolio|client project|client results)\b/i,
+      'The Case Studies page currently contains clearly labelled illustrative technical demonstrations, such as a knowledge assistant, CRM/ERP handoff and data pipeline. These are not represented as completed client deployments, and the site does not invent client names, testimonials or measured results: https://grapecrux.com/case-studies/.'],
+    [/\b(resource|checklist|readiness guide|migration checklist|qa checklist)\b/i,
+      'The GrapeCrux resource library includes practical checklists for AI implementation readiness, website visibility, CRM/ERP integration, software QA, cloud migration and business automation opportunities: https://grapecrux.com/resources/.'],
+    [/\b(custom software|bespoke software|business application|internal platform)\b/i,
+      'Custom Software Development can cover business applications, internal platforms and workflow systems. The work begins by mapping users, current processes, data ownership, integrations, constraints and acceptance criteria. Explore https://grapecrux.com/services/custom-software-development/.'],
+    [/\b(business process automation|workflow automation|automate process|approvals)\b/i,
+      'Business Process Automation starts by mapping a stable workflow, its users, rules, exceptions and source systems. The scope may include approvals, notifications, integrations, audit history and exception handling. Explore https://grapecrux.com/services/business-process-automation/.'],
+    [/\b(ai integration|rag|retrieval augmented|document processing|knowledge assistant)\b/i,
+      'AI Integration & Development may include approved knowledge retrieval, RAG, structured document workflows and product integrations. A responsible design includes source permissions, evaluation, human review, safe fallbacks and operational ownership. Explore https://grapecrux.com/services/ai-integration-development/.'],
+    [/\b(mobile app|android app|ios app|mobile application)\b/i,
+      'Mobile Application Development begins with supported devices, user tasks, authentication, network and offline requirements, API integration and release testing. The native or cross-platform approach depends on the project. Explore https://grapecrux.com/services/mobile-application-development/.'],
+    [/\b(data engineering|data pipeline|etl|analytics dashboard|data quality)\b/i,
+      'Data Engineering & Analytics can cover source-system mapping, data validation, pipeline design, freshness, lineage, reconciliation and reporting foundations. Explore https://grapecrux.com/services/data-engineering/.'],
+    [/\b(enquiry received|did you receive my enquiry|contact form|submit a project)\b/i,
+      'Use https://grapecrux.com/contact/ to share a project enquiry. When the server-side enquiry service is configured, the form confirms receipt with a reference number. If the online service is not connected, the page provides a clearly labelled email option to service@grapecrux.com.'],
   const fallbacks = [
     'I do not have a verified answer for that detail yet. I can still help with services (https://grapecrux.com/services/), work examples (https://grapecrux.com/work/), blogs (https://grapecrux.com/blogs/), careers (https://grapecrux.com/careers/) or a project enquiry (https://grapecrux.com/contact/). For a company-specific answer, email service@grapecrux.com.',
     'That is outside the information I can confirm. Try asking about GrapeCrux services, current full-time roles, internship tracks, blog topics or how to start a project. You can also reach the team at service@grapecrux.com.',

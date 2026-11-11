@@ -82,3 +82,11 @@
  .section{padding:16px 0!important}
  .checklist label{break-inside:avoid}
 }
+
+/* Visible keyboard focus across newly introduced assessment, archive and admin controls. */
+:where(a,button,input,select,textarea,summary):focus-visible{
+  outline:3px solid var(--moss);
+  outline-offset:3px;
+}
+button:disabled{cursor:not-allowed;opacity:.55}
+[hidden]{display:none!important}

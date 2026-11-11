@@ -103,33 +103,141 @@
     if (msg && !msg.value) msg.value = `I'm interested in: ${requested}.\n\nMy project goals are...`;
   }
 
-  // A client-side enquiry form that opens the visitor's email application. No server-side storage.
-  const contactForm = document.getElementById('project-form');
-  if (contactForm) contactForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    if (!contactForm.reportValidity()) return;
-    const data = new FormData(contactForm);
-    const subject = `[GrapeCrux project enquiry] ${data.get('service') || 'New enquiry'}`;
+  // Store only non-personal first-touch attribution in session storage.
+  const contactAttribution = (() => {
+    const params = new URLSearchParams(location.search);
+    const current = {
+      landing_page: location.pathname,
+      referrer: document.referrer || '',
+      utm_source: params.get('utm_source') || '',
+      utm_medium: params.get('utm_medium') || '',
+      utm_campaign: params.get('utm_campaign') || '',
+      utm_content: params.get('utm_content') || '',
+      utm_term: params.get('utm_term') || ''
+    };
+    try {
+      const key = 'gc-first-touch-attribution';
+      let first = sessionStorage.getItem(key);
+      if (!first) {
+        sessionStorage.setItem(key, JSON.stringify(current));
+        first = JSON.stringify(current);
+      }
+      return { ...JSON.parse(first), ...Object.fromEntries(
+        Object.entries(current).filter(([k,v]) => k !== 'landing_page' && k !== 'referrer' && v)
+      ) };
+    } catch (_error) {
+      return current;
+    }
+  })();
+
+  const addContactFallback = (form, data, status) => {
+    const subject = '[GrapeCrux project enquiry] ' + (data.service || 'New enquiry');
     const body = [
-      `Name: ${data.get('name') || ''}`,
-      `Work email: ${data.get('email') || ''}`,
-      `Company: ${data.get('company') || 'Not provided'}`,
-      `Service: ${data.get('service') || ''}`,
-      `Budget range: ${data.get('budget') || 'Not specified'}`,
-      `Budget currency: ${data.get('currency') || 'Not specified'}`,
-      `Preferred timeline: ${data.get('timeline') || 'Not specified'}`,
-      `Project stage: ${data.get('project_stage') || 'Not specified'}`,
-      `Primary desired outcome: ${data.get('project_outcome') || 'Not specified'}`,
-      `Current website/product: ${data.get('existing_website') || 'Not provided'}`,
-      `Current systems/tools: ${data.get('existing_systems') || 'Not provided'}`,
-      '', 'Project details:', data.get('message') || '', '',
-      'Submitted via the GrapeCrux website.'
+      'Name: ' + (data.name || ''),
+      'Business email: ' + (data.email || ''),
+      'Company: ' + (data.company || 'Not provided'),
+      'Country: ' + (data.country || 'Not provided'),
+      'Phone: ' + (data.phone || 'Not provided'),
+      'Service: ' + (data.service || ''),
+      'Project type: ' + (data.project_type || ''),
+      'Budget: ' + (data.budget_range || 'Not specified') + ' ' + (data.budget_currency || ''),
+      'Expected start date: ' + (data.expected_start_date || 'Not specified'),
+      'Preferred contact: ' + (data.preferred_contact_method || 'Email'),
+      'Existing website: ' + (data.existing_website || 'Not provided'),
+      '', 'Project description:', data.message || ''
     ].join('\n');
-    const mailto = `mailto:service@grapecrux.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    const status = document.getElementById('form-status');
-    if (status) { status.textContent = 'Your email app should open with the enquiry prepared. Review the message and send it to contact the GrapeCrux team.'; status.classList.add('show'); }
-    window.location.href = mailto;
-  });
+    const link = document.createElement('a');
+    link.className = 'btn btn-secondary';
+    link.href = 'mailto:service@grapecrux.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    link.textContent = 'Open email to service@grapecrux.com ↗';
+    const fallback = document.getElementById('contact-fallback');
+    if (fallback) {
+      fallback.hidden = false;
+      fallback.replaceChildren(link);
+    }
+    if (status) {
+      status.textContent = 'The online enquiry service is not connected or could not confirm receipt. Use the email option below and send the message manually. No lead has been recorded.';
+      status.classList.add('show','is-error');
+    }
+  };
+
+  // Project enquiries are submitted to the secure API when it has been deployed.
+  // Without an API URL the form provides a clearly labelled email fallback; it never claims receipt.
+  const contactForm = document.getElementById('project-form');
+  if (contactForm) {
+    let idempotencyKey = '';
+    contactForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!contactForm.reportValidity()) return;
+      const data = Object.fromEntries(new FormData(contactForm).entries());
+      data.privacy_consent = Boolean(contactForm.querySelector('[name="privacy_consent"]')?.checked);
+      Object.assign(data, contactAttribution);
+      const status = document.getElementById('form-status');
+      const fallback = document.getElementById('contact-fallback');
+      const submit = contactForm.querySelector('button[type="submit"]');
+      if (fallback) { fallback.hidden = true; fallback.replaceChildren(); }
+      if (status) { status.textContent = 'Submitting your enquiry securely…'; status.classList.remove('is-error'); status.classList.add('show'); }
+      if (window.GrapeCruxAnalytics?.track) {
+        window.GrapeCruxAnalytics.track('form_submit', {
+          form_name: 'project_enquiry',
+          service_name: data.service || 'unspecified',
+          submission_method: window.GRAPECRUX_API_BASE_URL ? 'server_api' : 'email_fallback'
+        });
+      }
+
+      const apiBase = String(window.GRAPECRUX_API_BASE_URL || '').trim().replace(/\/+$/,'');
+      if (!apiBase) {
+        addContactFallback(contactForm,data,status);
+        return;
+      }
+
+      if (!idempotencyKey) {
+        idempotencyKey = (window.crypto?.randomUUID?.() ||
+          ('gc-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2)));
+      }
+      if (submit) { submit.disabled = true; submit.textContent = 'Submitting…'; }
+      try {
+        const response = await fetch(apiBase + '/api/enquiries', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Idempotency-Key': idempotencyKey
+          },
+          credentials: 'omit',
+          body: JSON.stringify(data)
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.received || !result.reference) {
+          throw new Error(result.detail || 'The server could not confirm receipt.');
+        }
+        idempotencyKey = '';
+        if (status) {
+          status.textContent = 'Thank you. Your project enquiry has been received. Reference: ' + result.reference + '. An acknowledgement email will be sent when email delivery is configured.';
+          status.classList.remove('is-error');
+          status.classList.add('show');
+        }
+        if (window.GrapeCruxAnalytics?.track) {
+          // This event is sent only after the API confirms that the record was stored.
+          // Never include personal information or the free-text project description.
+          window.GrapeCruxAnalytics.track('generate_lead', {
+            service_name: data.service || 'unspecified',
+            project_type: data.project_type || 'unspecified',
+            enquiry_reference: result.reference,
+            submission_method: 'server_api'
+          });
+        }
+        contactForm.reset();
+      } catch (error) {
+        if (status) status.textContent = error.message || 'The enquiry could not be confirmed.';
+        addContactFallback(contactForm,data,status);
+      } finally {
+        if (submit) {
+          submit.disabled = false;
+          submit.innerHTML = 'Send project enquiry <span class="arrow" aria-hidden="true">↗</span>';
+        }
+      }
+    });
+  }
 
   // Internship applications are email-prepared; no CV or personal data is stored by this static site.
   const careersForm = document.getElementById('careers-form');

@@ -8,6 +8,8 @@ os.environ["ADMIN_API_TOKEN"] = "test-token-not-for-production"
 os.environ["CORS_ORIGINS"] = "https://grapecrux.com"
 os.environ["SMTP_HOST"] = ""
 from fastapi.testclient import TestClient
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from main import app
 class EnquiryApiTests(unittest.TestCase):
     @classmethod

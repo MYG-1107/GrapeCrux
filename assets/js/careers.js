@@ -152,7 +152,6 @@
     }
     const submit = form.querySelector('button[type="submit"]');
     if (submit) {
-      submit.disabled = true;
       submit.textContent = 'Submitting application…';
     }
 

@@ -122,7 +122,7 @@
     const attachment = form.querySelector('[name="attachment"]');
     const file = attachment?.files?.[0];
     if (file) {
-      const isSupported = /\\.(pdf|doc|docx)$/i.test(file.name);
+      const isSupported = /\.(pdf|doc|docx)$/i.test(file.name);
       const withinLimit = file.size <= 10 * 1024 * 1024;
       if (!isSupported || !withinLimit) {
         event.preventDefault();

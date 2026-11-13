@@ -178,7 +178,7 @@
     // Accessible client-side service assistant. It never pretends to provide confirmed pricing or human support.
     const chatbot = document.getElementById('gc-chatbot');
     if (chatbot) {
-      chatbot.innerHTML = `<button class="chat-launcher" type="button" aria-expanded="false" aria-controls="gc-chat-panel"><span class="chat-bubble-icon" aria-hidden="true">✳</span><span>Ask GrapeCrux</span></button><section class="chat-panel" id="gc-chat-panel" aria-label="GrapeCrux service assistant" aria-hidden="true"><div class="chat-head"><span class="chat-avatar" aria-hidden="true"><img src="${withBase('/grapecrux_brand_logo.png?v=20261102-original-png')}" alt="" width="38" height="38" loading="lazy" decoding="async"></span><div><strong>GrapeCrux Assistant</strong><small>Guided service information · Instant replies</small></div><button class="chat-close" type="button" aria-label="Close assistant">×</button></div><div class="chat-messages" role="log" aria-live="polite" aria-relevant="additions text"><div class="chat-msg bot">Hello! I can explain what GrapeCrux does, where the company is based, how projects are approached, and which services or internship tracks are listed. I am a guided FAQ assistant, not a human agent. What would you like to know?</div></div><div class="chat-quick"><button type="button" data-chat="Explore services">Explore services</button><button type="button" data-chat="I need a website">Build a website</button><button type="button" data-chat="Tell me about AI automation">AI automation</button><button type="button" data-chat="I want to start a project">Start a project</button></div><form class="chat-form"><label class="sr-only" for="gc-chat-input">Your message</label><input id="gc-chat-input" name="message" autocomplete="off" placeholder="Tell us what you need…" maxlength="500" required><button type="submit" aria-label="Send message">↑</button></form><div class="chat-footnote">Guided FAQ assistant · Not a human agent. Pricing and scope require team confirmation.</div></section>`;
+      chatbot.innerHTML = `<button class="chat-launcher" type="button" aria-expanded="false" aria-controls="gc-chat-panel"><span class="chat-bubble-icon" aria-hidden="true">✳</span><span>Ask GrapeCrux</span></button><section class="chat-panel" id="gc-chat-panel" aria-label="GrapeCrux service assistant" aria-hidden="true"><div class="chat-head"><span class="chat-avatar" aria-hidden="true"><img src="${withBase('/grapecrux_brand_logo.png?v=20261113-original-png')}" alt="" width="38" height="38" loading="lazy" decoding="async"></span><div><strong>GrapeCrux Assistant</strong><small>Guided service information · Instant replies</small></div><button class="chat-close" type="button" aria-label="Close assistant">×</button></div><div class="chat-messages" role="log" aria-live="polite" aria-relevant="additions text"><div class="chat-msg bot">Hello! I can explain what GrapeCrux does, where the company is based, how projects are approached, and which services or internship tracks are listed. I am a guided FAQ assistant, not a human agent. What would you like to know?</div></div><div class="chat-quick"><button type="button" data-chat="Explore services">Explore services</button><button type="button" data-chat="I need a website">Build a website</button><button type="button" data-chat="Tell me about AI automation">AI automation</button><button type="button" data-chat="I want to start a project">Start a project</button></div><form class="chat-form"><label class="sr-only" for="gc-chat-input">Your message</label><input id="gc-chat-input" name="message" autocomplete="off" placeholder="Tell us what you need…" maxlength="500" required><button type="submit" aria-label="Send message">↑</button></form><div class="chat-footnote">Guided FAQ assistant · Not a human agent. Pricing and scope require team confirmation.</div></section>`;
       const launch = chatbot.querySelector('.chat-launcher');
       const panel = chatbot.querySelector('.chat-panel');
       const messages = chatbot.querySelector('.chat-messages');
@@ -217,7 +217,7 @@
   window.addEventListener('keydown', initializeChatbot, { once: true });
 
 
-  // Blog reading experience: section navigation, heading anchors and reading progress.
+  // Blog reading experience: accessible section navigation, active section state and reading progress.
   const blogArticle = document.querySelector('article.blog-prose');
   if (blogArticle) {
     const headings = Array.from(blogArticle.querySelectorAll('h2, h3')).filter(item => item.textContent.trim());
@@ -234,28 +234,87 @@
       if (!item.id) item.id = makeHeadingId(item.textContent);
       item.classList.add('blog-section-heading');
     });
+
     if (headings.length > 1 && !blogArticle.querySelector('.blog-toc')) {
       const nav = document.createElement('nav');
       nav.className = 'blog-toc';
-      nav.setAttribute('aria-label', 'On this page');
-      const tocTitle = document.createElement('p');
-      tocTitle.className = 'blog-toc-title';
-      tocTitle.textContent = 'On this page';
+      nav.setAttribute('aria-label', 'Article sections');
+      const details = document.createElement('details');
+      details.className = 'blog-toc-details';
+      details.open = !window.matchMedia('(max-width: 640px)').matches;
+
+      const summary = document.createElement('summary');
+      summary.className = 'blog-toc-summary';
+      const title = document.createElement('span');
+      title.className = 'blog-toc-title';
+      title.textContent = 'On this page';
+      const hint = document.createElement('span');
+      hint.className = 'blog-toc-hint';
+      hint.textContent = 'Jump to a section';
+      summary.append(title, hint);
+
       const list = document.createElement('ol');
+      list.className = 'blog-toc-list';
+      let currentParent = null;
+      const linkMap = new Map();
       headings.forEach(item => {
         const entry = document.createElement('li');
         if (item.tagName === 'H3') entry.className = 'blog-toc-subsection';
         const link = document.createElement('a');
         link.href = '#' + item.id;
         link.textContent = item.textContent.trim();
+        link.dataset.sectionLink = item.id;
         entry.appendChild(link);
-        list.appendChild(entry);
+        linkMap.set(item.id, link);
+
+        if (item.tagName === 'H2' || !currentParent) {
+          list.appendChild(entry);
+          if (item.tagName === 'H2') currentParent = entry;
+        } else {
+          let nested = currentParent.querySelector('ol');
+          if (!nested) {
+            nested = document.createElement('ol');
+            currentParent.appendChild(nested);
+          }
+          nested.appendChild(entry);
+        }
       });
-      nav.append(tocTitle, list);
+      details.append(summary, list);
+      nav.appendChild(details);
       blogArticle.insertBefore(nav, blogArticle.firstChild);
+
+      const setCurrentSection = (id) => {
+        linkMap.forEach((link, key) => {
+          if (key === id) {
+            link.setAttribute('aria-current', 'location');
+            link.classList.add('is-active');
+          } else {
+            link.removeAttribute('aria-current');
+            link.classList.remove('is-active');
+          }
+        });
+      };
+      if (headings.length) setCurrentSection(headings[0].id);
+      linkMap.forEach((link, id) => link.addEventListener('click', () => {
+        setCurrentSection(id);
+        if (window.matchMedia('(max-width: 640px)').matches) details.open = false;
+      }));
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(() => {
+          const active = headings
+            .map(heading => ({heading, top: heading.getBoundingClientRect().top}))
+            .filter(item => item.top <= window.innerHeight * 0.72)
+            .sort((a, b) => b.top - a.top)[0];
+          if (active) setCurrentSection(active.heading.id);
+        }, { rootMargin: '-12% 0px -68% 0px', threshold: 0 });
+        headings.forEach(heading => observer.observe(heading));
+      }
     }
+
     const progress = document.createElement('div');
     progress.className = 'blog-reading-progress';
+    progress.setAttribute('aria-label', 'Article reading progress');
     progress.setAttribute('aria-hidden', 'true');
     progress.innerHTML = '<span></span>';
     document.body.appendChild(progress);

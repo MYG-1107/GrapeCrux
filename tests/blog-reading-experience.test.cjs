@@ -30,16 +30,17 @@ assert.match(archive, /name="robots" content="index,follow/i);
 assert.match(archive, /<link rel="canonical" href="https:\/\/grapecrux\.com\/blogs\/archive\/">/);
 assert.ok(archiveJs.includes('new URLSearchParams(window.location.search)'), 'Topic links must pre-filter the archive');
 assert.ok(archiveJs.includes('blog-archive-empty'), 'The archive must display a no-results state');
+assert.ok(archiveJs.includes("getElementById('blog-clear-filters')") && archiveJs.includes('cleanUrl.searchParams.delete'), 'The archive must support resetting search and category filters');
 
 const blogRoot = path.join(root, 'blogs');
 const articleSlugs = fs.readdirSync(blogRoot, {withFileTypes:true})
   .filter(entry => entry.isDirectory() && entry.name !== 'archive' && fs.existsSync(path.join(blogRoot, entry.name, 'index.html')))
   .map(entry => entry.name);
-assert.equal(articleSlugs.length, 74, 'There must be 74 individual indexable article pages');
+assert.equal(articleSlugs.length, 78, 'There must be 78 individual indexable article pages');
 
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
 assert.equal(sitemapUrls.length, new Set(sitemapUrls).size, 'The sitemap must not contain duplicate URLs');
-assert.equal(sitemapUrls.length, 139, 'The sitemap should include the archive and four newly published guides');
+assert.equal(sitemapUrls.length, 143, 'The sitemap should include the archive and four newly published guides');
 assert.ok(sitemapUrls.includes('https://grapecrux.com/blogs/archive/'), 'The archive must be in the sitemap');
 for (const slug of articleSlugs) {
   const url = 'https://grapecrux.com/blogs/' + slug + '/';
@@ -68,5 +69,14 @@ for (const slug of [
 assert.ok(mainJs.includes("className = 'blog-toc'"), 'Article headings must generate a navigable table of contents');
 assert.ok(mainJs.includes('blog-reading-progress'), 'Article pages must display reading progress');
 assert.ok(css.includes('.blog-prose') && css.includes('.blog-toc') && css.includes('.blog-archive-list'), 'Shared styles must cover articles, TOC and archive cards');
+assert.ok(css.includes('.blog-toc-details') && css.includes('.blog-toc a[aria-current="location"]'), 'The article section navigator must be collapsible and identify the active section');
+assert.ok(mainJs.includes('IntersectionObserver') && mainJs.includes('aria-current'), 'Article navigation must track the current section accessibly');
+for (const slug of ['llm-inference-optimization-production-latency-cost','opentelemetry-genai-observability-tracing-rag-agents','secure-sandboxing-ai-coding-agents-execution','agent-to-agent-interoperability-mcp-a2a-enterprise']) {
+  const page = read('blogs/' + slug + '/index.html');
+  assert.ok(hub.includes('/blogs/' + slug + '/'), slug + ' must be discoverable from selected reading');
+  assert.ok((page.match(/<h2>/g) || []).length >= 7, slug + ' must be divided into clear sections');
+  assert.ok((page.match(/<p>/g) || []).length >= 8, slug + ' must have substantial explanatory content');
+  assert.ok(page.includes('Further reading') && page.includes('Start a project'), slug + ' must link sources and related services');
+}
 
 console.log('Blog reading experience checks passed: curated hub, 74-article archive, 74 indexable articles, sitemap, SEO schema, section navigation and responsive styles.');

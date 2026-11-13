@@ -109,6 +109,8 @@
       'Data Engineering & Analytics can cover source-system mapping, data validation, pipeline design, freshness, lineage, reconciliation and reporting foundations. Explore https://grapecrux.com/services/data-engineering/.'],
     [/\b(enquiry received|did you receive my enquiry|contact form|submit a project)\b/i,
       'Use https://grapecrux.com/contact/ to share a project enquiry. When you submit the form, the hosted form-delivery provider forwards your details to service@grapecrux.com and redirects you to a confirmation page. The website does not verify that a recipient has read the email.'],
+  ];
+
   const fallbacks = [
     'I do not have a verified answer for that detail yet. I can still help with services (https://grapecrux.com/services/), work examples (https://grapecrux.com/work/), blogs (https://grapecrux.com/blogs/), careers (https://grapecrux.com/careers/) or a project enquiry (https://grapecrux.com/contact/). For a company-specific answer, email service@grapecrux.com.',
     'That is outside the information I can confirm. Try asking about GrapeCrux services, current full-time roles, internship tracks, blog topics or how to start a project. You can also reach the team at service@grapecrux.com.',

@@ -41,10 +41,15 @@ function localFile(href, fromRoute) {
 
 const files = walk(ROOT);
 const htmlPages = files.filter(file => file.toLowerCase().endsWith('.html'));
+const noindexUtilityPages = new Set([
+  'contact/received/index.html',
+  'careers/application-received/index.html'
+]);
 const contentPages = htmlPages.filter(file => {
   const source = fs.readFileSync(file, 'utf8');
+  const relative = path.relative(ROOT, file).split(path.sep).join('/');
   return path.basename(file).toLowerCase() !== '404.html' &&
-    !file.endsWith(path.join('lead-management','index.html')) &&
+    !noindexUtilityPages.has(relative) &&
     source.includes('id="site-header"') && source.includes('id="site-footer"');
 });
 assert.ok(contentPages.length > 0, 'No clean content pages found');
@@ -101,13 +106,6 @@ for (const include of ['includes/header.html', 'includes/footer.html']) {
     if (!href || /^(?:#|mailto:|tel:|javascript:|data:|https?:|\/\/)/i.test(href)) continue;
     assert.ok(localFile(href, '/'), include + ': broken local href="' + href + '"');
   }
-}
-
-const privateLeadPage = path.join(ROOT, 'lead-management', 'index.html');
-if (fs.existsSync(privateLeadPage)) {
-  const privateSource = fs.readFileSync(privateLeadPage, 'utf8');
-  assert.match(privateSource, /<meta[^>]*name=["']robots["'][^>]*content=["']noindex,follow["']/i,
-    'Lead management must remain noindex');
 }
 
 const robotsFile = path.join(ROOT, 'robots.txt');

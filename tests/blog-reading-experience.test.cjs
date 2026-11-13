@@ -12,7 +12,7 @@ const mainJs = read('assets/js/main.js');
 const archiveJs = read('assets/js/blog-archive.js');
 const css = read('assets/css/style.css');
 
-assert.equal((hub.match(/class="article-card(?:\\s|")/g) || []).length, 8, 'The public Blogs page should show eight selected guides');
+assert.equal((hub.match(/class="article-card(?:\s|")/g) || []).length, 8, 'The public Blogs page should show eight selected guides');
 assert.ok(hub.includes('Selected reading'), 'The hub should identify its curated section');
 assert.ok(hub.includes('/blogs/archive/'), 'The hub should link to the full archive');
 assert.ok(hub.includes('Other published GrapeCrux articles remain available'), 'The hub should explain that the remaining guides are still available');
@@ -50,7 +50,7 @@ for (const slug of articleSlugs) {
   assert.ok(page.includes('"@type":"BlogPosting"'), slug + ' must have BlogPosting structured data');
   assert.ok(page.includes('grapecrux_brand_logo.png'), slug + ' must use the original GrapeCrux PNG favicon');
   assert.ok(!/name="robots"[^>]*noindex/i.test(page), slug + ' must remain indexable');
-  assert.equal((page.match(/<h1\\b/g) || []).length, 1, slug + ' must have one H1');
+  assert.equal((page.match(/<h1\b/g) || []).length, 1, slug + ' must have one H1');
 }
 
 for (const slug of [

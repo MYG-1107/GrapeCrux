@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /backend/
 Disallow: /tests/
 Sitemap: https://grapecrux.com/sitemap.xml

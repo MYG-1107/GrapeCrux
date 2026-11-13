@@ -14,7 +14,7 @@ const contact=read('contact/index.html');
 const mainJs=read('assets/js/main.js');
 const work=read('work/index.html');
 assert.equal(slugs.length,24,'Expected at least 20, specifically 24, new technical articles');
-assert.equal((blogHub.match(/class="article-card(?:\\s|")/g)||[]).length,8,'The curated Blogs page must keep its eight selected cards');
+assert.equal((blogHub.match(/class="article-card(?:\s|")/g)||[]).length,8,'The curated Blogs page must keep its eight selected cards');
 for(const slug of slugs){
  const url='https://grapecrux.com/blogs/'+slug+'/';
  const page=read('blogs/'+slug+'/index.html');

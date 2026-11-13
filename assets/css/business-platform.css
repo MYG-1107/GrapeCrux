@@ -1,8 +1,8 @@
-/* GrapeCrux business-visibility and lead-platform components.
-   Scoped classes only; this file is loaded by the shared config.js on public pages. */
-.who-help-grid,.problem-solution-grid,.why-work-grid,.assessment-recommendations,.lead-admin-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.bp-card,.assessment-recommendation,.lead-record{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;min-width:0}
-.bp-card h3,.assessment-recommendation h3,.lead-record h3{margin:0 0 9px;color:var(--ink)}
+/* GrapeCrux business-visibility and browser-based project-assessment components.
+   Scoped classes only; this file is loaded by shared public pages. */
+.who-help-grid,.problem-solution-grid,.why-work-grid,.assessment-recommendations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.bp-card,.assessment-recommendation{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;min-width:0}
+.bp-card h3,.assessment-recommendation h3{margin:0 0 9px;color:var(--ink)}
 .bp-card p,.assessment-recommendation p{margin:0 0 12px;color:var(--muted);line-height:1.65}
 .bp-card .text-link{font-weight:700}
 .problem-solution-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -12,7 +12,7 @@
 .why-work-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 .why-work-card{border-top:3px solid var(--moss);padding:19px 4px 0}
 .why-work-card p{color:var(--muted);line-height:1.65}
-.resource-toolbar,.lead-admin-toolbar,.assessment-actions{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.resource-toolbar,.assessment-actions{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
 .resource-check-group{padding:22px 0;border-bottom:1px solid var(--line)}
 .resource-check-group h2{font-size:1.45rem;margin:0 0 14px}
 .checklist{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -20,7 +20,7 @@
 .checklist label{display:flex;gap:11px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff;line-height:1.5}
 .checklist input{margin-top:4px;accent-color:var(--moss);width:18px;height:18px;flex:0 0 auto}
 .assessment-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(290px,.9fr);gap:24px;align-items:start}
-.assessment-form,.assessment-result,.lead-admin-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:clamp(20px,3vw,30px);box-shadow:0 14px 35px rgba(22,63,54,.05)}
+.assessment-form,.assessment-result{background:#fff;border:1px solid var(--line);border-radius:20px;padding:clamp(20px,3vw,30px);box-shadow:0 14px 35px rgba(22,63,54,.05)}
 .assessment-step{padding:0 0 24px;margin-bottom:24px;border-bottom:1px solid var(--line)}
 .assessment-step:last-child{border:0;padding-bottom:0;margin-bottom:0}
 .assessment-step h2{font-size:1.45rem;margin:6px 0 16px}
@@ -32,26 +32,6 @@
 .assessment-summary-label{display:block;font-weight:700;margin:18px 0 8px}
 .assessment-result textarea{width:100%;min-height:170px;padding:13px;border:1px solid var(--line);border-radius:12px;font:inherit;line-height:1.5;background:#fbfcfa}
 .assessment-actions{justify-content:flex-start;margin-top:15px}
-.lead-admin-card{max-width:720px;margin:0 auto}
-.lead-admin-intro{margin-bottom:20px}
-.lead-admin-intro p{color:var(--muted)}
-.lead-admin-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.lead-admin-actions select{min-height:42px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff}
-.lead-admin-list{grid-template-columns:1fr;margin-top:18px}
-.lead-record{padding:0;overflow:hidden}
-.lead-record-top{padding:18px 20px}
-.lead-record-reference{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:8px}
-.lead-record-reference strong{color:var(--moss);font-size:.85rem}
-.lead-record-top h3{font-size:1.12rem}
-.lead-record-top p{margin:5px 0;color:var(--muted)}
-.lead-record-details{border-top:1px solid var(--line)}
-.lead-record-details summary{padding:13px 20px;cursor:pointer;font-weight:700}
-.lead-record-body{padding:5px 20px 20px;display:grid;gap:12px}
-.lead-record-body>p{margin:0;overflow-wrap:anywhere}
-.lead-admin-edit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.lead-admin-field{display:grid;gap:6px;font-size:.9rem;font-weight:650;min-width:0}
-.lead-admin-field input,.lead-admin-field select,.lead-admin-field textarea{width:100%;min-width:0;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit;font-weight:400}
-.lead-admin-status{margin-top:10px}
 .empty-state{padding:24px;background:#fff;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}
 .assessment-result-content{min-width:0}
 .resource-toolbar .small{margin:0;color:var(--muted)}
@@ -65,10 +45,6 @@
  .problem-solution-grid{grid-template-columns:1fr}
  .problem-solution{grid-template-columns:1fr;gap:6px}
  .checklist{grid-template-columns:1fr}
- .lead-admin-edit-grid{grid-template-columns:1fr}
- .lead-admin-toolbar{align-items:flex-start;flex-direction:column}
- .lead-admin-actions{width:100%}
- .lead-admin-actions>*{flex:1 1 auto}
 }
 @media(max-width:420px){
  .who-help-grid,.why-work-grid{grid-template-columns:1fr}
@@ -91,10 +67,6 @@
 button:disabled{cursor:not-allowed;opacity:.55}
 [hidden]{display:none!important}
 
-.lead-admin-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 22px}
-.lead-admin-stat{display:grid;gap:4px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff;min-width:0}
-.lead-admin-stat strong{font-size:1.35rem;color:var(--ink);font-variant-numeric:tabular-nums}
-@media(max-width:700px){.lead-admin-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* Contact form anti-spam honeypot: keep the control in the submitted form data,
    but remove it from the visual layout and keyboard/assistive navigation. */

@@ -51,7 +51,13 @@ gtag('config','G-QXMRMGJEP2',{'send_page_view':false,'allow_google_signals':fals
 </div></section>
 <section class="section section-tint" id="apply"><div class="container">
 <div class="career-form-intro"><span class="section-kicker">Internship application</span><h2>Apply for AI Engineer Intern.</h2><p class="lead">Your role and Job ID are already selected. Complete the same GrapeCrux application questions used on the Careers page.</p></div>
-<form class="form-card careers-form-card" id="gc-careers-application-form" data-job-detail="true" data-application-type="internship" data-role="AI Engineer Intern" data-job-id="GC-IN-003">
+<form class="form-card careers-form-card" id="gc-careers-application-form" data-job-detail="true" data-application-type="internship" data-role="AI Engineer Intern" data-job-id="GC-IN-003" action="https://formsubmit.co/yaswanth@grapecrux.com" method="POST" enctype="multipart/form-data">
+<input type="hidden" name="_subject" value="[GrapeCrux Careers] New application">
+<input type="hidden" name="_replyto" value="">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_next" value="https://grapecrux.com/careers/application-received/">
+<div class="honeypot" aria-hidden="true" hidden><label for="gc-careers-honey">Leave this field empty</label><input id="gc-careers-honey" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
+
 <div class="form-grid">
 <input type="hidden" id="career-application-type" name="application_type" value="internship"><input type="hidden" id="career-track" name="role" value="AI Engineer Intern"><input type="hidden" id="career-job-id" name="job_id" value="GC-IN-003">
 <div class="field"><label for="career-name">Full name *</label><input id="career-name" name="name" autocomplete="name" maxlength="100" required></div>
@@ -92,10 +98,14 @@ gtag('config','G-QXMRMGJEP2',{'send_page_view':false,'allow_google_signals':fals
 <div class="field"><label for="career-portfolio">Portfolio link</label><input id="career-portfolio" name="portfolio" type="url" maxlength="300" placeholder="https://your-portfolio.example"></div>
 <div class="field full"><label for="career-linkedin">LinkedIn profile</label><input id="career-linkedin" name="linkedin" type="url" maxlength="300" placeholder="https://www.linkedin.com/in/username"></div>
 </div></fieldset>
-<p class="form-note">All fields marked * are required. Please do not include passwords, identity numbers or financial details. Attach your resume or CV in the email draft before sending.</p>
-<button class="btn btn-primary" type="submit">Prepare my application ↗</button><p class="form-status" id="gc-careers-status" role="status" aria-live="polite"></p>
+<fieldset class="career-fieldset"><legend>Resume and privacy</legend><div class="form-grid">
+<div class="field full"><label for="career-resume">Resume / CV (optional)</label><input id="career-resume" name="attachment" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><p class="small">Accepted formats: PDF, DOC or DOCX. Maximum file size: 10 MB.</p></div>
+<div class="field full privacy-consent"><label for="career-privacy-consent"><input id="career-privacy-consent" name="privacy_consent" type="checkbox" value="true" required> <span>I have read the <a href="/privacy/">Privacy Notice</a> and agree that GrapeCrux and its form-delivery provider may process my application details to review this application. *</span></label></div>
+</div></fieldset>
+<p class="form-note">Complete all required fields. Do not include passwords, government IDs or financial details. You may attach one PDF, DOC or DOCX resume (maximum 10 MB). Your application details will be forwarded by our form-delivery provider to yaswanth@grapecrux.com.</p>
+<button class="btn btn-primary" type="submit">Submit application ↗</button><p class="form-status" id="gc-careers-status" role="status" aria-live="polite"></p>
 </form>
-<p class="career-email-note">Your browser will prepare an email to <a href="mailto:yaswanth@grapecrux.com">yaswanth@grapecrux.com</a>. Attach your resume or CV, review the content and press Send in your email application. This static website does not upload or store your application.</p>
+<p class="career-email-note">Your application details and any optional resume attachment will be forwarded to <a href="mailto:yaswanth@grapecrux.com">yaswanth@grapecrux.com</a> through our hosted form-delivery provider. You will be redirected to a confirmation page after the provider accepts your submission. The website itself does not store your application.</p>
 <p class="small">Need an accessible application format or have a question? Contact <a href="mailto:service@grapecrux.com">service@grapecrux.com</a> and include Job ID GC-IN-003.</p>
 </div></section>
 <section class="section"><div class="container"><div class="cta-band"><div><span class="eyebrow" style="color:var(--lime)">Explore other opportunities</span><h2>Find the role that fits your next step.</h2><p>Review all full-time roles and internship tracks in the GrapeCrux Careers hub.</p></div><a class="btn btn-accent" href="/careers/">Explore all careers <span class="arrow" aria-hidden="true">↗</span></a></div></div></section>

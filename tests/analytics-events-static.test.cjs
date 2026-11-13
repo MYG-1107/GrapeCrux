@@ -17,8 +17,8 @@ for (const eventName of [
   'career_job_detail_click',
   'career_apply_cta_click',
   'careers_apply_click',
-  'project_enquiry_email_draft_requested',
-  'careers_application_email_draft_requested'
+  'form_submit',
+  'careers_application_submit_attempt'
 ]) {
   assert.ok(source.includes(eventName), `Missing GA4 event: ${eventName}`);
 }

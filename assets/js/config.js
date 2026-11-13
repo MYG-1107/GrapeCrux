@@ -15,10 +15,8 @@ window.GRAPECRUX_GTM_ID = '';
   }
 })();
 
-/* Consent-aware GA4 intent tracking.
- * The site currently opens email drafts for enquiries/applications; it cannot
- * verify that a visitor actually sent the email. Event names deliberately say
- * "draft_requested" and must not be presented as confirmed submissions.
+/* Consent-aware GA4 interaction tracking.
+ * Hosted email forms report browser submission attempts only; they do not verify provider delivery or inbox receipt.
  */
 (() => {
   'use strict';

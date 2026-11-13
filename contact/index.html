@@ -35,12 +35,25 @@ gtag('config','G-QXMRMGJEP2',{send_page_view:false,allow_google_signals:false,al
 <div><span class="section-kicker">Project enquiries</span><h2>Start with the problem.</h2><p>Use this form for a website, software, AI, automation, integration, data, cloud or quality requirement. Fields marked with an asterisk are required.</p>
 <div class="contact-details">
 <div class="contact-detail"><strong>Business enquiries</strong><p><a href="mailto:service@grapecrux.com">service@grapecrux.com</a></p></div>
-<div class="contact-detail"><strong>What happens next</strong><p>Your enquiry is stored by the configured enquiry service. The team is notified by email when SMTP is configured. A reference is shown after the server confirms storage.</p></div>
+<div class="contact-detail"><strong>What happens next</strong><p>Your submitted details are forwarded to service@grapecrux.com by our hosted form-delivery provider. After submission, you will see a confirmation page.</p></div>
 <div class="contact-detail"><strong>Company</strong><p>GrapeCrux · A creative initiative of Infinite Resource Creators Private Limited.</p></div>
 </div>
 <p class="small" style="margin-top:18px">Do not submit passwords, payment-card details, government IDs, patient records or other sensitive information through this form.</p>
 </div>
-<form class="form-card" id="project-form">
+<form class="form-card" id="project-form" action="https://formsubmit.co/service@grapecrux.com" method="POST">
+<input type="hidden" name="_subject" value="[GrapeCrux] New project enquiry">
+<input type="hidden" name="_replyto" value="">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_next" value="https://grapecrux.com/contact/received/">
+<input type="hidden" name="landing_page" value="">
+<input type="hidden" name="referrer" value="">
+<input type="hidden" name="utm_source" value="">
+<input type="hidden" name="utm_medium" value="">
+<input type="hidden" name="utm_campaign" value="">
+<input type="hidden" name="utm_content" value="">
+<input type="hidden" name="utm_term" value="">
+<div class="honeypot" aria-hidden="true" hidden><label for="gc-contact-honey">Leave this field empty</label><input id="gc-contact-honey" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
+
 <h2 style="font-size:1.65rem">Project enquiry</h2>
 <p>Optional information helps us understand your environment. Budget ranges are indicative; you can leave them open for discussion.</p>
 <div class="form-grid">
@@ -69,13 +82,12 @@ gtag('config','G-QXMRMGJEP2',{send_page_view:false,allow_google_signals:false,al
 <div class="field full"><label for="existing-website">Existing website or product URL</label><input id="existing-website" name="existing_website" type="url" maxlength="500" placeholder="https://example.com"></div>
 <div class="field full"><label for="message">Project description *</label><textarea id="message" name="message" required minlength="20" maxlength="6000" rows="6" placeholder="What are you trying to achieve? Describe the users, process, systems, constraints or deadlines that matter."></textarea></div>
 </div>
-<div class="honeypot" aria-hidden="true" hidden><label for="website">Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="new-password" inputmode="none" spellcheck="false"></div>
-<input type="hidden" name="landing_page"><input type="hidden" name="referrer"><input type="hidden" name="utm_source"><input type="hidden" name="utm_medium"><input type="hidden" name="utm_campaign"><input type="hidden" name="utm_content"><input type="hidden" name="utm_term">
-<div class="field privacy-consent"><label for="privacy-consent"><input id="privacy-consent" name="privacy_consent" type="checkbox" value="true" required> <span>I have read the <a href="/privacy/">Privacy Notice</a> and agree that GrapeCrux may use these details to review and respond to this project enquiry. *</span></label></div>
+
+<input type="hidden" name="landing_page"><input type="hidden" name="referrer">
+<div class="field privacy-consent"><label for="privacy-consent"><input id="privacy-consent" name="privacy_consent" type="checkbox" value="true" required> <span>I have read the <a href="/privacy/">Privacy Notice</a> and agree that GrapeCrux and its form-delivery provider may process these details to review and respond to this project enquiry. *</span></label></div>
 <p class="form-note">When the server-side enquiry service is activated, the form sends your details to the GrapeCrux API for storage and notification. If the service is not connected or cannot confirm receipt, the page provides a manual email option; you must send that email yourself. Do not include sensitive personal or regulated information. You can also email <a href="mailto:service@grapecrux.com">service@grapecrux.com</a> directly.</p>
 <button type="submit" class="btn btn-primary" id="project-submit">Send project enquiry <span class="arrow" aria-hidden="true">↗</span></button>
-<div class="form-status" id="form-status" role="status" aria-live="polite"></div>
-<div id="contact-fallback" class="contact-fallback" hidden></div>
+<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
 </form>
 </div></section>
 <section class="section section-tint"><div class="container"><div class="section-header"><span class="section-kicker">What happens after an enquiry</span><h2>A clear path to a useful conversation.</h2></div><div class="process-grid">

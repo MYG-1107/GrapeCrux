@@ -48,7 +48,7 @@ for (const slug of articleSlugs) {
   const url = 'https://grapecrux.com/blogs/' + slug + '/';
   const page = read('blogs/' + slug + '/index.html');
   assert.ok(sitemapUrls.includes(url), slug + ' must be discoverable in the sitemap');
-  assert.match(page, /class="prose blog-prose(?:\\s|")/, slug + ' must use the shared reading layout');
+  assert.match(page, /class="prose blog-prose(?:\s|")/, slug + ' must use the shared reading layout');
   assert.ok(page.includes('name="keywords"') && page.includes('name="description"'), slug + ' must have SEO metadata');
   assert.ok(page.includes('"@type":"BlogPosting"'), slug + ' must have BlogPosting structured data');
   assert.ok(page.includes('grapecrux_brand_logo.png'), slug + ' must use the original GrapeCrux PNG favicon');

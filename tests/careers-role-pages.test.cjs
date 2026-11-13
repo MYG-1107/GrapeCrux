@@ -62,7 +62,6 @@ assert.ok(js.includes('10 * 1024 * 1024'),'Optional resume upload must enforce t
 assert.ok(js.includes("form.querySelector('[name=\"_replyto\"]')") || js.includes("form.querySelector('[name=\"_subject\"]')"),'Form submission metadata must be populated dynamically');
 assert.ok(!js.includes('mailto:'),'Career applications must not use manual email drafts');
 assert.ok(js.includes("form.dataset.jobDetail === 'true'"),'Shared JS must support preselected detail page mode');
-assert.ok(js.includes('roleQuestions')&&js.includes('updateRoleQuestion'),'Shared JS must load the selected role-specific question');
 assert.ok(js.includes("roleQuestions")&&js.includes("updateRoleQuestion"),'Role-specific questions must remain enabled');
 assert.ok(careers.includes('id="career-job-id" name="job_id"'),'Careers hub form must carry Job ID');
 assert.ok(careers.includes('name="role_interest"')&&careers.includes('name="role_skills"')&&careers.includes('name="role_specific_response"'),'Careers hub must ask role-specific questions');

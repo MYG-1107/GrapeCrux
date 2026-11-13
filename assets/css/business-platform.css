@@ -1,5 +1,5 @@
-/* GrapeCrux business-visibility and lead-platform components.
-   Scoped classes only; this file is loaded by the shared config.js on public pages. */
+/* GrapeCrux business-visibility and browser-based project-assessment components.
+   Scoped classes only; this file is loaded by shared public pages. */
 .who-help-grid,.problem-solution-grid,.why-work-grid,.assessment-recommendations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .bp-card,.assessment-recommendation{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;min-width:0}
 .bp-card h3,.assessment-recommendation h3{margin:0 0 9px;color:var(--ink)}
@@ -20,6 +20,7 @@
 .checklist label{display:flex;gap:11px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff;line-height:1.5}
 .checklist input{margin-top:4px;accent-color:var(--moss);width:18px;height:18px;flex:0 0 auto}
 .assessment-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(290px,.9fr);gap:24px;align-items:start}
+.assessment-form,.assessment-result{background:#fff;border:1px solid var(--line);border-radius:20px;padding:clamp(20px,3vw,30px);box-shadow:0 14px 35px rgba(22,63,54,.05)}
 .assessment-step{padding:0 0 24px;margin-bottom:24px;border-bottom:1px solid var(--line)}
 .assessment-step:last-child{border:0;padding-bottom:0;margin-bottom:0}
 .assessment-step h2{font-size:1.45rem;margin:6px 0 16px}

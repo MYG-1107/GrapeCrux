@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});gtag('js',new Date());gtag('config','G-QXMRMGJEP2',{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false});</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GrapeCrux Editorial Team">
+<meta name="theme-color" content="#f7f8f5">
+<title>OpenTelemetry for generative AI: trace LLM, RAG and agent workflows | GrapeCrux</title>
+<meta name="description" content="Learn how to observe generative AI applications with traces, metrics and logs across model calls, retrieval, tool execution, latency, token usage and privacy controls.">
+<meta name="keywords" content="OpenTelemetry GenAI observability, LLM tracing, AI agent monitoring, RAG observability, generative AI telemetry, token usage monitoring, AI application performance, distributed tracing">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://grapecrux.com/blogs/opentelemetry-genai-observability-tracing-rag-agents/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GrapeCrux">
+<meta property="og:title" content="OpenTelemetry for generative AI: trace LLM, RAG and agent workflows">
+<meta property="og:description" content="Learn how to observe generative AI applications with traces, metrics and logs across model calls, retrieval, tool execution, latency, token usage and privacy controls.">
+<meta property="og:url" content="https://grapecrux.com/blogs/opentelemetry-genai-observability-tracing-rag-agents/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta property="og:image:alt" content="GrapeCrux cloud &amp; devops guide">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-11-13">
+<meta property="article:modified_time" content="2026-11-13">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OpenTelemetry for generative AI: trace LLM, RAG and agent workflows">
+<meta name="twitter:description" content="Learn how to observe generative AI applications with traces, metrics and logs across model calls, retrieval, tool execution, latency, token usage and privacy controls.">
+<meta name="twitter:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta name="twitter:url" content="https://grapecrux.com/blogs/opentelemetry-genai-observability-tracing-rag-agents/">
+<link rel="icon" type="image/png" href="../../grapecrux_brand_logo.png?v=20261113-original-png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"OpenTelemetry for generative AI: trace LLM, RAG and agent workflows","description":"Learn how to observe generative AI applications with traces, metrics and logs across model calls, retrieval, tool execution, latency, token usage and privacy controls.","datePublished":"2026-11-13","dateModified":"2026-11-13","author":{"@type":"Organization","name":"GrapeCrux Editorial Team"},"publisher":{"@type":"Organization","name":"GrapeCrux","logo":{"@type":"ImageObject","url":"https://grapecrux.com/grapecrux_brand_logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://grapecrux.com/blogs/opentelemetry-genai-observability-tracing-rag-agents/"},"image":"https://grapecrux.com/assets/images/hero-orbit.svg","articleSection":"Cloud & DevOps","keywords":"OpenTelemetry GenAI observability, LLM tracing, AI agent monitoring, RAG observability, generative AI telemetry, token usage monitoring, AI application performance, distributed tracing","inLanguage":"en","wordCount":706}</script>
+<script defer src="../../assets/js/config.js"></script>
+<script defer src="../../assets/js/assistant-knowledge.js"></script>
+<script defer src="../../assets/js/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="page-hero">
+<div class="container">
+<div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><a href="/blogs/">Blogs</a><span class="sep">/</span><span>Cloud &amp; DevOps</span></div>
+<div class="article-meta"><span>Cloud &amp; DevOps</span><span>·</span><span>11 min read</span><span>·</span><time datetime="2026-11-13">13 November 2026</time></div>
+<h1>OpenTelemetry for generative AI: trace LLM, RAG and agent workflows</h1>
+<p class="lead">An AI answer can be slow or incorrect for many reasons: retrieval, a model call, a tool, retries or orchestration. Observability helps teams see the complete request path without exposing sensitive prompts and customer data.</p>
+</div>
+</section>
+<section class="section">
+<div class="container content-layout">
+<article class="prose blog-prose">
+<h2>Why model-only logs are not enough</h2>
+<p>A generative AI feature is usually a chain of operations. A user request may pass through authentication, prompt construction, retrieval, one or more model calls, tool execution, validation and response formatting. Logging only the final model response makes it difficult to explain latency, failures or unexpected cost.</p>
+<p>OpenTelemetry's May 2026 walkthrough of GenAI observability demonstrates how telemetry can make model operations visible alongside the rest of an application. The value is not another dashboard; it is a consistent way to connect each AI operation to the user request and services around it.</p>
+<h2>Model the request as a trace</h2>
+<p>Create a top-level span for the business operation, such as answering a support question or preparing a document summary. Add child spans for retrieval, model requests, tool calls, validation and external services. Preserve trace context across service boundaries so a team can follow the request from the entry point to the response.</p>
+<p>Use stable operation names and bounded attributes. Record the provider, model, operation type, duration, status and other fields needed to diagnose the system. Avoid embedding complete prompts, retrieved documents or tool arguments in span names or unfiltered attributes.</p>
+<h2>Choose useful metrics for AI workflows</h2>
+<p>Measure request volume, error rate, latency, time to first token, total generation time, token usage, retry counts and tool-call outcomes. For retrieval workflows, capture retrieval duration, result count and safe quality indicators. For agent workflows, monitor the number of steps, handoffs, tool failures and tasks that require human intervention.</p>
+<p>Connect infrastructure signals to application behaviour. CPU, GPU, memory, queue depth and network latency can explain slow requests, but they need to be correlated with the workflow and model operation. A rise in token use may be caused by longer context, repeated retries or an unexpected agent loop rather than a hardware issue.</p>
+<h2>Protect prompts, retrieved data and user information</h2>
+<p>Telemetry can contain personal data, confidential business information, credentials or proprietary documents. OpenTelemetry's GenAI attribute guidance warns that input messages, output messages and retrieval queries may contain sensitive content. Treat content capture as a deliberate, reviewed decision rather than a default setting.</p>
+<p>Prefer metadata and measurements over raw content. Use allowlists, redaction, truncation, sampling and role-based access. Define retention periods and restrict who can inspect traces. Test that secrets and private document text are not recorded during normal operation or error handling.</p>
+<h2>Keep instrumentation useful across providers</h2>
+<p>Teams often use several model providers or change providers as application requirements evolve. Keep instrumentation behind application-level interfaces and use documented semantic conventions where appropriate. Confirm which convention version and stability status your instrumentation supports; the GenAI conventions have moved to a dedicated OpenTelemetry repository and continue to evolve.</p>
+<p>Do not assume every provider exposes the same token, latency or tool-call fields. Document gaps, preserve provider-specific details where needed and avoid inventing a common metric when the underlying definitions are different.</p>
+<h2>Connect telemetry to an operational response</h2>
+<p>Build alerts around user-visible service objectives and sustained failure patterns. Examples include a rise in failed AI requests, a sudden increase in tail latency, an unexpected jump in cost per completed task or a tool dependency that repeatedly times out. Add links from an alert to representative traces and the relevant runbook.</p>
+<p>Use evaluations and user feedback alongside observability. A response can be fast and technically successful but still be inaccurate or unhelpful. Pair operational signals with a reviewed quality dataset, escalation paths and a clear process for updating prompts, retrieval sources or model versions.</p>
+<h2>A practical rollout checklist</h2>
+<ul>
+<li>Choose one AI workflow and map its request path end to end.</li>
+<li>Instrument retrieval, model calls, tools and validation as separate operations.</li>
+<li>Define a minimal set of useful latency, usage and error metrics.</li>
+<li>Disable raw content capture by default and test redaction controls.</li>
+<li>Connect alerts to traces, service objectives and operational runbooks.</li>
+<li>Review telemetry cost, access and retention as traffic grows.</li>
+</ul>
+<h2>Further reading</h2>
+<ul class="resource-list">
+<li><a href="https://opentelemetry.io/blog/2026/genai-observability/" target="_blank" rel="noopener noreferrer">OpenTelemetry — Inside the LLM call: GenAI observability with OpenTelemetry</a> (14 May 2026).</li>
+<li><a href="https://opentelemetry.io/docs/specs/semconv/" target="_blank" rel="noopener noreferrer">OpenTelemetry semantic conventions</a> for consistent telemetry across services.</li>
+<li><a href="https://www.cncf.io/announcements/2026/11/10/cncf-and-slashdata-report-finds-platform-engineering-strategies-are-shaping-ai-infrastructure-adoption/" target="_blank" rel="noopener noreferrer">CNCF and SlashData — Q3 2026 Technology Radar findings</a> (10 November 2026).</li>
+</ul>
+<p class="small">Published by GrapeCrux Editorial Team · 13 November 2026. This article is educational. Review telemetry conventions, privacy requirements and provider-specific documentation before rollout.</p>
+<a class="back-top" href="/blogs/">← Back to selected insights</a>
+</article>
+<aside class="side-card">
+<span class="section-kicker">Put the idea into practice</span>
+<h3>Discuss a related project.</h3>
+<p>Share your business context, current systems and goals. The GrapeCrux team can discuss a practical next step within an agreed scope.</p>
+<a class="btn btn-primary" href="/contact/">Start a project ↗</a>
+<div class="divider"></div>
+<p class="small">Related capability: <a href="/services/cloud-devops/">Cloud &amp; DevOps</a>.</p>
+<p class="small">Browse more guides in the <a href="/blogs/archive/">complete article archive</a>.</p>
+</aside>
+</div>
+</section>
+</main>
+<div id="site-footer"></div>
+<div id="gc-chatbot"></div>
+</body>
+</html>

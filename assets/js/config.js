@@ -1,10 +1,4 @@
-/* GrapeCrux client configuration.
- * Keep the assistant API URL empty to use the built-in curated assistant.
- * Never place private API keys or SMTP credentials in this public file.
- */
-window.GRAPECRUX_CHAT_API_URL = '';
-/* Set this to the deployed HTTPS FastAPI origin after backend deployment. */
-window.GRAPECRUX_API_BASE_URL = '';
+/* GrapeCrux static-site configuration. No private API or mail credentials belong in this file. */
 /* Optional GTM support is intentionally disabled until the real container ID is supplied.
    Do not add a GA4 tag in GTM while direct GA4 is active, or page/event data may duplicate. */
 window.GRAPECRUX_GTM_ID = '';
@@ -214,7 +208,7 @@ window.GRAPECRUX_GTM_ID = '';
       track('form_submit', {
         form_name: 'project_enquiry',
         service_name: service,
-        submission_method: window.GRAPECRUX_API_BASE_URL ? 'server_api' : 'email_fallback'
+        submission_method: 'hosted_email_form'
       });
     }
 
@@ -222,11 +216,11 @@ window.GRAPECRUX_GTM_ID = '';
       const type = form.querySelector('[name="application_type"]')?.value || 'unspecified';
       const role = form.querySelector('[name="role"]')?.value || 'unspecified';
       const jobId = form.querySelector('[name="job_id"]')?.value || 'unspecified';
-      track('careers_application_email_draft_requested', {
+      track('careers_application_submit_attempt', {
         application_type: type,
         role_name: role,
         job_id: jobId,
-        submission_method: 'mailto_draft'
+        submission_method: 'hosted_email_form'
       });
     }
   }, true);

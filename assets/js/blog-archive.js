@@ -8,6 +8,7 @@
   const next = document.getElementById('blog-next');
   const label = document.getElementById('blog-page-label');
   const pagination = document.getElementById('blog-pagination');
+  const clearFilters = document.getElementById('blog-clear-filters');
   if (!list || !search || !category || !count || !prev || !next || !label) return;
 
 
@@ -50,6 +51,7 @@
     prev.disabled = page <= 1;
     next.disabled = page >= pageCount;
     if (pagination) pagination.hidden = filtered.length <= pageSize;
+    if (clearFilters) clearFilters.hidden = !query && !selected;
   }
 
   search.addEventListener('input', () => { page = 1; render(); });
@@ -64,5 +66,17 @@
     list.scrollIntoView({ behavior: 'smooth', block: 'start' });
     window.GrapeCruxAnalytics?.track('blog_archive_page', { page_number: page });
   });
+  if (clearFilters) clearFilters.addEventListener('click', () => {
+    search.value = '';
+    category.value = '';
+    page = 1;
+    const cleanUrl = new URL(window.location.href);
+    cleanUrl.searchParams.delete('q');
+    cleanUrl.searchParams.delete('category');
+    window.history.replaceState({}, '', cleanUrl.pathname + cleanUrl.hash);
+    render();
+    search.focus();
+  });
+
   render();
 })();

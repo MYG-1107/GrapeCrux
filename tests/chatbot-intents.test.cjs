@@ -34,7 +34,11 @@ const cases = [
   ['Are you an AI?', /curated FAQ|GrapeCrux website assistant/i],
   ['Where can I submit my resume?', /careers.*yaswanth@grapecrux.com/i],
   ['How do I contact the team?', /service@grapecrux.com/i],
-  ['Do you have ISO certifications?', /does not currently list independently verified/i]
+  ['Do you have ISO certifications?', /does not currently list independently verified/i],
+  ['How can we use AI coding agents safely?', /bounded tasks.*verification.*human review/i],
+  ['How should we secure MCP integrations?', /MCP security guide.*authorization.*token audience/i],
+  ['How do we plan a post-quantum migration?', /post-quantum readiness guide.*cryptographic inventories/i],
+  ['What is an SBOM?', /SBOM guide.*component identity.*generation context/i],
 ];
 for (const [q, pattern] of cases) {
   const answer = ask(q);

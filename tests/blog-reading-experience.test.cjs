@@ -24,8 +24,8 @@ assert.match(hub, /<link rel="canonical" href="https:\/\/grapecrux\.com\/blogs\/
 assert.ok(archive.includes('id="blog-archive-list"'), 'The full archive must render its article list in the source HTML');
 assert.ok(archive.includes('id="blog-search"') && archive.includes('id="blog-category"'), 'The full archive must expose search and category filters');
 assert.ok(archive.includes('id="blog-pagination"') && archive.includes('id="blog-next"'), 'The full archive must expose pagination');
-assert.equal((archive.match(/class="article-card blog-archive-item"/g) || []).length, 74, 'The archive must contain all 74 article links in the original HTML');
-assert.ok(archive.includes('"@type":"CollectionPage"') && archive.includes('"numberOfItems":74'), 'The archive structured data must describe the full library');
+assert.equal((archive.match(/class="article-card blog-archive-item"/g) || []).length, 78, 'The archive must contain all 78 article links in the original HTML');
+assert.ok(archive.includes('"@type":"CollectionPage"') && archive.includes('"numberOfItems":78'), 'The archive structured data must describe the full library');
 assert.match(archive, /name="robots" content="index,follow/i);
 assert.match(archive, /<link rel="canonical" href="https:\/\/grapecrux\.com\/blogs\/archive\/">/);
 assert.ok(archiveJs.includes('new URLSearchParams(window.location.search)'), 'Topic links must pre-filter the archive');
@@ -79,4 +79,4 @@ for (const slug of ['llm-inference-optimization-production-latency-cost','opente
   assert.ok(page.includes('Further reading') && page.includes('Start a project'), slug + ' must link sources and related services');
 }
 
-console.log('Blog reading experience checks passed: curated hub, 74-article archive, 74 indexable articles, sitemap, SEO schema, section navigation and responsive styles.');
+console.log('Blog reading experience checks passed: curated hub, 78-article archive, 78 indexable articles, sitemap, SEO schema, section navigation and responsive styles.');

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});gtag('js',new Date());gtag('config','G-QXMRMGJEP2',{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false});</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GrapeCrux Editorial Team">
+<meta name="theme-color" content="#f7f8f5">
+<title>Post-quantum cryptography migration: a practical plan for software teams | GrapeCrux</title>
+<meta name="description" content="A practical post-quantum cryptography readiness guide for software teams: inventory cryptography, prioritise long-lived data, assess vendors and plan staged migration.">
+<meta name="keywords" content="post quantum cryptography, PQC migration, NIST IR 8547, cryptographic inventory, quantum safe migration, software security, cryptographic agility">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://grapecrux.com/blogs/post-quantum-cryptography-migration-for-software-teams/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GrapeCrux">
+<meta property="og:title" content="Post-quantum cryptography migration: a practical plan for software teams">
+<meta property="og:description" content="A practical post-quantum cryptography readiness guide for software teams: inventory cryptography, prioritise long-lived data, assess vendors and plan staged migration.">
+<meta property="og:url" content="https://grapecrux.com/blogs/post-quantum-cryptography-migration-for-software-teams/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta property="og:image:alt" content="GrapeCrux practical technology and software engineering guide">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-11-13">
+<meta property="article:modified_time" content="2026-11-13">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Post-quantum cryptography migration: a practical plan for software teams">
+<meta name="twitter:description" content="A practical post-quantum cryptography readiness guide for software teams: inventory cryptography, prioritise long-lived data, assess vendors and plan staged migration.">
+<meta name="twitter:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta name="twitter:url" content="https://grapecrux.com/blogs/post-quantum-cryptography-migration-for-software-teams/">
+<link rel="icon" type="image/png" href="../../grapecrux_brand_logo.png?v=20261113-original-png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Post-quantum cryptography migration: a practical plan for software teams","description":"A practical post-quantum cryptography readiness guide for software teams: inventory cryptography, prioritise long-lived data, assess vendors and plan staged migration.","datePublished":"2026-11-13","dateModified":"2026-11-13","author":{"@type":"Organization","name":"GrapeCrux Editorial Team"},"publisher":{"@type":"Organization","name":"GrapeCrux","logo":{"@type":"ImageObject","url":"https://grapecrux.com/grapecrux_brand_logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://grapecrux.com/blogs/post-quantum-cryptography-migration-for-software-teams/"},"image":"https://grapecrux.com/assets/images/hero-orbit.svg","articleSection":"Cybersecurity","keywords":"post quantum cryptography, PQC migration, NIST IR 8547, cryptographic inventory, quantum safe migration, software security, cryptographic agility","inLanguage":"en","wordCount":744}</script>
+<script defer src="../../assets/js/config.js"></script>
+<script defer src="../../assets/js/assistant-knowledge.js"></script>
+<script defer src="../../assets/js/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="page-hero">
+<div class="container">
+<div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><a href="/blogs/">Blogs</a><span class="sep">/</span><span>Cybersecurity</span></div>
+<div class="article-meta"><span>Cybersecurity</span><span>·</span><span>10 min read</span><span>·</span><time datetime="2026-11-13">13 November 2026</time></div>
+<h1>Post-quantum cryptography migration: a practical plan for software teams</h1>
+<p class="lead">Post-quantum cryptography is a technology transition that affects applications, identity, infrastructure and vendors. Teams can prepare without predicting when a cryptographically relevant quantum computer will arrive: discover where cryptography is used, understand what must remain confidential and build a controlled migration plan.</p>
+</div>
+</section>
+<section class="section">
+<div class="container content-layout">
+<article class="prose blog-prose">
+<h2>Why post-quantum readiness belongs on the roadmap</h2>
+<p>Many widely deployed public-key cryptographic systems were designed before practical large-scale quantum computing was a realistic engineering consideration. Post-quantum cryptography (PQC) refers to cryptographic approaches designed to resist attacks from both classical and quantum computers. Moving to new standards is not simply a library update; it can affect protocols, certificates, hardware, stored data and interoperability with external services.</p>
+<p>On October 27, 2026, NIST published its final report, <em>Transition to Post-Quantum Cryptography Standards</em> (NISTIR 8547), describing a path for transitioning away from quantum-vulnerable standards. The report is a useful planning reference for technology providers and organisations preparing their own road maps. <a href="https://www.nist.gov/publications/transition-post-quantum-cryptography-standards" target="_blank" rel="noopener noreferrer">Read the NIST transition report</a>.</p>
+<h2>Start with a cryptographic inventory</h2>
+<p>Teams cannot migrate what they cannot find. Catalogue where public-key cryptography, key exchange, digital signatures, certificates and cryptographic libraries are used. Include application code, API gateways, TLS termination, identity providers, device management, VPNs, code signing, backup systems, databases, message queues and third-party SaaS dependencies.</p>
+<p>Record the algorithm or library, protocol, key or certificate owner, vendor, system version, data classification, renewal cycle and business function. Ask suppliers for a documented PQC roadmap and supported standards. Include embedded systems and long-lived devices where updates may be difficult after deployment.</p>
+<h2>Prioritise by data lifetime and system exposure</h2>
+<p>Not every system carries the same urgency. Data that must remain confidential for many years deserves early attention because information captured today may be exposed in the future if it was protected with vulnerable cryptography. Systems that protect identity, financial transactions, software distribution or critical infrastructure may also require careful sequencing.</p>
+<p>Classify assets by confidentiality lifetime, sensitivity, external exposure, business criticality, replacement difficulty and vendor readiness. This creates a reasoned priority order rather than a blanket “upgrade everything now” programme.</p>
+<h2>Build for cryptographic agility</h2>
+<p>Hard-coded algorithms and assumptions can make later transitions expensive. Centralise cryptographic configuration where practical, document protocol dependencies and use supported libraries with a clear update path. Design systems so approved algorithms and parameters can be changed without rewriting unrelated business logic.</p>
+<p>Do not invent your own cryptographic schemes or swap algorithms in production based on a blog post. Follow standards and vendor guidance, validate key sizes and protocol support, and test the exact libraries and hardware that the organisation operates. Some deployments may use staged or hybrid approaches where standards and implementation guidance support them, but compatibility and security must be evaluated rather than assumed.</p>
+<h2>Test interoperability before broad rollout</h2>
+<p>New cryptographic mechanisms can affect handshake sizes, certificate chains, latency, memory use, hardware support and compatibility with older clients. Build a pilot environment that includes representative browsers, mobile clients, APIs, identity services, network devices and vendor integrations.</p>
+<p>Test connection establishment, key and certificate rotation, recovery, logging, performance and failure behaviour. Confirm that rollback procedures are safe and that old cryptographic paths can be retired deliberately rather than left enabled indefinitely.</p>
+<h2>Plan migration as a staged programme</h2>
+<ul>
+<li><strong>Discover:</strong> inventory algorithms, certificates, libraries, protocols, vendors and data flows.</li>
+<li><strong>Prioritise:</strong> rank assets by data lifetime, sensitivity, exposure and replacement difficulty.</li>
+<li><strong>Prepare:</strong> establish standards, procurement requirements, owners and cryptographic agility.</li>
+<li><strong>Pilot:</strong> test supported implementations in representative environments.</li>
+<li><strong>Roll out:</strong> migrate in controlled stages, monitor interoperability and record exceptions.</li>
+<li><strong>Retire:</strong> remove deprecated paths after evidence, approval and recovery readiness are in place.</li>
+</ul>
+<h2>Separate standards guidance from organisational deadlines</h2>
+<p>Government migration timelines and policy instructions may apply to specific public-sector systems and jurisdictions. They should not automatically be presented as legal deadlines for every private organisation. Private-sector teams should review applicable regulation, customer contracts, sector guidance and supplier requirements, then agree a risk-based migration plan with their security and legal stakeholders.</p>
+<p>Keep an auditable record of the systems assessed, exceptions accepted, vendor commitments, tests completed and remaining dependencies. A roadmap should be updated when standards, products or system lifetimes change.</p>
+<h2>How GrapeCrux can support readiness work</h2>
+<p>Post-quantum planning connects software architecture, application security, infrastructure, vendor management and quality assurance. A useful first engagement can map critical cryptographic dependencies, identify systems with long-lived sensitive data and produce a prioritised test and migration plan.</p>
+<p>GrapeCrux can discuss security-oriented software testing and technical consulting as part of an agreed scope. The right first step is an evidence-based inventory, not an unverified claim that a system is already quantum-safe.</p>
+<h2>Further reading</h2>
+<ul class="resource-list">
+<li><a href="https://www.nist.gov/publications/transition-post-quantum-cryptography-standards" target="_blank" rel="noopener noreferrer">NIST — Transition to Post-Quantum Cryptography Standards (NISTIR 8547, October 2026)</a>.</li>
+<li><a href="https://csrc.nist.gov/projects/post-quantum-cryptography" target="_blank" rel="noopener noreferrer">NIST — Post-Quantum Cryptography project</a>.</li>
+<li><a href="https://www.whitehouse.gov/presidential-actions/2026/06/securing-the-nation-against-advanced-cryptographic-attacks/" target="_blank" rel="noopener noreferrer">United States policy — Securing the Nation Against Advanced Cryptographic Attacks</a>; check jurisdiction-specific applicability before using public-sector timelines.</li>
+</ul>
+<p class="small">Published by GrapeCrux Editorial Team · 13 November 2026. This article is educational. Review current standards, vendor documentation and project-specific requirements before making production changes.</p>
+<a class="back-top" href="/blogs/">← Back to selected insights</a>
+</article>
+<aside class="side-card">
+<span class="section-kicker">Put the idea into practice</span>
+<h3>Discuss a related project.</h3>
+<p>Share your business context, current systems and goals. The GrapeCrux team can discuss a practical next step within an agreed scope.</p>
+<a class="btn btn-primary" href="/contact/">Start a project ↗</a>
+<div class="divider"></div>
+<p class="small">Related capability: <a href="/services/software-testing/">Software Testing</a>.</p>
+<p class="small">Browse more guides in the <a href="/blogs/archive/">complete article archive</a>.</p>
+</aside>
+</div>
+</section>
+</main>
+<div id="site-footer"></div>
+<div id="gc-chatbot"></div>
+</body>
+</html>

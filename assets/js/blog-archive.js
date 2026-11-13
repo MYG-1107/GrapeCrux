@@ -10,10 +10,25 @@
   const pagination = document.getElementById('blog-pagination');
   if (!list || !search || !category || !count || !prev || !next || !label) return;
 
+
   const cards = Array.from(list.querySelectorAll('.blog-archive-item'));
+  const params = new URLSearchParams(window.location.search);
+  const initialCategory = params.get('category') || '';
+  const initialQuery = params.get('q') || '';
+  if (initialCategory && Array.from(category.options).some(option => option.value === initialCategory)) category.value = initialCategory;
+  if (initialQuery) search.value = initialQuery;
   const pageSize = 12;
   let page = 1;
   let filtered = cards;
+
+
+  let emptyState = list.parentElement.querySelector('.blog-archive-empty');
+  if (!emptyState) {
+    emptyState = document.createElement('p');
+    emptyState.className = 'blog-archive-empty';
+    emptyState.textContent = 'No articles match those filters. Try a broader search or choose another category.';
+    list.insertAdjacentElement('afterend', emptyState);
+  }
 
   function render() {
     const query = search.value.trim().toLocaleLowerCase();
@@ -22,6 +37,7 @@
       const title = card.dataset.search || card.textContent.toLocaleLowerCase();
       return (!selected || card.dataset.category === selected) && (!query || title.includes(query));
     });
+    emptyState.hidden = filtered.length > 0;
     const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
     page = Math.min(Math.max(1, page), pageCount);
     const start = (page - 1) * pageSize;

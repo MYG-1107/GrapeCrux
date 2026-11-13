@@ -48,4 +48,17 @@ for (const file of htmlFiles) {
   }
 }
 assert.ok(iconPages.length >= 70, 'Expected the original favicon to be present on all current indexable/redirect pages');
+const sharedPages = htmlFiles.filter(file => {
+  const html = fs.readFileSync(file, 'utf8');
+  return html.includes('id="site-header"') && html.includes('id="site-footer"');
+});
+for (const file of sharedPages) {
+  const html = fs.readFileSync(file, 'utf8');
+  const tags = [...html.matchAll(/<link[^>]*rel=["']icon["'][^>]*>/gi)].map(match => match[0]);
+  assert.ok(tags.length > 0, path.relative(root, file) + ' must declare the original GrapeCrux browser icon');
+  for (const tag of tags) {
+    assert.ok(tag.includes('grapecrux_brand_logo.png'), path.relative(root, file) + ' must use the original GrapeCrux PNG on every shared-layout page');
+  }
+}
+
 console.log('Original GrapeCrux PNG branding QA passed: shared header/footer, homepage schema, chatbot avatar and ' + iconPages.length + ' page favicons.');

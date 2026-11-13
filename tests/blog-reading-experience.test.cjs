@@ -24,6 +24,8 @@ assert.match(hub, /<link rel="canonical" href="https:\/\/grapecrux\.com\/blogs\/
 assert.ok(archive.includes('id="blog-archive-list"'), 'The full archive must render its article list in the source HTML');
 assert.ok(archive.includes('id="blog-search"') && archive.includes('id="blog-category"'), 'The full archive must expose search and category filters');
 assert.ok(archive.includes('id="blog-pagination"') && archive.includes('id="blog-next"'), 'The full archive must expose pagination');
+assert.ok(archive.includes('id="blog-clear-filters"'), 'The archive must expose a clear-filters control');
+assert.ok(!archive.includes('</a></div></article>'), 'Archive cards must not contain extra closing div elements');
 assert.equal((archive.match(/class="article-card blog-archive-item"/g) || []).length, 78, 'The archive must contain all 78 article links in the original HTML');
 assert.ok(archive.includes('"@type":"CollectionPage"') && archive.includes('"numberOfItems":78'), 'The archive structured data must describe the full library');
 assert.match(archive, /name="robots" content="index,follow/i);

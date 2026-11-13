@@ -130,130 +130,25 @@
     }
   })();
 
-  const addContactFallback = (form, data, status) => {
-    const subject = '[GrapeCrux project enquiry] ' + (data.service || 'New enquiry');
-    const body = [
-      'Name: ' + (data.name || ''),
-      'Business email: ' + (data.email || ''),
-      'Company: ' + (data.company || 'Not provided'),
-      'Country: ' + (data.country || 'Not provided'),
-      'Phone: ' + (data.phone || 'Not provided'),
-      'Service: ' + (data.service || ''),
-      'Project type: ' + (data.project_type || ''),
-      'Budget: ' + (data.budget_range || 'Not specified') + ' ' + (data.budget_currency || ''),
-      'Expected start date: ' + (data.expected_start_date || 'Not specified'),
-      'Preferred contact: ' + (data.preferred_contact_method || 'Email'),
-      'Existing website: ' + (data.existing_website || 'Not provided'),
-      '', 'Project description:', data.message || ''
-    ].join('\n');
-    const link = document.createElement('a');
-    link.className = 'btn btn-secondary';
-    link.href = 'mailto:service@grapecrux.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    link.textContent = 'Open email to service@grapecrux.com ↗';
-    const fallback = document.getElementById('contact-fallback');
-    if (fallback) {
-      fallback.hidden = false;
-      fallback.replaceChildren(link);
-    }
-    if (status) {
-      status.textContent = 'The online enquiry service is not connected or could not confirm receipt. Use the email option below and send the message manually. No lead has been recorded.';
-      status.classList.add('show','is-error');
-    }
-  };
-
-  // Project enquiries are submitted to the secure API when it has been deployed.
-  // Without an API URL the form provides a clearly labelled email fallback; it never claims receipt.
+  // Static contact form: submit directly to the hosted email form provider.
   const contactForm = document.getElementById('project-form');
   if (contactForm) {
-    let idempotencyKey = '';
-    contactForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      if (!contactForm.reportValidity()) return;
-      const data = Object.fromEntries(new FormData(contactForm).entries());
-      data.expected_start_date = data.expected_start_date || null;
-      data.privacy_consent = Boolean(contactForm.querySelector('[name="privacy_consent"]')?.checked);
-      Object.assign(data, contactAttribution);
-      const status = document.getElementById('form-status');
-      const fallback = document.getElementById('contact-fallback');
-      const submit = contactForm.querySelector('button[type="submit"]');
-      if (fallback) { fallback.hidden = true; fallback.replaceChildren(); }
-      if (status) { status.textContent = 'Submitting your enquiry securely…'; status.classList.remove('is-error'); status.classList.add('show'); }
-      const apiBase = String(window.GRAPECRUX_API_BASE_URL || '').trim().replace(/\/+$/,'');
-      if (!apiBase) {
-        addContactFallback(contactForm,data,status);
+    Object.entries(contactAttribution).forEach(([name, value]) => {
+      const field = contactForm.querySelector('[name="' + name + '"]');
+      if (field) field.value = value || '';
+    });
+    contactForm.addEventListener('submit', (event) => {
+      if (!contactForm.reportValidity()) {
+        event.preventDefault();
         return;
       }
-
-      if (!idempotencyKey) {
-        idempotencyKey = (window.crypto?.randomUUID?.() ||
-          ('gc-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2)));
-      }
-      if (submit) { submit.disabled = true; submit.textContent = 'Submitting…'; }
-      try {
-        const response = await fetch(apiBase + '/api/enquiries', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Idempotency-Key': idempotencyKey
-          },
-          credentials: 'omit',
-          body: JSON.stringify(data)
-        });
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok || !result.received || !result.reference) {
-          throw new Error(result.detail || 'The server could not confirm receipt.');
-        }
-        idempotencyKey = '';
-        if (status) {
-          status.textContent = 'Thank you. Your project enquiry has been received. Reference: ' + result.reference + '. An acknowledgement email will be sent when email delivery is configured.';
-          status.classList.remove('is-error');
-          status.classList.add('show');
-        }
-        if (result.created !== false && result.reference !== 'GC-IGNORED' && window.GrapeCruxAnalytics?.track) {
-          // Emit only for a newly stored record; idempotent retries and honeypots are not new leads.
-          // Never include personal information or the free-text project description.
-          window.GrapeCruxAnalytics.track('generate_lead', {
-            service_name: data.service || 'unspecified',
-            project_type: data.project_type || 'unspecified',
-            enquiry_reference: result.reference,
-            submission_method: 'server_api'
-          });
-        }
-        contactForm.reset();
-      } catch (error) {
-        if (status) status.textContent = error.message || 'The enquiry could not be confirmed.';
-        addContactFallback(contactForm,data,status);
-      } finally {
-        if (submit) {
-          submit.disabled = false;
-          submit.innerHTML = 'Send project enquiry <span class="arrow" aria-hidden="true">↗</span>';
-        }
-      }
+      const replyTo = contactForm.querySelector('[name="email"]')?.value.trim() || '';
+      const replyField = contactForm.querySelector('[name="_replyto"]');
+      if (replyField) replyField.value = replyTo;
+      const submit = contactForm.querySelector('button[type="submit"]');
+      if (submit) submit.textContent = 'Sending enquiry…';
     });
   }
-
-  // Internship applications are email-prepared; no CV or personal data is stored by this static site.
-  const careersForm = document.getElementById('careers-form');
-  if (careersForm) careersForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    if (!careersForm.reportValidity()) return;
-    const data = new FormData(careersForm);
-    const role = data.get('role') || 'Internship application';
-    const body = [
-      `Applicant: ${data.get('name') || ''}`,
-      `Email: ${data.get('email') || ''}`,
-      `Phone (optional): ${data.get('phone') || 'Not provided'}`,
-      `Role: ${role}`,
-      `Education/status: ${data.get('education') || ''}`,
-      `Portfolio/GitHub/LinkedIn: ${data.get('links') || 'Not provided'}`,
-      '', 'Why this role:', data.get('message') || '', '',
-      'I will attach my resume before sending this email.'
-    ].join('\n');
-    const subject = `[GrapeCrux internship application] ${role}`;
-    const status = document.getElementById('careers-form-status');
-    if (status) { status.textContent = 'Your email application should open in your email app. Attach your resume, review the details and send it to service@grapecrux.com. This website does not store applications.'; status.classList.add('show'); }
-    window.location.href = `mailto:service@grapecrux.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  });
 
   // Role cards pre-select the application form track and move keyboard focus to it.
   document.querySelectorAll('.apply-role[data-role]').forEach((button) => {
@@ -298,41 +193,11 @@
       const addMessage = (text, who='bot', allowHtml=false) => { const div=document.createElement('div'); div.className=`chat-msg ${who}`; if(allowHtml) div.innerHTML=text; else div.textContent=text; messages.appendChild(div); messages.scrollTop=messages.scrollHeight; };
       const answerFor = (raw) => window.GrapeCruxKnowledge?.answerFor(raw) || 'I can help with published GrapeCrux services and project enquiries. Please contact service@grapecrux.com for details I cannot verify.';
       const serviceFor = (raw) => { const m=raw.toLowerCase(); if(/ai|chatbot|automation|agent/.test(m)) return 'AI & Automation'; if(/website|web development|e-commerce|app|portal/.test(m)) return 'Web & App Development'; if(/design|ux|ui|prototype/.test(m)) return 'Product Design & UX'; if(/brand|logo|identity/.test(m)) return 'Brand Strategy & Visual Identity'; if(/seo|marketing|growth|search/.test(m)) return 'Digital Growth & SEO'; if(/cloud|devops|hosting|pipeline/.test(m)) return 'Cloud & DevOps'; if(/qa|test|bug|quality/.test(m)) return 'Quality Assurance & Consulting'; if(/api|integration|data|dashboard/.test(m)) return 'Data & System Integration'; return 'Project enquiry'; };
-      const chatHistory = [];
-      const chatApiUrl = String(window.GRAPECRUX_CHAT_API_URL || '').trim().replace(/\/+$/, '');
       const send = async (text) => {
         const clean = text.trim();
         if (!clean) return;
         addMessage(clean, 'user');
-        let reply = '';
-        if (chatApiUrl) {
-          const thinking = document.createElement('div');
-          thinking.className = 'chat-msg bot';
-          thinking.textContent = 'Thinking…';
-          messages.appendChild(thinking);
-          messages.scrollTop = messages.scrollHeight;
-          try {
-            const response = await fetch(`${chatApiUrl}/api/chat`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              credentials: 'omit',
-              body: JSON.stringify({ messages: [...chatHistory.slice(-8), { role: 'user', content: clean }] })
-            });
-            const payload = await response.json().catch(() => ({}));
-            if (!response.ok) throw new Error(`Assistant request failed (${response.status})`);
-            reply = String(payload.reply || '').trim();
-            if (!reply) throw new Error('Empty assistant response');
-          } catch (_error) {
-            reply = `${answerFor(clean)}\n\n(The hosted assistant is unavailable right now, so I’m using the built-in guide.)`;
-          } finally {
-            thinking.remove();
-          }
-        } else {
-          reply = answerFor(clean);
-        }
-        chatHistory.push({ role: 'user', content: clean }, { role: 'assistant', content: reply });
-        if (chatHistory.length > 12) chatHistory.splice(0, chatHistory.length - 12);
-        addMessage(reply, 'bot');
+        addMessage(answerFor(clean), 'bot');
       };
       form.addEventListener('submit', e => { e.preventDefault(); const text=input.value.trim(); if(!text) return; input.value=''; send(text); });
       quick.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {

@@ -3,7 +3,7 @@
 (() => {
   const answers = [
     [/\b(ai coding agent|coding agents|agentic coding|ai-assisted coding)\b/i,
-      'Our AI coding-agent sandboxing and delivery guides recommend bounded tasks, isolated workspaces, least-privilege repository permissions, automated verification, human review and controlled releases. Read https://grapecrux.com/blogs/ai-coding-agents-in-software-delivery-2026/ or explore Product Engineering at https://grapecrux.com/services/product-engineering/.'],
+      'Our AI coding-agent sandboxing guide recommends bounded tasks, isolated workspaces, least-privilege repository permissions, automated verification, human review and controlled releases. Read https://grapecrux.com/blogs/ai-coding-agents-in-software-delivery-2026/ or explore Product Engineering at https://grapecrux.com/services/product-engineering/.'],
     [/\b(llm inference|inference optimization|inference optimisation|model routing|token cost|ai latency)\b/i,
       'Our LLM inference optimization guide covers model routing, prompt design, caching, batching, quantization and production latency/cost measurement. Read https://grapecrux.com/blogs/llm-inference-optimization-production-latency-cost/ or explore AI Integration & Development at https://grapecrux.com/services/ai-integration-development/.'],
     [/\b(opentelemetry|genai observability|llm tracing|rag observability|ai telemetry)\b/i,

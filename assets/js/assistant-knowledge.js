@@ -107,6 +107,14 @@
       'Data Engineering & Analytics can cover source-system mapping, data validation, pipeline design, freshness, lineage, reconciliation and reporting foundations. Explore https://grapecrux.com/services/data-engineering/.'],
     [/\b(enquiry received|did you receive my enquiry|contact form|submit a project)\b/i,
       'Use https://grapecrux.com/contact/ to share a project enquiry. When you submit the form, the hosted form-delivery provider forwards your details to service@grapecrux.com and redirects you to a confirmation page. The website does not verify that a recipient has read the email.'],
+    [/\b(ai coding agent|coding agents|agentic coding|ai-assisted coding)\b/i,
+      'Our guide to AI coding agents explains bounded tasks, repository permissions, automated verification, human review and release controls. Read https://grapecrux.com/blogs/ai-coding-agents-in-software-delivery-2026/ or explore Product Engineering at https://grapecrux.com/services/product-engineering/.'],
+    [/\b(model context protocol|mcp security|mcp integration)\b/i,
+      'Our MCP security guide covers server identity, authorization, token audience validation, least-privilege tools, prompt injection and auditability. Read https://grapecrux.com/blogs/model-context-protocol-mcp-security-enterprise-integrations/ or explore AI Integration & Development at https://grapecrux.com/services/ai-integration-development/.'],
+    [/\b(post[- ]quantum|quantum[- ]safe|pqc migration|quantum cryptography)\b/i,
+      'Our post-quantum readiness guide explains cryptographic inventories, long-lived data risk, vendor assessment and staged testing. Read https://grapecrux.com/blogs/post-quantum-cryptography-migration-for-software-teams/ or discuss a security testing scope at https://grapecrux.com/services/software-testing/.'],
+    [/\b(sbom|software bill of materials|software supply chain inventory)\b/i,
+      'Our SBOM guide explains the 2026 minimum-elements update, component identity, generation context, validation and vulnerability response. Read https://grapecrux.com/blogs/software-bill-of-materials-sbom-2026-supply-chain-security/ or explore Software Testing at https://grapecrux.com/services/software-testing/.'],
   ];
 
   const fallbacks = [

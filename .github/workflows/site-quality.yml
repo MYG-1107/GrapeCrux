@@ -47,6 +47,8 @@ jobs:
         run: node tests/analytics-events-static.test.cjs
       - name: Run brand and blog tests
         run: node tests/brand-blog-qa.test.cjs
+      - name: Validate curated blog hub, full archive and article reading UX
+        run: node tests/blog-reading-experience.test.cjs
       - name: Validate original GrapeCrux PNG branding
         run: node tests/sitewide-original-logo.test.cjs
       - name: Validate new blogs, curation and Google tag

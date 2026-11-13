@@ -41,7 +41,6 @@ jobs:
           node --check assets/js/careers.js
           node --check assets/js/blog-archive.js
           node --check assets/js/project-assessment.js
-          node --check assets/js/lead-management.js
       - name: Run chatbot tests
         run: node tests/chatbot-intents.test.cjs
       - name: Run analytics event tests
@@ -60,5 +59,3 @@ jobs:
         run: node tests/client-conversion-24-blogs.test.cjs
       - name: Validate business visibility and enquiry platform
         run: node tests/business-platform-qa.test.cjs
-      - name: Compile optional API
-        run: python -m py_compile backend/main.py

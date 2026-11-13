@@ -21,7 +21,7 @@ const requiredPages = [
   'resources/software-qa-checklist/index.html',
   'resources/cloud-migration-checklist/index.html',
   'resources/business-automation-opportunity-checklist/index.html',
-  'project-assessment/index.html','lead-management/index.html'
+  'project-assessment/index.html'
 ];
 for(const page of requiredPages) assert.ok(exists(page),'Missing page: '+page);
 
@@ -35,7 +35,7 @@ assert.match(homepage,/#organization/);
 assert.match(homepage,/#brand/);
 
 const contact = read('contact/index.html');
-for(const field of ['name','email','company','country','phone','service','project_type','budget_range','budget_currency','expected_start_date','existing_website','preferred_contact_method','message','privacy_consent','website','utm_source','landing_page']) {
+for(const field of ['name','email','company','country','phone','service','project_type','budget_range','budget_currency','expected_start_date','existing_website','preferred_contact_method','message','privacy_consent','_honey','utm_source','landing_page']) {
   assert.match(contact,new RegExp('name="'+field+'"'),'Contact form missing '+field);
 }
 for(const service of ['Custom Software Development','Web &amp; App Development','Mobile Application Development','AI &amp; Automation','AI Integration &amp; Development','Business Process Automation','CRM &amp; ERP Solutions','Data Engineering &amp; Analytics','Data &amp; System Integration','Cloud &amp; DevOps','Software Testing','Quality Assurance &amp; Consulting','Product Engineering &amp; SaaS Development','Managed Support &amp; Maintenance']) {
@@ -50,18 +50,44 @@ assert.match(businessCss, /pointer-events:\s*none/);
 assert.doesNotMatch(contact,/email-draft-only|prepares an email draft/i);
 
 const mainJs = read('assets/js/main.js');
-assert.match(mainJs,/\/api\/enquiries/);
-assert.match(mainJs,/generate_lead/);
-assert.match(mainJs,/result\.received/);
-assert.match(mainJs,/result\.reference/);
-assert.match(mainJs,/Open email to service@grapecrux\.com/);
+assert.doesNotMatch(mainJs,/GRAPECRUX_API_BASE_URL|GRAPECRUX_CHAT_API_URL|\/api\/enquiries|\/api\/chat/);
 const config = read('assets/js/config.js');
-assert.match(config,/GRAPECRUX_API_BASE_URL/);
-assert.match(config,/form_start/);
-assert.match(config,/email_click/);
-assert.match(config,/phone_click/);
-assert.match(config,/whatsapp_click/);
+assert.doesNotMatch(config,/GRAPECRUX_API_BASE_URL|GRAPECRUX_CHAT_API_URL/);
+for(const item of ['form_start','email_click','phone_click','whatsapp_click']) assert.ok(config.includes(item),'Analytics event missing: '+item);
+assert.match(contact,/action="https:\/\/formsubmit\.co\/service@grapecrux\.com"/);
+assert.match(contact,/method="POST"/);
+assert.match(contact,/name="_next"/);
+assert.match(contact,/name="_honey"/);
 
+const careerForms = [
+  'careers/index.html',
+  'careers/full-time/senior-full-stack-developer/index.html',
+  'careers/full-time/ai-engineer/index.html',
+  'careers/full-time/forward-deployment-engineer/index.html',
+  'careers/full-time/quality-assurance-tester/index.html',
+  'careers/full-time/devops-engineer/index.html',
+  'careers/full-time/big-data-engineer/index.html',
+  'careers/internships/software-developer-intern/index.html',
+  'careers/internships/prompt-engineer-intern/index.html',
+  'careers/internships/ai-engineer-intern/index.html',
+  'careers/internships/python-developer-intern/index.html',
+  'careers/internships/dotnet-developer-intern/index.html',
+  'careers/internships/machine-learning-engineer-intern/index.html',
+  'careers/internships/data-analytics-intern/index.html'
+];
+for(const file of careerForms) {
+  const html = read(file);
+  assert.match(html,/action="https:\/\/formsubmit\.co\/yaswanth@grapecrux\.com"/,file+' must deliver applications by email');
+  assert.match(html,/method="POST"/,file+' must use native form POST');
+  assert.match(html,/enctype="multipart\/form-data"/,file+' must support CV attachments');
+  assert.match(html,/name="attachment"/,file+' must support an optional CV');
+  assert.match(html,/name="_honey"/,file+' must include a honeypot');
+  assert.match(html,/name="_next"/,file+' must redirect to confirmation');
+}
+assert.ok(!exists('backend'),'The self-hosted backend directory must be removed');
+assert.ok(!exists('lead-management/index.html'),'The private lead dashboard must be removed');
+assert.ok(!exists('assets/js/lead-management.js'),'The lead dashboard script must be removed');
+assert.ok(!exists('.github/workflows/backend-tests.yml'),'Backend test workflow must be removed');
 const blog = read('blogs/index.html');
 const blogCount = (blog.match(/class="article-card blog-archive-item"/g)||[]).length;
 assert.equal(blogCount,70,'Blog archive must contain all 70 static article cards');
@@ -78,13 +104,6 @@ for(const route of ['custom-software-development','business-process-automation',
 const assessment = read('project-assessment/index.html');
 assert.ok(assessment.includes('project-assessment.js'),'Project assessment script not included');
 assert.ok(exists('assets/js/project-assessment.js'));
-const admin = read('lead-management/index.html');
-assert.match(admin,/name="robots" content="noindex,follow"/);
-assert.ok(admin.includes('lead-management.js'),'Lead dashboard script not included');
-assert.ok(exists('assets/js/lead-management.js'));
-assert.ok(!read('sitemap.xml').includes('https://grapecrux.com/lead-management/'));
-assert.ok(!read('robots.txt').includes('Disallow: /lead-management/'),'Noindex page must remain crawlable');
-
 const footer = read('includes/footer.html');
 for(const route of ['/how-we-work/','/technologies/','/case-studies/','/resources/','/project-assessment/']) {
   assert.ok(footer.includes('href="'+route+'"'),'Footer missing '+route);
@@ -93,26 +112,6 @@ const assistant = read('assets/js/assistant-knowledge.js');
 for(const route of ['/project-assessment/','/how-we-work/','/technologies/','/case-studies/','/resources/','/services/business-process-automation/','/services/data-engineering/']) {
   assert.ok(assistant.includes(route),'Assistant knowledge missing '+route);
 }
-
-const backend = read('backend/main.py');
-const serviceBlock = backend.match(/SERVICES = \\{([\\s\\S]*?)\\n\\}/);
-assert.ok(serviceBlock, 'Backend service allowlist missing');
-const allowedServices = [...serviceBlock[1].matchAll(/"([^"]+)"/g)].map(match => match[1]);
-const formServices = [...contact.matchAll(/<option(?:\\s+value="[^"]*")?>([\\s\\S]*?)<\\/option>/gi)]
-  .map(match => match[1].replace(/&amp;/g, '&').trim())
-  .filter(value => value && value !== 'Choose a service');
-for (const service of formServices) {
-  assert.ok(allowedServices.includes(service), 'Contact option is rejected by backend: ' + service);
-}
-
-for(const item of ['@app.post("/api/enquiries"','idempotency_key','privacy_consent','notification_email_status','acknowledgement_email_status','@app.get("/api/admin/enquiries"','@app.patch("/api/admin/enquiries/{reference}"','@app.get("/api/admin/enquiries/export.csv"','hmac.compare_digest','TURNSTILE_SECRET_KEY','@app.get("/health")']) {
-  assert.ok(backend.includes(item),'Backend feature missing: '+item);
-}
-assert.ok(exists('backend/.env.example'));
-assert.ok(exists('backend/maintenance.py'));
-assert.ok(exists('backend/tests/test_enquiries.py'));
-assert.ok(read('backend/.env.example').includes('SMTP_PASSWORD='));
-assert.ok(!/SMTP_PASSWORD=.{4,}/.test(read('backend/.env.example')),'Example environment must not contain a real password');
 
 const sitemap = read('sitemap.xml');
 const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);

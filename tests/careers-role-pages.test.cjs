@@ -57,13 +57,18 @@ for(const [id,slug,title,kind] of jobs){
  assert.ok(sitemap.includes('https://grapecrux.com/careers/'+slug+'/'),id+' sitemap entry missing');
  assert.ok(careers.includes('href="/careers/'+slug+'/" data-job-id="'+id+'"')&&careers.includes('target="_blank" rel="noopener noreferrer"'),id+' new-tab Careers link missing');
 }
-assert.ok(js.includes("['Job ID',jobId]"),'Email body must contain Job ID');
-assert.ok(js.includes('[GrapeCrux application][${jobId}]'),'Email subject must contain Job ID');
+assert.ok(js.includes('const subject = `[GrapeCrux application][${jobId}] ${role}`'),'Hosted form subject must include role and Job ID');
+assert.ok(js.includes('10 * 1024 * 1024'),'Optional resume upload must enforce the 10 MB provider limit');
+assert.ok(js.includes("form.querySelector('[name=\"_replyto\"]')") || js.includes("form.querySelector('[name=\"_subject\"]')"),'Form submission metadata must be populated dynamically');
+assert.ok(!js.includes('mailto:'),'Career applications must not use manual email drafts');
 assert.ok(js.includes("form.dataset.jobDetail === 'true'"),'Shared JS must support preselected detail page mode');
 assert.ok(js.includes('roleQuestions')&&js.includes('updateRoleQuestion'),'Shared JS must load the selected role-specific question');
-assert.ok(js.includes("data.get('role_interest')")&&js.includes("data.get('role_skills')")&&js.includes("data.get('role_specific_response')"),'Application email must include role-specific answers');
+assert.ok(js.includes("roleQuestions")&&js.includes("updateRoleQuestion"),'Role-specific questions must remain enabled');
 assert.ok(careers.includes('id="career-job-id" name="job_id"'),'Careers hub form must carry Job ID');
 assert.ok(careers.includes('name="role_interest"')&&careers.includes('name="role_skills"')&&careers.includes('name="role_specific_response"'),'Careers hub must ask role-specific questions');
 assert.ok(careers.includes('name="weekly_availability"')&&careers.includes('name="internship_start_availability"'),'Careers hub must ask internship schedule availability');
+assert.ok(careers.includes('action="https://formsubmit.co/yaswanth@grapecrux.com"'),'Careers hub form must use hosted email delivery');
+assert.ok(careers.includes('name="attachment"'),'Careers hub must support optional CV upload');
+assert.ok(!js.includes('mailto:'),'Career application handler must not open an email draft');
 assert.ok(careers.includes('/assets/css/careers.css?v=20261102-careers'),'Careers hub must use root-absolute styling');
 console.log('Careers role detail QA passed: 6 full-time pages + 7 internship pages, IDs, SEO, GA4, sitemap and preselected applications.');

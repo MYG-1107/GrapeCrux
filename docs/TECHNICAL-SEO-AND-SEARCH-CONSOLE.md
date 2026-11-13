@@ -13,7 +13,7 @@ At the reviewed commit:
 - 12 service detail pages.
 - 13 individual Careers role pages.
 - 118 sitemap URLs; every sitemap URL maps to a clean page file, with no duplicate or unmapped URL.
-- robots.txt allows public crawling, disallows only /backend/ and /tests/, and declares the canonical sitemap.
+- robots.txt allows public crawling, disallows /tests/, and declares the canonical sitemap.
 - Main content and headings are in the original HTML response. JavaScript enhances the shared header/footer and other interactions.
 - Page title, meta description, canonical, GA4 Consent Mode and Open Graph metadata are present in the current implementation.
 
@@ -64,12 +64,13 @@ Google treats sitemap submission and indexing requests as discovery signals, not
 
 The supplied Analytics screenshot shows 73 active users, approximately 1.2K events and 0 Key events in the selected 30-day overview. It also suggests tracking Contact page visits as generate_lead. Do not apply that suggestion as written: a page view only means someone visited the Contact page.
 
-The current static Contact and Careers forms prepare email drafts. The visitor must send the email themselves. Existing events project_enquiry_email_draft_requested and careers_application_email_draft_requested measure intent, not confirmed receipt.
+Contact and Careers forms now submit through the hosted FormSubmit service and forward messages to the company inboxes. The browser redirects to a confirmation page after the provider accepts the form request. That redirect does not independently prove that the recipient inbox delivered or read the message.
 
 Recommended reporting:
-- You may mark the project email-draft event as a Key event if you deliberately want to measure enquiry intent, but label it as a draft request.
-- Do not rename it generate_lead while it only opens an email draft.
-- For real lead measurement, connect the form to a secure backend/form provider and fire generate_lead only after confirmed successful receipt.
+- Keep form_submit as a client-side form-attempt event, not a confirmed lead.
+- Do not emit or mark generate_lead from a browser-side submit event.
+- Review actual enquiries in the authorised service@grapecrux.com inbox or an approved CRM.
+- Review applications in the authorised yaswanth@grapecrux.com inbox.
 - Do not send names, phone numbers, email addresses, CV contents or free-text responses to GA4.
 
 ## Core Web Vitals

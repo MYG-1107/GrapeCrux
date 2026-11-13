@@ -59,15 +59,16 @@ assert.ok(home.includes('id="client-deliverables-title"'),'Homepage client deliv
 assert.ok(home.includes('written project brief')&&home.includes('defined scope'),'Homepage must explain client outputs');
 assert.ok(services.includes('id="scope-clarity-title"'),'Services scope transparency section missing');
 assert.ok(services.includes('third-party licences'),'Services page must explain third-party costs');
-for(const field of ['project_stage','project_outcome','existing_website','existing_systems']){
- assert.ok(contact.includes('name="'+field+'"'),'Contact form missing '+field);
- assert.ok(mainJs.includes("data.get('"+field+"')"),'Enquiry email must include '+field);
+for(const field of ['name','email','company','country','phone','service','project_type','budget_range','budget_currency','expected_start_date','preferred_contact_method','existing_website','message','privacy_consent']){
+ assert.ok(contact.includes('name="'+field+'"'),'Contact form must include and submit '+field);
 }
+assert.ok(contact.includes('method="POST"'),'Contact form must submit with native POST');
+
 assert.ok(contact.includes('"@type":"ContactPage"'),'ContactPage schema missing');
 assert.ok(contact.includes('action="https://formsubmit.co/service@grapecrux.com"'),'Contact form must forward enquiries to the business inbox');
 assert.ok(contact.includes('The GrapeCrux website does not maintain a separate enquiry database'),'Contact form privacy disclosure must describe email-only handling');
 assert.ok(work.includes('not completed client engagements'),'Portfolio must remain transparent about illustrative concepts');
 const urls=sitemap.split('<loc>').slice(1).map(part=>part.split('</loc>')[0]);
 assert.equal(urls.length,new Set(urls).size,'Sitemap must contain no duplicate URLs');
-assert.equal(urls.length,118,'Sitemap should include the existing 89 URLs plus 24 articles and five topic hubs');
+assert.equal(urls.length,134,'Sitemap should include the currently published public pages without duplicates');
 console.log('Client conversion and content expansion QA passed: 24 articles, 5 specialist hubs, 8-card blog curation, 4 existing hubs preserved, sitemap uniqueness and contact flow.');

@@ -216,6 +216,66 @@
   window.addEventListener('pointerdown', initializeChatbot, { once: true, passive: true });
   window.addEventListener('keydown', initializeChatbot, { once: true });
 
+
+  // Blog reading experience: section navigation, heading anchors and reading progress.
+  const blogArticle = document.querySelector('article.blog-prose');
+  if (blogArticle) {
+    const headings = Array.from(blogArticle.querySelectorAll('h2, h3')).filter(item => item.textContent.trim());
+    const usedIds = new Set(Array.from(document.querySelectorAll('[id]')).map(item => item.id));
+    const makeHeadingId = (value) => {
+      const base = value.toLocaleLowerCase().normalize('NFKD').replace(/[\\u0300-\\u036f]/g, '').replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'section';
+      let candidate = base;
+      let suffix = 2;
+      while (usedIds.has(candidate)) candidate = base + '-' + suffix++;
+      usedIds.add(candidate);
+      return candidate;
+    };
+    headings.forEach(item => {
+      if (!item.id) item.id = makeHeadingId(item.textContent);
+      item.classList.add('blog-section-heading');
+    });
+    if (headings.length > 1 && !blogArticle.querySelector('.blog-toc')) {
+      const nav = document.createElement('nav');
+      nav.className = 'blog-toc';
+      nav.setAttribute('aria-label', 'On this page');
+      const tocTitle = document.createElement('p');
+      tocTitle.className = 'blog-toc-title';
+      tocTitle.textContent = 'On this page';
+      const list = document.createElement('ol');
+      headings.forEach(item => {
+        const entry = document.createElement('li');
+        if (item.tagName === 'H3') entry.className = 'blog-toc-subsection';
+        const link = document.createElement('a');
+        link.href = '#' + item.id;
+        link.textContent = item.textContent.trim();
+        entry.appendChild(link);
+        list.appendChild(entry);
+      });
+      nav.append(tocTitle, list);
+      blogArticle.insertBefore(nav, blogArticle.firstChild);
+    }
+    const progress = document.createElement('div');
+    progress.className = 'blog-reading-progress';
+    progress.setAttribute('aria-hidden', 'true');
+    progress.innerHTML = '<span></span>';
+    document.body.appendChild(progress);
+    const progressBar = progress.querySelector('span');
+    let progressFrame = 0;
+    const updateProgress = () => {
+      if (progressFrame) return;
+      progressFrame = window.requestAnimationFrame(() => {
+        progressFrame = 0;
+        const rect = blogArticle.getBoundingClientRect();
+        const total = Math.max(1, blogArticle.offsetHeight - window.innerHeight * 0.55);
+        const passed = Math.min(total, Math.max(0, -rect.top + window.innerHeight * 0.2));
+        progressBar.style.transform = 'scaleX(' + (passed / total) + ')';
+      });
+    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
+  }
+
   // Analytics consent: GA4 is configured with denied defaults in the page head.
   // A page_view is sent only after the visitor opts into analytics measurement.
   const CONSENT_KEY = 'gc-analytics-consent-v1';

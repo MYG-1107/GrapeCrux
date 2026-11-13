@@ -10,8 +10,8 @@ const header=read('includes/header.html');
 const footer=read('includes/footer.html');
 const logoPath=path.join(root,'grapecrux_brand_logo.png');
 const logoBytes=fs.readFileSync(logoPath);
-assert.ok(header.includes('/grapecrux_brand_logo.png?v=20261102-original-png') && header.includes('brand-wordmark'), 'Shared header must use original repository PNG and wordmark');
-assert.ok(footer.includes('/grapecrux_brand_logo.png?v=20261102-original-png') && footer.includes('brand-wordmark'), 'Shared footer must use the same original PNG and wordmark');
+assert.ok(header.includes('/grapecrux_brand_logo.png?v=20261113-original-png') && header.includes('brand-wordmark'), 'Shared header must use original repository PNG and wordmark');
+assert.ok(footer.includes('/grapecrux_brand_logo.png?v=20261113-original-png') && footer.includes('brand-wordmark'), 'Shared footer must use the same original PNG and wordmark');
 assert.deepEqual([...logoBytes.subarray(0,8)],[137,80,78,71,13,10,26,10],'Original logo asset must be a valid PNG file');
 assert.ok(header.includes('alt="Original GrapeCrux logo"') && footer.includes('alt="Original GrapeCrux logo"'), 'Original logo must have descriptive alt text in shared includes');
 const jobs=[

@@ -124,7 +124,7 @@ assert.equal(urls.length,new Set(urls).size,'Sitemap URLs must be unique');
 for(const url of urls) {
   const route = new URL(url).pathname.replace(/^\/|\/$/g,'');
   const target = path.join(ROOT,route,'index.html');
-  assert.ok(exists(target),'Sitemap URL has no page file: '+url);
+  assert.ok(fs.existsSync(target),'Sitemap URL has no page file: '+url);
 }
 console.log('Business platform QA passed.');
 console.log('New pages: '+requiredPages.length+'; blog cards: '+blogCount+'; sitemap URLs: '+urls.length+'.');

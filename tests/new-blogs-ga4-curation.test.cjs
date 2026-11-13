@@ -17,7 +17,7 @@ const slugs = [
   'ransomware-resilience-immutable-backups-identity-and-recovery-drills',
   'real-time-streaming-data-architecture-event-time-late-events-and-quality'
 ];
-assert.equal((hub.match(/class="article-card(?:\\s|")/g) || []).length, 8, 'Blog hub should show only eight curated article cards');
+assert.equal((hub.match(/class="article-card(?:\s|")/g) || []).length, 8, 'Blog hub should show only eight curated article cards');
 for (const slug of slugs) {
   const url = 'https://grapecrux.com/blogs/' + slug + '/';
   const page = read('blogs/' + slug + '/index.html');

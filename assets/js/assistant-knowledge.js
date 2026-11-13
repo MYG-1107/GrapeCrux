@@ -85,8 +85,6 @@
       'The public website does not currently list independently verified ISO, SOC 2 or other formal certifications. I cannot confirm credentials that are not published. Please contact service@grapecrux.com for current company documentation.'],
     [/\b(hello|hi|hey|good morning|good afternoon)\b/i,
       'Hello! I can help explain GrapeCrux, services, project enquiries, work examples, blogs and current careers opportunities. What would you like to explore?']
-  ];
-
     [/\b(project assessment|what does my business need|which service do i need|recommend a service|not sure what service)\b/i,
       'Use the guided Project Assessment to identify a possible starting point based on your business challenge, current systems and project stage: https://grapecrux.com/project-assessment/. The recommendations are a guide, not a quote or a technical feasibility decision.'],
     [/\b(how we work|delivery process|project process|scope|proposal|handover|milestones)\b/i,

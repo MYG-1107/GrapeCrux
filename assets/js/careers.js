@@ -1,5 +1,5 @@
-/* GrapeCrux Careers: shared role-aware application and Job ID handling.
- * Applications open an email draft; this static website does not receive or store applicant data.
+/* Shared role-aware Careers form handling and Job ID validation.
+ * Native form POST forwards applications through the hosted email provider; the website does not store submissions.
  */
 (() => {
   const form = document.getElementById('gc-careers-application-form');

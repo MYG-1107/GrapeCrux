@@ -64,7 +64,8 @@ for(const field of ['project_stage','project_outcome','existing_website','existi
  assert.ok(mainJs.includes("data.get('"+field+"')"),'Enquiry email must include '+field);
 }
 assert.ok(contact.includes('"@type":"ContactPage"'),'ContactPage schema missing');
-assert.ok(contact.includes('This form prepares an email draft'),'Contact form storage/submission disclosure missing');
+assert.ok(contact.includes('action="https://formsubmit.co/service@grapecrux.com"'),'Contact form must forward enquiries to the business inbox');
+assert.ok(contact.includes('The GrapeCrux website does not maintain a separate enquiry database'),'Contact form privacy disclosure must describe email-only handling');
 assert.ok(work.includes('not completed client engagements'),'Portfolio must remain transparent about illustrative concepts');
 const urls=sitemap.split('<loc>').slice(1).map(part=>part.split('</loc>')[0]);
 assert.equal(urls.length,new Set(urls).size,'Sitemap must contain no duplicate URLs');

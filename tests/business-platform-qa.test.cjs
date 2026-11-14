@@ -97,7 +97,7 @@ assert.match(formCss, /\.field\.privacy-consent input\[type="checkbox"\]\{[^}]*w
 for (const file of ['contact/index.html', ...careerForms]) {
   const html = read(file);
   assert.match(html, /class="field privacy-consent"/, file + ' must contain its privacy-consent field');
-  assert.match(html, /<input[^>]*type="checkbox"[^>]*name="privacy_consent"/, file + ' must use a real, accessible consent checkbox');
+  assert.match(html, /<input(?=[^>]*type="checkbox")(?=[^>]*name="privacy_consent")[^>]*>/, file + ' must use a real, accessible consent checkbox');
 }
 const blog = read('blogs/index.html');
 const archive = read('blogs/archive/index.html');

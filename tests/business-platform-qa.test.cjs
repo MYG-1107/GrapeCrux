@@ -94,7 +94,9 @@ const formCss = read('assets/css/style.css');
 assert.ok(formCss.includes('.field input:not([type="checkbox"]):not([type="radio"])'), 'Text-field sizing must exclude checkbox and radio controls');
 assert.ok(formCss.includes('.field.privacy-consent label{display:flex;align-items:flex-start;gap:10px'), 'Consent copy must align beside its checkbox');
 assert.match(formCss, /\.field\.privacy-consent input\[type="checkbox"\]\{[^}]*width:18px;[^}]*height:18px;/, 'Consent checkboxes must remain 18px square');
-for (const file of ['contact/index.html', ...careerForms]) {
+const consentCheckboxPages = ['contact/index.html', ...careerForms.filter(file => file !== 'careers/index.html')];
+assert.equal(consentCheckboxPages.length, 14, 'Contact and all 13 role-application pages must be covered');
+for (const file of consentCheckboxPages) {
   const html = read(file);
   assert.match(html, /class="field privacy-consent"/, file + ' must contain its privacy-consent field');
   assert.match(html, /<input(?=[^>]*type="checkbox")(?=[^>]*name="privacy_consent")[^>]*>/, file + ' must use a real, accessible consent checkbox');

@@ -98,7 +98,7 @@ const consentCheckboxPages = ['contact/index.html', ...careerForms.filter(file =
 assert.equal(consentCheckboxPages.length, 14, 'Contact and all 13 role-application pages must be covered');
 for (const file of consentCheckboxPages) {
   const html = read(file);
-  assert.match(html, /class="field privacy-consent"/, file + ' must contain its privacy-consent field');
+  assert.match(html, /class="field(?: full)? privacy-consent"/, file + ' must contain its privacy-consent field');
   assert.match(html, /<input(?=[^>]*type="checkbox")(?=[^>]*name="privacy_consent")[^>]*>/, file + ' must use a real, accessible consent checkbox');
 }
 const blog = read('blogs/index.html');

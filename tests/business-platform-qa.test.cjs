@@ -89,12 +89,16 @@ assert.ok(!exists('lead-management/index.html'),'The private lead dashboard must
 assert.ok(!exists('assets/js/lead-management.js'),'The lead dashboard script must be removed');
 assert.ok(!exists('.github/workflows/backend-tests.yml'),'Backend test workflow must be removed');
 const blog = read('blogs/index.html');
-const blogCount = (blog.match(/class="article-card blog-archive-item"/g)||[]).length;
-assert.equal(blogCount,70,'Blog archive must contain all 70 static article cards');
-assert.match(blog,/id="blog-search"/);
-assert.match(blog,/id="blog-category"/);
-assert.match(blog,/id="blog-pagination"/);
-assert.ok(blog.includes('blog-archive.js'),'Blog archive script missing');
+const archive = read('blogs/archive/index.html');
+const blogCount = (archive.match(/class="article-card blog-archive-item"/g)||[]).length;
+const featuredCount = (blog.match(/class="article-card blog-featured-card"/g)||[]).length;
+assert.equal(blogCount,78,'Full blog archive must contain all 78 static article cards');
+assert.equal(featuredCount,8,'Blogs landing page must remain curated to eight selected reads');
+assert.ok(blog.includes('href="/blogs/archive/"'),'Curated Blogs page must link to the full archive');
+assert.match(archive,/id="blog-search"/);
+assert.match(archive,/id="blog-category"/);
+assert.match(archive,/id="blog-pagination"/);
+assert.ok(archive.includes('blog-archive.js'),'Full archive script missing');
 assert.ok(exists('assets/js/blog-archive.js'));
 
 const services = read('services/index.html');
@@ -115,12 +119,12 @@ for(const route of ['/project-assessment/','/how-we-work/','/technologies/','/ca
 
 const sitemap = read('sitemap.xml');
 const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
-assert.equal(urls.length,134,'Expected 134 public sitemap URLs after this release');
+assert.equal(urls.length,143,'Expected 143 public sitemap URLs including four new guides');
 assert.equal(urls.length,new Set(urls).size,'Sitemap URLs must be unique');
 for(const url of urls) {
   const route = new URL(url).pathname.replace(/^\/|\/$/g,'');
   const target = path.join(ROOT,route,'index.html');
-  assert.ok(exists(target),'Sitemap URL has no page file: '+url);
+  assert.ok(fs.existsSync(target),'Sitemap URL has no page file: '+url);
 }
 console.log('Business platform QA passed.');
 console.log('New pages: '+requiredPages.length+'; blog cards: '+blogCount+'; sitemap URLs: '+urls.length+'.');

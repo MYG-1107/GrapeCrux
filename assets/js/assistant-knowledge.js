@@ -2,6 +2,16 @@
    Deterministic, curated FAQ content. This is not a generative AI model or a human agent. */
 (() => {
   const answers = [
+    [/\b(ai coding agent|coding agents|agentic coding|ai-assisted coding)\b/i,
+      'Our AI coding-agent sandboxing guide recommends bounded tasks, isolated workspaces, least-privilege repository permissions, automated verification, human review and controlled releases. Read https://grapecrux.com/blogs/ai-coding-agents-in-software-delivery-2026/ or explore Product Engineering at https://grapecrux.com/services/product-engineering/.'],
+    [/\b(llm inference|inference optimization|inference optimisation|model routing|token cost|ai latency)\b/i,
+      'Our LLM inference optimization guide covers model routing, prompt design, caching, batching, quantization and production latency/cost measurement. Read https://grapecrux.com/blogs/llm-inference-optimization-production-latency-cost/ or explore AI Integration & Development at https://grapecrux.com/services/ai-integration-development/.'],
+    [/\b(opentelemetry|genai observability|monitor generative ai|monitor genai|generative ai telemetry|llm tracing|rag observability|ai telemetry)\b/i,
+      'Our OpenTelemetry for generative AI guide explains traces, metrics and logs across model calls, retrieval and agent tools, with privacy-aware telemetry. Read https://grapecrux.com/blogs/opentelemetry-genai-observability-tracing-rag-agents/ or explore Cloud & DevOps at https://grapecrux.com/services/cloud-devops/.'],
+    [/\b(agent sandbox|sandboxing|coding agent security|isolate coding agents|agent execution isolation)\b/i,
+      'Our AI coding-agent sandboxing guide covers isolated workspaces, least-privilege credentials, network controls and auditable execution. Read https://grapecrux.com/blogs/secure-sandboxing-ai-coding-agents-execution/ or explore Software Testing at https://grapecrux.com/services/software-testing/.'],
+    [/\b(a2a|agent-to-agent|agent interoperability|agent cards|mcp and a2a)\b/i,
+      'Our A2A and MCP interoperability guide explains agent-to-agent task communication and controlled tool access, with identity, authorization and human oversight. Read https://grapecrux.com/blogs/agent-to-agent-interoperability-mcp-a2a-enterprise/ or explore AI Integration & Development at https://grapecrux.com/services/ai-integration-development/.'],
 
     [/\b(postgresql|postgres|query plan|explain analyze|slow sql|database performance)\b/i,
       'Our PostgreSQL guide explains how to investigate slow queries with EXPLAIN, choose indexes for real workloads, maintain statistics and monitor connections. Read https://grapecrux.com/blogs/postgresql-query-performance-explained/ or explore Data & System Integration at https://grapecrux.com/services/data-integration/.'],
@@ -107,9 +117,7 @@
       'Data Engineering & Analytics can cover source-system mapping, data validation, pipeline design, freshness, lineage, reconciliation and reporting foundations. Explore https://grapecrux.com/services/data-engineering/.'],
     [/\b(enquiry received|did you receive my enquiry|contact form|submit a project)\b/i,
       'Use https://grapecrux.com/contact/ to share a project enquiry. When you submit the form, the hosted form-delivery provider forwards your details to service@grapecrux.com and redirects you to a confirmation page. The website does not verify that a recipient has read the email.'],
-    [/\b(ai coding agent|coding agents|agentic coding|ai-assisted coding)\b/i,
-      'Our guide to AI coding agents explains bounded tasks, repository permissions, automated verification, human review and release controls. Read https://grapecrux.com/blogs/ai-coding-agents-in-software-delivery-2026/ or explore Product Engineering at https://grapecrux.com/services/product-engineering/.'],
-    [/\b(model context protocol|mcp security|mcp integration)\b/i,
+    [/\b(model context protocol|mcp security|mcp integrations?)\b/i,
       'Our MCP security guide covers server identity, authorization, token audience validation, least-privilege tools, prompt injection and auditability. Read https://grapecrux.com/blogs/model-context-protocol-mcp-security-enterprise-integrations/ or explore AI Integration & Development at https://grapecrux.com/services/ai-integration-development/.'],
     [/\b(post[- ]quantum|quantum[- ]safe|pqc migration|quantum cryptography)\b/i,
       'Our post-quantum readiness guide explains cryptographic inventories, long-lived data risk, vendor assessment and staged testing. Read https://grapecrux.com/blogs/post-quantum-cryptography-migration-for-software-teams/ or discuss a security testing scope at https://grapecrux.com/services/software-testing/.'],

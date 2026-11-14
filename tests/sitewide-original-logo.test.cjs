@@ -17,7 +17,7 @@ assert.deepEqual([...png.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], 'Re
 const header = read('includes/header.html');
 const footer = read('includes/footer.html');
 for (const [label, html] of [['header', header], ['footer', footer]]) {
-  assert.ok(html.includes('src="/grapecrux_brand_logo.png?v=20261102-original-png"'), label + ' must use the original repository PNG');
+  assert.ok(html.includes('src="/grapecrux_brand_logo.png?v=20261113-original-png"'), label + ' must use the original repository PNG');
   assert.ok(html.includes('alt="Original GrapeCrux logo"'), label + ' must include descriptive alt text');
   assert.ok(html.includes('brand-wordmark') && html.includes('<span>Grape</span>') && html.includes('>Crux</span>'), label + ' must preserve the GrapeCrux wordmark');
   assert.ok(html.includes('background:transparent;border:0;box-shadow:none;border-radius:0'), label + ' must keep the PNG on a transparent, card-free background');
@@ -25,15 +25,15 @@ for (const [label, html] of [['header', header], ['footer', footer]]) {
 }
 
 const mainJs = read('assets/js/main.js');
-assert.ok(mainJs.includes("withBase('/grapecrux_brand_logo.png?v=20261102-original-png')"), 'Chat assistant avatar should use the same original logo');
+assert.ok(mainJs.includes("withBase('/grapecrux_brand_logo.png?v=20261113-original-png')"), 'Chat assistant avatar should use the same original logo');
 
 const home = read('index.html');
-assert.ok(home.includes('href="/grapecrux_brand_logo.png?v=20261102-original-png"'), 'Homepage favicon must use original PNG');
+assert.ok(home.includes('href="/grapecrux_brand_logo.png?v=20261113-original-png"'), 'Homepage favicon must use original PNG');
 assert.ok(home.includes('"url":"https://grapecrux.com/grapecrux_brand_logo.png"'), 'Organization schema logo must use original PNG');
 const careers = read('careers/index.html');
-assert.ok(careers.includes('href="/grapecrux_brand_logo.png?v=20261102-original-png"'), 'Careers favicon must use original PNG');
+assert.ok(careers.includes('href="/grapecrux_brand_logo.png?v=20261113-original-png"'), 'Careers favicon must use original PNG');
 const notFound = read('404.html');
-assert.ok(notFound.includes('href="/grapecrux_brand_logo.png?v=20261102-original-png"'), '404 favicon must use original PNG');
+assert.ok(notFound.includes('href="/grapecrux_brand_logo.png?v=20261113-original-png"'), '404 favicon must use original PNG');
 
 const htmlFiles = walk(root).filter(file => !file.split(path.sep).includes('includes'));
 const iconPages = [];

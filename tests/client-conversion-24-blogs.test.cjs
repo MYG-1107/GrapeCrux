@@ -70,5 +70,5 @@ assert.ok(contact.includes('The GrapeCrux website does not maintain a separate e
 assert.ok(work.includes('not completed client engagements'),'Portfolio must remain transparent about illustrative concepts');
 const urls=sitemap.split('<loc>').slice(1).map(part=>part.split('</loc>')[0]);
 assert.equal(urls.length,new Set(urls).size,'Sitemap must contain no duplicate URLs');
-assert.equal(urls.length,139,'Sitemap should include the currently published public pages without duplicates');
+assert.equal(urls.length,143,'Sitemap should include the currently published public pages without duplicates');
 console.log('Client conversion and content expansion QA passed: 24 articles, 5 specialist hubs, 8-card blog curation, 4 existing hubs preserved, sitemap uniqueness and contact flow.');

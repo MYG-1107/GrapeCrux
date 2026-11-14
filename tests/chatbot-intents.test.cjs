@@ -39,6 +39,10 @@ const cases = [
   ['How should we secure MCP integrations?', /MCP security guide.*authorization.*token audience/i],
   ['How do we plan a post-quantum migration?', /post-quantum readiness guide.*cryptographic inventories/i],
   ['What is an SBOM?', /SBOM guide.*component identity.*generation context/i],
+  ['How can we optimize LLM inference?', /LLM inference optimization guide.*model routing.*caching/i],
+  ['How should we monitor generative AI?', /OpenTelemetry for generative AI guide.*traces, metrics and logs/i],
+  ['How can we isolate AI coding agents?', /AI coding-agent sandboxing guide.*isolated workspaces.*least-privilege/i],
+  ['What is A2A and MCP interoperability?', /A2A and MCP interoperability guide.*agent-to-agent.*controlled tool access/i],
 ];
 for (const [q, pattern] of cases) {
   const answer = ask(q);

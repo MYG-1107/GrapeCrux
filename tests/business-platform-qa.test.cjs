@@ -88,6 +88,17 @@ assert.ok(!exists('backend'),'The self-hosted backend directory must be removed'
 assert.ok(!exists('lead-management/index.html'),'The private lead dashboard must be removed');
 assert.ok(!exists('assets/js/lead-management.js'),'The lead dashboard script must be removed');
 assert.ok(!exists('.github/workflows/backend-tests.yml'),'Backend test workflow must be removed');
+
+// Consent checkboxes must stay compact and align beside their text on every enquiry/application form.
+const formCss = read('assets/css/style.css');
+assert.ok(formCss.includes('.field input:not([type="checkbox"]):not([type="radio"])'), 'Text-field sizing must exclude checkbox and radio controls');
+assert.ok(formCss.includes('.field.privacy-consent label{display:flex;align-items:flex-start;gap:10px'), 'Consent copy must align beside its checkbox');
+assert.match(formCss, /\.field\.privacy-consent input\[type="checkbox"\]\{[^}]*width:18px;[^}]*height:18px;/, 'Consent checkboxes must remain 18px square');
+for (const file of ['contact/index.html', ...careerForms]) {
+  const html = read(file);
+  assert.match(html, /class="field privacy-consent"/, file + ' must contain its privacy-consent field');
+  assert.match(html, /<input(?=[^>]*type="checkbox")(?=[^>]*name="privacy_consent")[^>]*>/, file + ' must use a real, accessible consent checkbox');
+}
 const blog = read('blogs/index.html');
 const archive = read('blogs/archive/index.html');
 const blogCount = (archive.match(/class="article-card blog-archive-item"/g)||[]).length;

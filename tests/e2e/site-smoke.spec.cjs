@@ -82,6 +82,7 @@ test('human-readable sitemap links to every published XML sitemap route', async 
 
 test('keyboard users can reach the skip link and move to primary navigation', async ({ page }) => {
   await page.goto('/');
+  await expect(page.locator('#site-header .brand')).toBeVisible();
   await page.keyboard.press('Tab');
   await expect(page.locator('.skip-link')).toBeFocused();
   await page.keyboard.press('Enter');

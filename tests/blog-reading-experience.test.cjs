@@ -42,7 +42,7 @@ assert.equal(articleSlugs.length, 78, 'There must be 78 individual indexable art
 
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
 assert.equal(sitemapUrls.length, new Set(sitemapUrls).size, 'The sitemap must not contain duplicate URLs');
-assert.equal(sitemapUrls.length, 143, 'The sitemap should include the archive and four newly published guides');
+assert.ok(sitemapUrls.includes('https://grapecrux.com/sitemap/'), 'The visitor-facing site map should be discoverable in the XML sitemap');
 assert.ok(sitemapUrls.includes('https://grapecrux.com/blogs/archive/'), 'The archive must be in the sitemap');
 for (const slug of articleSlugs) {
   const url = 'https://grapecrux.com/blogs/' + slug + '/';

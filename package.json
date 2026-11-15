@@ -1,0 +1,13 @@
+{
+  "name": "grapecrux-site-quality",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Browser, responsive-layout and accessibility checks for the GrapeCrux static website.",
+  "scripts": {
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@axe-core/playwright": "4.14.0"
+  }
+}

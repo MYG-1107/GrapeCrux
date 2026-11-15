@@ -103,26 +103,42 @@
     if (msg && !msg.value) msg.value = `I'm interested in: ${requested}.\n\nMy project goals are...`;
   }
 
-  // Store only non-personal first-touch attribution in session storage.
+  // Keep attribution minimal: retain only the referring site's origin, never its
+  // path, query string or fragment, which could contain identifiers or tokens.
   const contactAttribution = (() => {
     const params = new URLSearchParams(location.search);
+    const safeReferrerOrigin = (value) => {
+      try {
+        const parsed = new URL(value);
+        return /^https?:$/.test(parsed.protocol) ? parsed.origin : '';
+      } catch (_error) {
+        return '';
+      }
+    };
+    const safeCampaignValue = (value) => {
+      const clean = String(value || '').replace(/[\r\n]/g, ' ').trim().slice(0, 120);
+      return /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(clean) ? '' : clean;
+    };
     const current = {
       landing_page: location.pathname,
-      referrer: document.referrer || '',
-      utm_source: params.get('utm_source') || '',
-      utm_medium: params.get('utm_medium') || '',
-      utm_campaign: params.get('utm_campaign') || '',
-      utm_content: params.get('utm_content') || '',
-      utm_term: params.get('utm_term') || ''
+      referrer: safeReferrerOrigin(document.referrer),
+      utm_source: safeCampaignValue(params.get('utm_source')),
+      utm_medium: safeCampaignValue(params.get('utm_medium')),
+      utm_campaign: safeCampaignValue(params.get('utm_campaign')),
+      utm_content: safeCampaignValue(params.get('utm_content')),
+      utm_term: safeCampaignValue(params.get('utm_term'))
     };
     try {
       const key = 'gc-first-touch-attribution';
-      let first = sessionStorage.getItem(key);
-      if (!first) {
-        sessionStorage.setItem(key, JSON.stringify(current));
-        first = JSON.stringify(current);
+      const stored = sessionStorage.getItem(key);
+      const parsed = stored ? JSON.parse(stored) : current;
+      const first = parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : current;
+      first.referrer = safeReferrerOrigin(first.referrer);
+      for (const name of ['utm_source','utm_medium','utm_campaign','utm_content','utm_term']) {
+        first[name] = safeCampaignValue(first[name]);
       }
-      return { ...JSON.parse(first), ...Object.fromEntries(
+      sessionStorage.setItem(key, JSON.stringify(first));
+      return { ...first, ...Object.fromEntries(
         Object.entries(current).filter(([k,v]) => k !== 'landing_page' && k !== 'referrer' && v)
       ) };
     } catch (_error) {

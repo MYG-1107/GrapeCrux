@@ -61,3 +61,22 @@ jobs:
         run: node tests/client-conversion-24-blogs.test.cjs
       - name: Validate business visibility and enquiry platform
         run: node tests/business-platform-qa.test.cjs
+
+  browser:
+    name: Chromium browser, mobile UX and accessibility checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install browser test dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium and operating-system dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Run sitemap, responsive, interaction and accessibility checks
+        run: npm run test:browser

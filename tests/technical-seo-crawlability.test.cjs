@@ -5,6 +5,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const ROOT = path.resolve(__dirname, '..');
 const BASE = 'https://grapecrux.com';
+const GA4_ID = 'G-QXMRMGJEP2';
+const sharedAnalyticsConfig = fs.readFileSync(path.join(ROOT, 'assets/js/config.js'), 'utf8');
+assert.ok(sharedAnalyticsConfig.includes(GA4_ID), 'Shared configuration must contain the approved GA4 measurement ID');
+assert.ok(sharedAnalyticsConfig.includes('googletagmanager.com/gtag/js'), 'Shared configuration must load the Google tag');
+assert.ok(sharedAnalyticsConfig.includes('gaScript.async = true'), 'Google tag should load asynchronously');
 
 function walk(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -68,6 +73,11 @@ for (const file of contentPages) {
   const h1s = [...main.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
   const robots = valueOfTag(source, /<meta[^>]*name="robots"[^>]*>/i, 'content').toLowerCase();
 
+  assert.match(source, /<script[^>]+src=["'][^"']*assets\/js\/config\.js(?:\?[^"']*)?["'][^>]*>/i,
+    file + ': shared GA4 configuration must be loaded on every public page');
+  assert.ok(source.includes('id="site-header"') && source.includes('id="site-footer"'),
+    file + ': public pages must use the shared site shell');
+
   assert.ok(title, file + ': missing title');
   assert.ok(description, file + ': missing meta description');
   assert.ok(canonical, file + ': missing canonical');
@@ -129,6 +139,25 @@ const sitemapSet = new Set(sitemapUrls.map(url => new URL(url).href));
 for (const route of routeMap.keys()) {
   assert.ok(sitemapSet.has(BASE + route), route + ' missing from sitemap.xml');
 }
+const humanSitemapFile = path.join(ROOT, 'sitemap', 'index.html');
+assert.ok(fs.existsSync(humanSitemapFile), 'Visitor-facing HTML sitemap missing');
+const humanSitemap = fs.readFileSync(humanSitemapFile, 'utf8');
+const humanSitemapRoutes = new Set(
+  [...humanSitemap.matchAll(/<a\\b[^>]*\\bhref=["']([^"']+)["'][^>]*>/gi)]
+    .map(match => {
+      try {
+        const target = new URL(match[1], BASE + '/sitemap/');
+        return target.origin === BASE ? target.pathname : null;
+      } catch { return null; }
+    })
+    .filter(Boolean)
+);
+assert.ok(sitemapSet.has(BASE + '/sitemap/'), 'HTML sitemap page must be included in the XML sitemap');
+for (const url of sitemapUrls) {
+  const route = new URL(url).pathname;
+  assert.ok(humanSitemapRoutes.has(route), route + ' must be linked from the visitor-facing HTML sitemap');
+}
+
 for (const url of sitemapUrls) {
   const parsed = new URL(url);
   assert.equal(parsed.origin, BASE, 'Sitemap must use canonical host: ' + url);

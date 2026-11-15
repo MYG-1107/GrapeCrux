@@ -143,7 +143,7 @@ const humanSitemapFile = path.join(ROOT, 'sitemap', 'index.html');
 assert.ok(fs.existsSync(humanSitemapFile), 'Visitor-facing HTML sitemap missing');
 const humanSitemap = fs.readFileSync(humanSitemapFile, 'utf8');
 const humanSitemapRoutes = new Set(
-  [...humanSitemap.matchAll(/<a\\b[^>]*\\bhref=["']([^"']+)["'][^>]*>/gi)]
+  [...humanSitemap.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>/gi)]
     .map(match => {
       try {
         const target = new URL(match[1], BASE + '/sitemap/');

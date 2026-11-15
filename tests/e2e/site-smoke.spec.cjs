@@ -88,7 +88,10 @@ test('keyboard users can reach the skip link and move to primary navigation', as
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#main-content$/);
   await page.keyboard.press('Tab');
-  await expect(page.locator('#site-header .brand')).toBeFocused();
+  const focusedMainContent = await page.evaluate(() =>
+    Boolean(document.querySelector('#main-content')?.contains(document.activeElement))
+  );
+  expect(focusedMainContent, 'The next keyboard stop after the skip link should be within main content').toBe(true);
 });
 
 test('mobile navigation opens and closes with Escape and link selection', async ({ page }, testInfo) => {

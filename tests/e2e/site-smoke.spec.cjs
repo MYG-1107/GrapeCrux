@@ -194,8 +194,22 @@ test('axe accessibility review for key conversion pages (critical violations fai
       id: violation.id,
       impact: violation.impact,
       help: violation.help,
-      nodes: violation.nodes.length,
-      targets: violation.nodes.slice(0, 8).map((node) => node.target)
+      nodes: violation.nodes.map((node) => ({
+        target: node.target,
+        failureSummary: node.failureSummary,
+        checks: node.any.map((check) => ({
+          id: check.id,
+          message: check.message,
+          data: check.data ? {
+            fgColor: check.data.fgColor,
+            bgColor: check.data.bgColor,
+            contrastRatio: check.data.contrastRatio,
+            expectedContrastRatio: check.data.expectedContrastRatio,
+            fontSize: check.data.fontSize,
+            fontWeight: check.data.fontWeight
+          } : null
+        }))
+      }))
     }));
     await testInfo.attach('axe-' + route.replace(/[^a-z0-9]+/gi, '-') + '.json', {
       body: Buffer.from(JSON.stringify({ route, violations: findings }, null, 2)),
@@ -206,8 +220,10 @@ test('axe accessibility review for key conversion pages (critical violations fai
       : 'none';
     console.log('AXE ' + route + ': ' + results.violations.length + ' violation groups [' +
       severitySummary + ']; ' + results.passes.length + ' passing rules.');
-    const critical = results.violations.filter((item) => item.impact === 'critical');
-    expect(critical, route + ' critical accessibility violations: ' +
-      critical.map((item) => item.id + ': ' + item.help).join('; ')).toEqual([]);
+    const blocking = results.violations.filter((item) =>
+      item.impact === 'critical' || item.impact === 'serious'
+    );
+    expect(blocking, route + ' serious/critical accessibility violations: ' +
+      blocking.map((item) => item.id + '/' + item.impact + ': ' + item.help).join('; ')).toEqual([]);
   }
 });

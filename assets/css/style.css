@@ -157,3 +157,27 @@
 @media(prefers-reduced-motion:reduce){
   .blog-toc-summary::after,.blog-archive-list .blog-archive-item{transition:none}
 }
+
+
+/* WCAG 2.2 AA contrast improvements.
+   Keep body and supporting copy readable on the paper, tint, white and lime surfaces. */
+:root{
+  --moss:#3f632a;
+  --muted:#526158;
+}
+.trust-title,
+.service-number,
+.breadcrumbs,
+.chat-footnote,
+.blog-toc-hint,
+.blog-archive-toolbar .small{
+  color:#526158;
+}
+
+
+/* Preserve text contrast during the entrance motion.
+   Elements can move into place, but their foreground colors must remain fully opaque. */
+@keyframes rise-in{
+  from{opacity:1;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}

@@ -116,8 +116,8 @@
       }
     };
     const safeCampaignValue = (value) => {
-      const clean = String(value || '').replace(/[\\r\\n]/g, ' ').trim().slice(0, 120);
-      return /\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b/i.test(clean) ? '' : clean;
+      const clean = String(value || '').replace(/[\r\n]/g, ' ').trim().slice(0, 120);
+      return /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(clean) ? '' : clean;
     };
     const current = {
       landing_page: location.pathname,

@@ -131,7 +131,7 @@ test('project assessment returns a service route and a local project summary', a
   await page.getByRole('button', { name: /Review my suggested services/ }).click();
   await expect(page.locator('.assessment-result-content h2')).toContainText('These service areas look relevant');
   await expect(page.locator('.assessment-recommendation h3').first()).toContainText('Web & App Development');
-  await expect(page.locator('#assessment-summary')).toContainText('Primary need: website');
+  await expect(page.locator('#assessment-summary')).toHaveValue(/Primary need: website/);
   await expect(page.locator('.assessment-actions a[href^="/contact/?service="]')).toBeVisible();
 });
 
@@ -147,16 +147,39 @@ test('cookie preferences can be rejected and reopened from the footer', async ({
 
 test('the local service assistant opens, responds and can be dismissed', async ({ page }) => {
   await page.goto('/');
+
+  // The first-visit privacy banner sits above the floating launcher on small screens.
+  // Rejecting optional analytics keeps this test privacy-preserving and makes the
+  // chatbot control genuinely tappable before we exercise it.
+  await test.step('clear the first-visit privacy banner without opting into analytics', async () => {
+    const privacyBanner = page.locator('#gc-consent-banner');
+    if (await privacyBanner.isVisible().catch(() => false)) {
+      await privacyBanner.getByRole('button', { name: 'Reject optional analytics' }).click({ timeout: 5_000 });
+      await expect(privacyBanner).toBeHidden({ timeout: 5_000 });
+    }
+  });
+
   const launcher = page.locator('#gc-chatbot .chat-launcher');
-  await expect(launcher).toBeVisible({ timeout: 8_000 });
-  await launcher.click();
-  await expect(page.locator('#gc-chat-panel')).toHaveAttribute('aria-hidden', 'false');
-  await page.locator('#gc-chat-input').fill('What services do you offer?');
-  await page.locator('#gc-chat-input').press('Enter');
-  await expect(page.locator('.chat-msg.user')).toContainText('What services do you offer?');
-  await expect(page.locator('.chat-msg.bot').last()).not.toBeEmpty();
-  await page.locator('#gc-chat-panel .chat-close').click();
-  await expect(page.locator('#gc-chat-panel')).toHaveAttribute('aria-hidden', 'true');
+  const panel = page.locator('#gc-chat-panel');
+  await test.step('open the service assistant', async () => {
+    await expect(launcher).toBeVisible({ timeout: 8_000 });
+    await launcher.click({ timeout: 5_000 });
+    await expect(panel).toHaveAttribute('aria-hidden', 'false', { timeout: 5_000 });
+  });
+
+  await test.step('send a message and verify the local answer', async () => {
+    await page.locator('#gc-chat-input').fill('What services do you offer?', { timeout: 5_000 });
+    // Use the visible send control instead of Enter so mobile tests do not depend
+    // on a virtual keyboard being available in headless Chromium.
+    await panel.getByRole('button', { name: 'Send message' }).click({ timeout: 5_000 });
+    await expect(page.locator('.chat-msg.user').last()).toHaveText('What services do you offer?', { timeout: 5_000 });
+    await expect(page.locator('.chat-msg.bot').last()).not.toBeEmpty({ timeout: 5_000 });
+  });
+
+  await test.step('close the assistant', async () => {
+    await panel.getByRole('button', { name: 'Close assistant' }).click({ timeout: 5_000 });
+    await expect(panel).toHaveAttribute('aria-hidden', 'true', { timeout: 5_000 });
+  });
 });
 
 test('axe accessibility review for key conversion pages (critical violations fail; all findings are attached)', async ({ page }, testInfo) => {
@@ -178,8 +201,11 @@ test('axe accessibility review for key conversion pages (critical violations fai
       body: Buffer.from(JSON.stringify({ route, violations: findings }, null, 2)),
       contentType: 'application/json'
     });
-    console.log('AXE ' + route + ': ' + results.violations.length + ' violation groups; ' +
-      results.passes.length + ' passing rules.');
+    const severitySummary = findings.length
+      ? findings.map((item) => item.id + '/' + item.impact + ' (' + item.nodes + ' nodes)').join(', ')
+      : 'none';
+    console.log('AXE ' + route + ': ' + results.violations.length + ' violation groups [' +
+      severitySummary + ']; ' + results.passes.length + ' passing rules.');
     const critical = results.violations.filter((item) => item.impact === 'critical');
     expect(critical, route + ' critical accessibility violations: ' +
       critical.map((item) => item.id + ': ' + item.help).join('; ')).toEqual([]);

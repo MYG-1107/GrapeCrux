@@ -61,6 +61,8 @@ jobs:
         run: node tests/client-conversion-24-blogs.test.cjs
       - name: Validate business visibility and enquiry platform
         run: node tests/business-platform-qa.test.cjs
+      - name: Validate enquiry delivery wording and attribution privacy
+        run: node tests/email-form-copy.test.cjs
 
   browser:
     name: Chromium browser, mobile UX and accessibility checks

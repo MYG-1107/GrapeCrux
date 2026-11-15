@@ -90,7 +90,6 @@ test('contact form preselects a requested service and enforces required fields a
   const form = page.locator('#project-form');
   const service = form.locator('[name="service"]');
   await expect(service).toHaveValue('AI & Automation');
-  await expect(form.locator('[name="message"]')).toContainText('');
   await expect(form.locator('[name="message"]')).toHaveValue(/AI & Automation/);
   expect(await form.evaluate((element) => element.checkValidity())).toBe(false);
 

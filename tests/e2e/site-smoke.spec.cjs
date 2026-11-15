@@ -11,7 +11,7 @@ const SITEMAP_ROUTES = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)]
   .map((match) => new URL(match[1]).pathname);
 const PRIORITY_ROUTES = [
   '/', '/services/', '/industries/', '/work/', '/how-we-work/',
-  '/about/', '/blogs/', '/blogs/archive/', '/contact/', '/careers/',
+  '/about/', '/blogs/', '/blogs/archive/', '/contact/', '/careers/', '/sitemap/',
   '/project-assessment/', '/resources/', '/technologies/', '/privacy/', '/terms/'
 ];
 
@@ -67,8 +67,35 @@ test('priority pages hydrate shared navigation and footer without runtime or hor
   expect(failedLocalRequests, 'Failed same-origin resources').toEqual([]);
 });
 
+
+test('human-readable sitemap links to every published XML sitemap route', async ({ page }) => {
+  await page.goto('/sitemap/');
+  await expect(page.locator('main#main-content h1')).toContainText('Find your way around GrapeCrux');
+  const hrefs = await page.locator('#main-content a[href]').evaluateAll((anchors) =>
+    anchors.map((anchor) => anchor.getAttribute('href'))
+  );
+  for (const route of SITEMAP_ROUTES) {
+    expect(hrefs, 'Human-readable sitemap should link to ' + route).toContain(route);
+  }
+  await expect(page.locator('.sitemap-group')).toHaveCount(9);
+});
+
+test('keyboard users can reach the skip link and move to primary navigation', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#site-header .brand')).toBeVisible();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('.skip-link')).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#main-content$/);
+  await page.keyboard.press('Tab');
+  const focusedMainContent = await page.evaluate(() =>
+    Boolean(document.querySelector('#main-content')?.contains(document.activeElement))
+  );
+  expect(focusedMainContent, 'The next keyboard stop after the skip link should be within main content').toBe(true);
+});
+
 test('mobile navigation opens and closes with Escape and link selection', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium-mobile', 'Mobile-specific navigation check');
+  test.skip(testInfo.project.name === 'chromium-desktop', 'Responsive navigation check for tablet and mobile');
   await page.goto('/');
   const toggle = page.locator('#site-header .menu-toggle');
   await expect(toggle).toBeVisible();

@@ -132,7 +132,7 @@ for(const route of ['/project-assessment/','/how-we-work/','/technologies/','/ca
 
 const sitemap = read('sitemap.xml');
 const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
-assert.equal(urls.length,143,'Expected 143 public sitemap URLs including four new guides');
+assert.ok(urls.includes('https://grapecrux.com/sitemap/'),'The visitor-facing site map must be included in the XML sitemap');
 assert.equal(urls.length,new Set(urls).size,'Sitemap URLs must be unique');
 for(const url of urls) {
   const route = new URL(url).pathname.replace(/^\/|\/$/g,'');

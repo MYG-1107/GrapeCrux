@@ -126,6 +126,9 @@
   ];
 
   const fallbacks = [
+    [/\b(vaagdevi|vaagdevi college|vaagdevi internship|college internship call)\b/i,
+      'GrapeCrux has a dedicated internship application page for students of Vaagdevi College of Engineering. The five tracks are Software Developer Intern, Data Analytics Intern, AI Intern, Forward Deployment Intern and QA Testing Intern. This is an unpaid opportunity: no stipend or salary is provided, and students are not charged an application, registration, training or participation fee. Details and the application form are at https://grapecrux.com/careers/internships/special-call-vaagdevi-college-of-engineering/.'],
+
     'I do not have a verified answer for that detail yet. I can still help with services (https://grapecrux.com/services/), work examples (https://grapecrux.com/work/), blogs (https://grapecrux.com/blogs/), careers (https://grapecrux.com/careers/) or a project enquiry (https://grapecrux.com/contact/). For a company-specific answer, email service@grapecrux.com.',
     'That is outside the information I can confirm. Try asking about GrapeCrux services, current full-time roles, internship tracks, blog topics or how to start a project. You can also reach the team at service@grapecrux.com.',
     'I do not want to guess. The website has dedicated pages for Services, Work, Blogs, Careers and Contact. Tell me which area you mean, or email service@grapecrux.com for a confirmed response.'

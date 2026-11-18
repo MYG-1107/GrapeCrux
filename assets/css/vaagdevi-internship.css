@@ -1,0 +1,122 @@
+/* Special internship landing page for Vaagdevi College of Engineering. */
+.vce-hero{position:relative;overflow:hidden;padding:54px 0 64px;background:radial-gradient(circle at 88% 18%,rgba(217,243,106,.28),transparent 24%),radial-gradient(circle at 0% 100%,rgba(163,196,160,.18),transparent 32%),var(--paper)}
+.vce-hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.75fr);gap:54px;align-items:center}
+.vce-hero-copy{min-width:0}
+.vce-eyebrow{display:inline-flex;padding:8px 13px;border:1px solid #d7e3d1;border-radius:999px;background:#fff;color:var(--ink);font-size:.83rem;font-weight:750;margin:0 0 18px}
+.vce-hero h1{font-size:clamp(3rem,6.1vw,5.1rem);max-width:760px;margin-bottom:20px}
+.vce-hero h1 span{color:var(--moss)}
+.vce-hero-copy .lead{max-width:690px}
+.vce-hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0 24px}
+.vce-hero-meta{display:flex;flex-wrap:wrap;gap:10px 20px;color:#586b60;font-size:.85rem;font-weight:700}
+.vce-hero-meta span:before{content:"✓";color:var(--moss);margin-right:7px;font-weight:900}
+.vce-hero-panel{position:relative;padding:30px;border:1px solid #dce6d7;border-radius:26px;background:rgba(255,255,255,.9);box-shadow:0 18px 55px rgba(22,63,54,.09)}
+.vce-panel-kicker{font-size:.73rem;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:var(--moss)}
+.vce-term-mark{display:grid;place-items:center;width:48px;height:48px;margin:22px 0 18px;border-radius:16px;background:var(--soft-lime);color:var(--ink);font-size:1.8rem;font-weight:850}
+.vce-hero-panel h2{font-size:clamp(1.8rem,3vw,2.45rem);margin-bottom:12px}
+.vce-hero-panel p{font-size:.95rem;line-height:1.7}
+.vce-term-lines{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:20px 0}
+.vce-term-lines span{display:grid;gap:2px;padding:13px 14px;border-radius:13px;background:#f0f5eb;color:#53685c;font-size:.75rem}
+.vce-term-lines strong{font-size:1.35rem;color:var(--ink)}
+.vce-inline-link{display:inline-flex;gap:8px;color:var(--moss);font-size:.9rem;font-weight:800;text-decoration:none}
+.vce-inline-link:hover{text-decoration:underline;text-underline-offset:4px}
+.vce-trust-strip{background:#163f36;color:#fff}
+.vce-trust-items{display:flex;align-items:center;justify-content:space-between;gap:14px 24px;flex-wrap:wrap;padding:18px 0}
+.vce-trust-items span{font-size:.86rem;font-weight:700}
+.vce-trust-items i{display:inline-grid;place-items:center;width:21px;height:21px;margin-right:7px;border-radius:50%;background:var(--lime);color:var(--ink);font-style:normal;font-size:.76rem}
+.vce-section-heading{max-width:760px;margin:0 auto 38px;text-align:center}
+.vce-section-heading .section-kicker{justify-content:center}
+.vce-section-heading .lead{margin-inline:auto}
+.vce-track-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.vce-track-card{display:flex;flex-direction:column;min-width:0;padding:23px;border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:var(--shadow-sm);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.vce-track-card:hover{transform:translateY(-3px);border-color:#c9d8c3;box-shadow:var(--shadow)}
+.vce-track-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:19px}
+.vce-track-number{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:var(--soft-lime);color:var(--ink);font-weight:850;font-size:.83rem}
+.vce-track-tag{padding:6px 9px;border:1px solid #e0e8dc;border-radius:999px;color:#627469;font-size:.7rem;font-weight:750}
+.vce-track-card h3{font-size:1.22rem;margin-bottom:9px}
+.vce-track-card>p{font-size:.92rem;line-height:1.7;margin-bottom:10px}
+.vce-track-card ul{display:grid;gap:8px;margin:5px 0 22px;padding-left:19px;color:#596d61;font-size:.87rem;line-height:1.55}
+.vce-select-track{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:auto;padding:12px 14px;border:1px solid #d4dfd0;border-radius:12px;background:#f7faf5;color:var(--ink);font:inherit;font-size:.87rem;font-weight:800;text-align:left;cursor:pointer}
+.vce-select-track:hover{border-color:var(--moss);background:var(--soft-lime)}
+.vce-track-note{display:flex;flex-direction:column;justify-content:center;min-height:275px;padding:25px;border:1px dashed #bfcebb;border-radius:20px;background:#f6f8f2}
+.vce-note-symbol{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:var(--lime);font-size:1.35rem;font-weight:800;color:var(--ink);margin-bottom:17px}
+.vce-track-note h3{font-size:1.2rem}
+.vce-track-note p{font-size:.92rem;line-height:1.7}
+.vce-track-note .text-link{margin-top:auto}
+.vce-two-column{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:start}
+.vce-two-column h2{max-width:520px}
+.vce-outcomes-list{display:grid;gap:0}
+.vce-outcomes-list article{display:grid;grid-template-columns:42px minmax(0,1fr);gap:16px;padding:19px 0;border-bottom:1px solid #d8e3d4}
+.vce-outcomes-list article:first-child{padding-top:0}
+.vce-outcomes-list article>span{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:#fff;color:var(--moss);font-weight:850;font-size:.82rem}
+.vce-outcomes-list h3{font-size:1.08rem;margin:2px 0 6px}
+.vce-outcomes-list p{font-size:.91rem;line-height:1.65;margin:0}
+.vce-process-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.vce-process-grid article{padding:20px;border:1px solid var(--line);border-radius:17px;background:#fff}
+.vce-process-grid article>span{display:grid;place-items:center;width:34px;height:34px;margin-bottom:18px;border-radius:50%;background:var(--lime);color:var(--ink);font-size:.8rem;font-weight:850}
+.vce-process-grid h3{font-size:1rem;margin-bottom:8px}
+.vce-process-grid p{font-size:.87rem;line-height:1.65;margin:0}
+.vce-application-section{background:#f3f6ef}
+.vce-application-layout{display:grid;grid-template-columns:minmax(260px,.75fr) minmax(0,1.25fr);gap:40px;align-items:start}
+.vce-application-aside{position:sticky;top:110px}
+.vce-application-aside h2{font-size:clamp(2.1rem,4vw,3.15rem)}
+.vce-application-points{display:grid;gap:10px;margin:24px 0}
+.vce-application-points p{display:flex;gap:10px;margin:0;color:#53685c;font-size:.9rem}
+.vce-application-points span{color:var(--moss);font-weight:900}
+.vce-terms-reminder{padding:18px;border-left:3px solid var(--moss);border-radius:0 13px 13px 0;background:#fff}
+.vce-terms-reminder strong{display:block;margin-bottom:7px}
+.vce-terms-reminder p{margin:0;font-size:.9rem;line-height:1.65}
+.vce-application-form{min-width:0;padding:29px;border:1px solid #dce5d7;border-radius:23px;background:#fff;box-shadow:0 14px 45px rgba(22,63,54,.07)}
+.vce-form-heading{margin-bottom:24px;padding-bottom:19px;border-bottom:1px solid #e7ece4}
+.vce-form-heading>span{color:var(--moss);font-size:.72rem;font-weight:850;letter-spacing:.13em}
+.vce-form-heading h3{font-size:1.55rem;margin:8px 0}
+.vce-form-heading p{font-size:.84rem;margin:0}
+.vce-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.vce-field{display:grid;gap:7px;min-width:0}
+.vce-field-full{grid-column:1/-1}
+.vce-field label{font-size:.87rem;font-weight:750;color:var(--ink)}
+.vce-field input,.vce-field select,.vce-field textarea{display:block;width:100%;min-width:0;min-height:48px;padding:12px 13px;border:1px solid #cfdacf;border-radius:11px;background:#fcfdfb;color:var(--ink);font:inherit;font-size:.92rem;outline:none}
+.vce-field textarea{min-height:108px;resize:vertical;line-height:1.55}
+.vce-field input:focus,.vce-field select:focus,.vce-field textarea:focus{border-color:var(--moss);box-shadow:0 0 0 3px rgba(82,122,54,.13)}
+.vce-field input[readonly]{background:#f0f4ed;color:#596b60}
+.vce-field small{color:#738178;font-size:.77rem;line-height:1.5}
+.vce-consent{margin:21px 0 12px;padding:14px;border-radius:13px;background:#f1f5ec}
+.vce-consent label{display:flex;align-items:flex-start;gap:10px;color:#506357;font-size:.85rem;line-height:1.6;cursor:pointer}
+.vce-consent input{flex:0 0 auto;width:17px;height:17px;margin-top:3px;accent-color:var(--moss)}
+.vce-consent a{color:var(--moss);font-weight:800}
+.vce-form-note{font-size:.78rem;line-height:1.65;margin:0 0 18px}
+.vce-submit{min-height:52px}
+.vce-form-status{display:none;padding:12px 14px;margin:14px 0 0;border-radius:11px;background:#f0f5eb;color:var(--ink);font-size:.88rem}
+.vce-form-status.show{display:block}
+.vce-honeypot{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;clip-path:inset(50%)!important;white-space:nowrap!important;opacity:0!important;pointer-events:none!important}
+.vce-honeypot[hidden]{display:none!important}
+.vce-terms-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px;align-items:start}
+.vce-terms-copy{display:grid;gap:0}
+.vce-terms-copy article{padding:0 0 17px;margin:0 0 17px;border-bottom:1px solid #d8e3d4}
+.vce-terms-copy article:last-child{margin-bottom:0}
+.vce-terms-copy h3{font-size:1rem;margin-bottom:6px}
+.vce-terms-copy p{font-size:.9rem;line-height:1.7;margin:0}
+.vce-disclaimer{margin-top:25px;padding:15px 17px;border:1px solid #dce5d7;border-radius:13px;background:rgba(255,255,255,.65)}
+.vce-disclaimer p{font-size:.79rem;line-height:1.6;margin:0}
+.vce-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.vce-faq-grid .faq-item{padding:0 18px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.vce-faq-grid .faq-item summary{font-size:.91rem}
+.vce-faq-grid .faq-item p{font-size:.87rem;line-height:1.65}
+.vce-final-cta{padding-top:0}
+.vce-final-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:25px;padding:36px 40px;border-radius:22px;background:#eaf1e4}
+.vce-final-cta-inner h2{max-width:650px;font-size:clamp(1.8rem,3.4vw,2.6rem)}
+.vce-final-cta-inner p{margin:0}
+.vce-final-cta-inner .section-kicker{margin-bottom:10px}
+.vce-final-cta-inner .btn{flex:0 0 auto}
+.vce-confirm-page{min-height:60vh;display:grid;align-items:center;background:radial-gradient(circle at 50% 15%,rgba(217,243,106,.22),transparent 35%),var(--paper)}
+.vce-confirm-card{max-width:720px;margin:0 auto;padding:clamp(25px,5vw,50px);border:1px solid var(--line);border-radius:24px;background:#fff;box-shadow:var(--shadow-sm);text-align:center}
+.vce-confirm-icon{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 22px;border-radius:50%;background:var(--lime);color:var(--ink);font-size:1.8rem;font-weight:900}
+.vce-confirm-card .section-kicker{justify-content:center}
+.vce-confirm-card h1{font-size:clamp(2.35rem,5vw,3.6rem);margin:0 auto 15px}
+.vce-confirm-card>p{max-width:570px;margin:0 auto 16px;font-size:.96rem;line-height:1.7}
+.vce-confirm-reminder{padding:14px 16px;border-radius:12px;background:#f0f5eb;text-align:left}
+.vce-confirm-card .btn{margin-top:10px}
+.vce-application-form button:disabled{opacity:.7;cursor:wait}
+:where(.vce-application-form a,.vce-application-form button,.vce-field input,.vce-field select,.vce-field textarea,.vce-consent input,.vce-select-track):focus-visible{outline:3px solid var(--moss);outline-offset:3px}
+@media(max-width:1000px){.vce-hero-grid{gap:30px}.vce-track-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vce-process-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vce-application-layout{grid-template-columns:1fr;gap:25px}.vce-application-aside{position:static}.vce-application-aside h2{max-width:680px}.vce-application-points{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.vce-hero{padding:35px 0 45px}.vce-hero-grid,.vce-two-column,.vce-terms-grid{grid-template-columns:1fr;gap:27px}.vce-hero-panel{max-width:560px}.vce-trust-items{justify-content:flex-start}.vce-trust-items span{flex:1 1 42%;font-size:.8rem}.vce-two-column{gap:20px}.vce-final-cta-inner{align-items:flex-start;flex-direction:column;padding:29px 24px}.vce-final-cta-inner .btn{width:100%}}
+@media(max-width:560px){.vce-hero h1{font-size:2.75rem}.vce-hero-actions{flex-direction:column;align-items:stretch}.vce-hero-actions .btn{width:100%}.vce-hero-meta{gap:9px 13px;font-size:.78rem}.vce-hero-panel{padding:23px;border-radius:19px}.vce-track-grid,.vce-process-grid,.vce-faq-grid{grid-template-columns:1fr}.vce-track-card{padding:21px}.vce-track-note{min-height:220px}.vce-application-form{padding:20px 17px;border-radius:18px}.vce-form-grid{grid-template-columns:1fr}.vce-field-full{grid-column:auto}.vce-application-points{grid-template-columns:1fr}.vce-term-lines{grid-template-columns:1fr 1fr}.vce-final-cta-inner{padding:25px 20px}.vce-trust-items span{flex-basis:100%}}

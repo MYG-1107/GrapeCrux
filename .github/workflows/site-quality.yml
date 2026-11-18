@@ -39,6 +39,7 @@ jobs:
           node --check assets/js/main.js
           node --check assets/js/assistant-knowledge.js
           node --check assets/js/careers.js
+          node --check assets/js/vaagdevi-internship.js
           node --check assets/js/blog-archive.js
           node --check assets/js/project-assessment.js
       - name: Run chatbot tests
@@ -57,6 +58,8 @@ jobs:
         run: node tests/additive-topic-hubs.test.cjs
       - name: Run Careers role-page tests
         run: node tests/careers-role-pages.test.cjs
+      - name: Validate Vaagdevi College internship page
+        run: node tests/vaagdevi-internship.test.cjs
       - name: Validate client conversion and 24 new articles
         run: node tests/client-conversion-24-blogs.test.cjs
       - name: Validate business visibility and enquiry platform

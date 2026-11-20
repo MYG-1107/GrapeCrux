@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});gtag('js',new Date());gtag('config','G-QXMRMGJEP2',{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false});</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GrapeCrux Editorial Team">
+<meta name="theme-color" content="#f7f8f5">
+<title>Apache Iceberg 1.12: upgrade planning and interoperability checks | GrapeCrux</title>
+<meta name="description" content="What Apache Iceberg 1.12.0 changes mean for data platform teams, including compatibility checks, Variant and geospatial support and upgrade testing.">
+<meta name="keywords" content="Apache Iceberg 1.12, Iceberg 1.12.0 upgrade, open table format, data lakehouse interoperability, Iceberg Spark Flink Kafka">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://grapecrux.com/blogs/apache-iceberg-1-12-upgrade-interoperability-guide/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GrapeCrux">
+<meta property="og:title" content="Apache Iceberg 1.12: upgrade planning and interoperability checks">
+<meta property="og:description" content="What Apache Iceberg 1.12.0 changes mean for data platform teams, including compatibility checks, Variant and geospatial support and upgrade testing.">
+<meta property="og:url" content="https://grapecrux.com/blogs/apache-iceberg-1-12-upgrade-interoperability-guide/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta property="og:image:alt" content="GrapeCrux practical technology guide">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-11-20">
+<meta property="article:modified_time" content="2026-11-20">
+<meta property="article:section" content="Data Engineering">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Apache Iceberg 1.12: upgrade planning and interoperability checks">
+<meta name="twitter:description" content="What Apache Iceberg 1.12.0 changes mean for data platform teams, including compatibility checks, Variant and geospatial support and upgrade testing.">
+<meta name="twitter:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta name="twitter:url" content="https://grapecrux.com/blogs/apache-iceberg-1-12-upgrade-interoperability-guide/">
+<link rel="icon" type="image/png" href="../../grapecrux_brand_logo.png?v=20261113-original-png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Apache Iceberg 1.12: upgrade planning and interoperability checks","description":"What Apache Iceberg 1.12.0 changes mean for data platform teams, including compatibility checks, Variant and geospatial support and upgrade testing.","datePublished":"2026-11-20","dateModified":"2026-11-20","author":{"@type":"Organization","name":"GrapeCrux Editorial Team"},"publisher":{"@type":"Organization","name":"GrapeCrux","logo":{"@type":"ImageObject","url":"https://grapecrux.com/grapecrux_brand_logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://grapecrux.com/blogs/apache-iceberg-1-12-upgrade-interoperability-guide/"},"image":"https://grapecrux.com/assets/images/hero-orbit.svg","articleSection":"Data Engineering","keywords":"Apache Iceberg 1.12, Iceberg 1.12.0 upgrade, open table format, data lakehouse interoperability, Iceberg Spark Flink Kafka","inLanguage":"en","wordCount":395}</script>
+<script defer src="../../assets/js/config.js"></script>
+<script defer src="../../assets/js/assistant-knowledge.js"></script>
+<script defer src="../../assets/js/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="page-hero"><div class="container">
+<div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><a href="/blogs/">Blogs</a><span class="sep">/</span><span>Data Engineering</span></div>
+<div class="article-meta"><span>Data Engineering</span><span>·</span><span>10 min read</span><span>·</span><time datetime="2026-11-20">20 November 2026</time></div>
+<h1>Apache Iceberg 1.12: upgrade planning and interoperability checks</h1><p class="lead">Open table formats keep evolving, and upgrades can affect more than the table library itself. Apache Iceberg 1.12.0 includes notable data-type improvements and compatibility changes. This guide turns the release into a practical platform upgrade checklist.</p>
+</div></section>
+<section class="section"><div class="container content-layout">
+<article class="prose blog-prose">
+<h2>Why the 1.12.0 release matters</h2>
+<p>Apache Iceberg 1.12.0 was announced on October 5, 2026. The project highlights improvements for Variant data and geospatial types, together with changes across supported engines and APIs. The release notes also identify compatibility and removal changes that teams should review before upgrading.</p><p>A table format sits between storage, catalogs and compute engines. An upgrade therefore needs to consider writers, readers, catalog services, connectors, schema evolution, maintenance jobs and downstream consumers—not just one dependency version.</p>
+<h2>Review Variant and geospatial workloads</h2>
+<p>The release announcement describes faster reads for unshredded Variant values through a vectorized Parquet path in supported Spark versions and broader Variant writing support beyond Spark. It also adds read and write support for geospatial types. These improvements may matter for semi-structured event data and location-oriented analytics.</p><p>Before enabling a new type in production, confirm that every engine can read, write, filter and preserve it correctly. Test nulls, mixed types, schema evolution, statistics, partition pruning and cross-engine round trips.</p>
+<h2>Check compatibility and removed APIs</h2>
+<p>Iceberg 1.12.0 removes support for some older integrations and deprecated APIs. Its release notes identify Spark 3.4 and Flink 2.0 among removed support lines and list removals across Spark, Flink, core and AWS-related components. Review the full upstream notes for your exact connector stack.</p><p>Create a matrix of Iceberg, Spark or Flink, catalog, object-store client, Kafka Connect, serialization formats and custom extensions. Compile and run integration tests against the target combination before changing shared production libraries.</p>
+<h2>Upgrade with staging, observability and rollback</h2>
+<p>Test reads, writes, deletes, compaction, snapshots, expiration, schema changes, partition evolution and catalog operations using representative tables. Exercise recovery and rollback. Compare query performance, planning time, commit latency, metadata growth, object-store requests and job failures before and after the upgrade.</p><ul><li>Read the complete 1.12.0 release notes and breaking changes.</li><li>Inventory engines, connectors, catalogs and custom APIs.</li><li>Test Variant, geospatial and schema evolution where used.</li><li>Verify IAM, storage clients, retries and catalog operations.</li><li>Roll out gradually with performance baselines and rollback criteria.</li></ul>
+<h2>Further reading</h2><ul class="resource-list"><li><a href="https://iceberg.apache.org/blog/apache-iceberg-1.12.0-release/" target="_blank" rel="noopener noreferrer">Apache Iceberg — 1.12.0 release announcement, October 5, 2026</a></li>
+<li><a href="https://iceberg.apache.org/releases/" target="_blank" rel="noopener noreferrer">Apache Iceberg — release history</a></li><li><a href="/blogs/data-warehouse-vs-lakehouse-choosing-analytics-architecture/">Data warehouse vs. lakehouse</a></li></ul>
+<p class="small">Published by GrapeCrux Editorial Team · 20 November 2026. This article is educational and reflects information reviewed on the publication date. Verify current vendor documentation, standards and project-specific requirements before production or compliance decisions.</p>
+<a class="back-top" href="/blogs/archive/">← Search the complete article archive</a>
+</article>
+<aside class="side-card"><span class="section-kicker">Put the idea into practice</span><h3>Discuss a related project.</h3><p>Share your business context, current systems and goals. The GrapeCrux team can discuss a practical next step within an agreed scope.</p><a class="btn btn-primary" href="/contact/">Start a project ↗</a><div class="divider"></div><p class="small">Related capability: <a href="/services/data-engineering/">Data Engineering</a>.</p><p class="small">Browse more guides in the <a href="/blogs/archive/">complete article archive</a>.</p></aside>
+</div></section>
+</main><div id="site-footer"></div><div id="gc-chatbot"></div>
+</body></html>

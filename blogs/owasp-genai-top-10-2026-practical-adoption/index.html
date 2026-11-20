@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});gtag('js',new Date());gtag('config','G-QXMRMGJEP2',{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false});</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GrapeCrux Editorial Team">
+<meta name="theme-color" content="#f7f8f5">
+<title>OWASP GenAI Top 10 2026: turning AI risks into engineering controls | GrapeCrux</title>
+<meta name="description" content="How to use the OWASP GenAI Top 10 2026 as a practical security programme for LLM applications, retrieval systems, tools and agent workflows.">
+<meta name="keywords" content="OWASP GenAI Top 10 2026, LLM application security, generative AI security controls, AI risk assessment, agentic AI security">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://grapecrux.com/blogs/owasp-genai-top-10-2026-practical-adoption/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GrapeCrux">
+<meta property="og:title" content="OWASP GenAI Top 10 2026: turning AI risks into engineering controls">
+<meta property="og:description" content="How to use the OWASP GenAI Top 10 2026 as a practical security programme for LLM applications, retrieval systems, tools and agent workflows.">
+<meta property="og:url" content="https://grapecrux.com/blogs/owasp-genai-top-10-2026-practical-adoption/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta property="og:image:alt" content="GrapeCrux practical technology guide">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-11-20">
+<meta property="article:modified_time" content="2026-11-20">
+<meta property="article:section" content="Cybersecurity">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OWASP GenAI Top 10 2026: turning AI risks into engineering controls">
+<meta name="twitter:description" content="How to use the OWASP GenAI Top 10 2026 as a practical security programme for LLM applications, retrieval systems, tools and agent workflows.">
+<meta name="twitter:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta name="twitter:url" content="https://grapecrux.com/blogs/owasp-genai-top-10-2026-practical-adoption/">
+<link rel="icon" type="image/png" href="../../grapecrux_brand_logo.png?v=20261113-original-png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"OWASP GenAI Top 10 2026: turning AI risks into engineering controls","description":"How to use the OWASP GenAI Top 10 2026 as a practical security programme for LLM applications, retrieval systems, tools and agent workflows.","datePublished":"2026-11-20","dateModified":"2026-11-20","author":{"@type":"Organization","name":"GrapeCrux Editorial Team"},"publisher":{"@type":"Organization","name":"GrapeCrux","logo":{"@type":"ImageObject","url":"https://grapecrux.com/grapecrux_brand_logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://grapecrux.com/blogs/owasp-genai-top-10-2026-practical-adoption/"},"image":"https://grapecrux.com/assets/images/hero-orbit.svg","articleSection":"Cybersecurity","keywords":"OWASP GenAI Top 10 2026, LLM application security, generative AI security controls, AI risk assessment, agentic AI security","inLanguage":"en","wordCount":421}</script>
+<script defer src="../../assets/js/config.js"></script>
+<script defer src="../../assets/js/assistant-knowledge.js"></script>
+<script defer src="../../assets/js/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="page-hero"><div class="container">
+<div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><a href="/blogs/">Blogs</a><span class="sep">/</span><span>Cybersecurity</span></div>
+<div class="article-meta"><span>Cybersecurity</span><span>·</span><span>11 min read</span><span>·</span><time datetime="2026-11-20">20 November 2026</time></div>
+<h1>OWASP GenAI Top 10 2026: turning AI risks into engineering controls</h1><p class="lead">A published AI risk list is useful only when it changes design, testing and operations. This guide shows how engineering teams can translate OWASP’s 2026 GenAI security resources into an application-specific control plan.</p>
+</div></section>
+<section class="section"><div class="container content-layout">
+<article class="prose blog-prose">
+<h2>Start with the application, not a generic list</h2>
+<p>OWASP’s GenAI Security Project announced its 2026 Top 10 for LLM Applications and a new Agent Control Standard in September 2026. Use these resources to challenge assumptions about how an AI application receives instructions, retrieves information, invokes tools, handles data and affects real systems.</p><p>The same model can have very different risk in a public FAQ assistant, an internal document search tool and an agent that updates customer records. Map the data, identities, tools, permissions and consequences of each workflow before selecting controls.</p>
+<h2>Map the complete AI attack surface</h2>
+<p>Document the interface, API gateway, prompt construction, system instructions, retrieval layer, embedding pipeline, model provider, tool server, agent memory, file handling, logs and downstream business systems. Include human review and administrative interfaces. Third-party connectors are part of the attack surface.</p><p>For every boundary, ask what an attacker can control, what the component trusts and what action becomes possible if that trust is misplaced. Include indirect inputs such as uploaded documents, web pages, tickets, source repositories and retrieved text.</p>
+<h2>Translate risk into testable requirements</h2>
+<p>Write controls as observable requirements: retrieved text cannot override trusted instructions; a tool call is authorized by the application; user permissions are checked before retrieval; secrets never appear in prompts or logs; output is validated before downstream use; and high-impact actions require approval.</p><p>Attach each control to a reproducible test. Use adversarial prompts, malicious documents, unexpected tool arguments, authorization boundary tests and regression suites. Measure false positives too—a defensive system that blocks every legitimate request is not a successful control.</p>
+<h2>Secure tools, releases and operations</h2>
+<p>Give each tool a narrow schema and a specific identity. Validate arguments server-side, enforce resource-level authorization, rate-limit calls and log request, decision and result. The model should not decide its own permissions. Use time-limited credentials and isolate execution from sensitive networks.</p><p>Maintain model and component inventories, test after prompt or connector changes, and define incident playbooks for data disclosure, unsafe actions and suspicious tool activity. Start with one application, map relevant risks, prioritize retrieval permissions and write-capable tools, then expand after regression tests and independent review are in place.</p>
+<h2>Further reading</h2><ul class="resource-list"><li><a href="https://genai.owasp.org/2026/09/01/owasp-genai-security-project-unveils-2026-top-10-for-llm-applications-new-agent-control-standard-and-sponsors-as-community-tops-30000-members/" target="_blank" rel="noopener noreferrer">OWASP GenAI Security Project — 2026 Top 10 and Agent Control Standard announcement</a></li>
+<li><a href="https://genai.owasp.org/Blog/" target="_blank" rel="noopener noreferrer">OWASP GenAI Security Project — latest blog and resources</a></li><li><a href="/blogs/secure-prompt-design-separate-instructions-from-untrusted-input/">Secure prompt design</a></li></ul>
+<p class="small">Published by GrapeCrux Editorial Team · 20 November 2026. This article is educational and reflects information reviewed on the publication date. Verify current vendor documentation, standards and project-specific requirements before production or compliance decisions.</p>
+<a class="back-top" href="/blogs/archive/">← Search the complete article archive</a>
+</article>
+<aside class="side-card"><span class="section-kicker">Put the idea into practice</span><h3>Discuss a related project.</h3><p>Share your business context, current systems and goals. The GrapeCrux team can discuss a practical next step within an agreed scope.</p><a class="btn btn-primary" href="/contact/">Start a project ↗</a><div class="divider"></div><p class="small">Related capability: <a href="/services/software-testing/">Quality Assurance &amp; Software Testing</a>.</p><p class="small">Browse more guides in the <a href="/blogs/archive/">complete article archive</a>.</p></aside>
+</div></section>
+</main><div id="site-footer"></div><div id="gc-chatbot"></div>
+</body></html>

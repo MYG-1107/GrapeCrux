@@ -46,8 +46,8 @@ for(const [id,slug,title,kind] of jobs){
  assert.ok(page.includes('G-QXMRMGJEP2')&&page.includes('googletagmanager.com/gtag/js'),id+' GA4 head snippet missing');
  assert.ok(page.includes('id="site-header"')&&page.includes('id="site-footer"')&&page.includes('id="gc-chatbot"'),id+' shared layout missing');
  assert.ok(page.includes('id="gc-careers-application-form"'),id+' application form missing');
-const visiblePage = page.replace(/<script\\b[\\s\\S]*?<\\/script>/gi,' ').replace(/<form\\b[\\s\\S]*?<\\/form>/gi,' ').replace(/<[^>]+>/g,' ');
- assert.doesNotMatch(visiblePage,/yaswanth@grapecrux\\.com/i,id+' must not show the recruitment mailbox in visible copy');
+const visiblePage = page.replace(/<script\b[\s\\S]*?<\/script>/gi,' ').replace(/<form\b[\s\\S]*?<\/form>/gi,' ').replace(/<[^>]+>/g,' ');
+ assert.doesNotMatch(visiblePage,/yaswanth@grapecrux\.com/i,id+' must not show the recruitment mailbox in visible copy');
  assert.ok(page.includes('name="role_interest"')&&page.includes('name="role_skills"')&&page.includes('name="role_specific_response"'),id+' role-specific questions missing');
  assert.equal((page.match(/id="career-job-id"/g)||[]).length,1,id+' must contain exactly one Job ID field');
  assert.ok(page.includes('Job ID:</span><strong>'+id+'</strong>'),id+' Job ID label must be spaced from the value');
@@ -69,8 +69,8 @@ assert.ok(careers.includes('id="career-job-id" name="job_id"'),'Careers hub form
 assert.ok(careers.includes('name="role_interest"')&&careers.includes('name="role_skills"')&&careers.includes('name="role_specific_response"'),'Careers hub must ask role-specific questions');
 assert.ok(careers.includes('name="weekly_availability"')&&careers.includes('name="internship_start_availability"'),'Careers hub must ask internship schedule availability');
 assert.ok(careers.includes('action="https://formsubmit.co/yaswanth@grapecrux.com"'),'Careers hub form must use hosted email delivery');
-const visibleCareers = careers.replace(/<script\\b[\\s\\S]*?<\\/script>/gi,' ').replace(/<form\\b[\\s\\S]*?<\\/form>/gi,' ').replace(/<[^>]+>/g,' ');
-assert.doesNotMatch(visibleCareers,/yaswanth@grapecrux\\.com/i,'Recruitment mailbox must not appear in visible Careers copy');
+const visibleCareers = careers.replace(/<script\b[\s\\S]*?<\/script>/gi,' ').replace(/<form\b[\s\\S]*?<\/form>/gi,' ').replace(/<[^>]+>/g,' ');
+assert.doesNotMatch(visibleCareers,/yaswanth@grapecrux\.com/i,'Recruitment mailbox must not appear in visible Careers copy');
 assert.ok(careers.includes('name="attachment"'),'Careers hub must support optional CV upload');
 assert.ok(!js.includes('mailto:'),'Career application handler must not open an email draft');
 assert.ok(careers.includes('/assets/css/careers.css?v=20261102-careers'),'Careers hub must use root-absolute styling');

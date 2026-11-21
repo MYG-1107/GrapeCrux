@@ -93,8 +93,8 @@ assert.ok(!sitemap.includes('application-received'),'Confirmation page must not 
 assert.ok(sitemap.includes('https://grapecrux.com/'+route),'Landing page must be in sitemap');
 assert.ok(!careers.includes('/'+route),'Main Careers page must not promote the college-specific campaign');
 assert.doesNotMatch(careers,/Campus internship opportunity|Vaagdevi College of Engineering students/,'Main Careers page must not contain the college campaign banner');
-const careersVisible = careers.replace(/<script\\b[\\s\\S]*?<\\/script>/gi,' ').replace(/<form\\b[\\s\\S]*?<\\/form>/gi,' ').replace(/<[^>]+>/g,' ');
-assert.doesNotMatch(careersVisible,/yaswanth@grapecrux\\.com/i,'Recruitment mailbox must not appear in visible Careers copy');
+const careersVisible = careers.replace(/<script\b[\s\\S]*?<\/script>/gi,' ').replace(/<form\b[\s\\S]*?<\/form>/gi,' ').replace(/<[^>]+>/g,' ');
+assert.doesNotMatch(careersVisible,/yaswanth@grapecrux\.com/i,'Recruitment mailbox must not appear in visible Careers copy');
 assert.ok(assistant.toLowerCase().includes('vaagdevi internship'),'Assistant knowledge must include this campus opportunity');
 
 console.log('Vaagdevi internship page QA passed: five roles, no-fee terms, hidden recipient, application flow, SEO and responsive styles.');

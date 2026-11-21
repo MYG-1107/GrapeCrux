@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});gtag('js',new Date());gtag('config','G-QXMRMGJEP2',{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false});</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GrapeCrux">
+<meta name="theme-color" content="#f7f8f5">
+<title>eBPF in Kubernetes: Network Observability and Runtime Security | GrapeCrux</title>
+<meta name="description" content="How eBPF supports Kubernetes networking, visibility and runtime security, with practical guidance for Cilium, Hubble and production rollout.">
+<meta name="keywords" content="eBPF Kubernetes, Cilium, Hubble observability, Kubernetes network security, eBPF runtime security">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://grapecrux.com/blogs/ebpf-kubernetes-observability-runtime-security/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GrapeCrux">
+<meta property="og:title" content="eBPF in Kubernetes: Network Observability and Runtime Security">
+<meta property="og:description" content="How eBPF supports Kubernetes networking, visibility and runtime security, with practical guidance for Cilium, Hubble and production rollout.">
+<meta property="og:url" content="https://grapecrux.com/blogs/ebpf-kubernetes-observability-runtime-security/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta property="og:image:alt" content="GrapeCrux technology article">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-11-21">
+<meta property="article:modified_time" content="2026-11-21">
+<meta property="article:section" content="Cloud &amp; DevOps">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="eBPF in Kubernetes: Network Observability and Runtime Security">
+<meta name="twitter:description" content="How eBPF supports Kubernetes networking, visibility and runtime security, with practical guidance for Cilium, Hubble and production rollout.">
+<meta name="twitter:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta name="twitter:url" content="https://grapecrux.com/blogs/ebpf-kubernetes-observability-runtime-security/">
+<link rel="icon" type="image/png" href="../../grapecrux_brand_logo.png?v=20261113-original-png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"eBPF in Kubernetes: Network Observability and Runtime Security","description":"How eBPF supports Kubernetes networking, visibility and runtime security, with practical guidance for Cilium, Hubble and production rollout.","datePublished":"2026-11-21","dateModified":"2026-11-21","author":{"@type":"Organization","name":"GrapeCrux"},"publisher":{"@type":"Organization","name":"GrapeCrux","logo":{"@type":"ImageObject","url":"https://grapecrux.com/grapecrux_brand_logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://grapecrux.com/blogs/ebpf-kubernetes-observability-runtime-security/"},"image":"https://grapecrux.com/assets/images/hero-orbit.svg","articleSection":"Cloud & DevOps","keywords":"eBPF Kubernetes, Cilium, Hubble observability, Kubernetes network security, eBPF runtime security","inLanguage":"en","wordCount":470}</script>
+<script defer src="../../assets/js/config.js"></script>
+<script defer src="../../assets/js/assistant-knowledge.js"></script>
+<script defer src="../../assets/js/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="page-hero"><div class="container">
+<div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><a href="/blogs/">Blogs</a><span class="sep">/</span><span>Cloud &amp; DevOps</span></div>
+<div class="article-meta"><span>Cloud &amp; DevOps</span><span>·</span><span>10 min read</span><span>·</span><time datetime="2026-11-21">21 November 2026</time></div>
+<h1>eBPF in Kubernetes: Network Observability and Runtime Security</h1><p class="lead">Kubernetes teams often need to understand traffic between services without adding more application code or sidecars. eBPF lets tools attach controlled programs to Linux kernel events, creating a way to observe and enforce behaviour close to the operating system.</p>
+</div></section>
+<section class="section"><div class="container content-layout">
+<article class="prose blog-prose">
+<h2>Why eBPF is useful in a cluster</h2>
+<p>eBPF allows programs to run at selected points in the Linux kernel under verifier and runtime constraints. It is used for networking, tracing and security. In Kubernetes, this can provide visibility into service communication and policy decisions without requiring every application to emit the same telemetry.</p>
+<p>Cilium uses eBPF for networking and security controls, while Hubble provides network observability. The combination can help operators understand which services communicate, where traffic is denied and how network behaviour changes across a cluster.</p>
+<h2>What teams can observe</h2>
+<p>Depending on the configuration, eBPF-based tooling can expose connection metadata, flow direction, policy verdicts, DNS activity and service-level traffic patterns. This can be useful when a deployment works in one namespace but fails after a network policy or service change.</p>
+<p>Do not assume that kernel-level visibility automatically means full payload inspection. Tools differ in the data they collect, and encrypted traffic limits what can be seen at the network layer. Start by defining the operational question—such as “which service is calling this endpoint?”—then enable only the telemetry required to answer it.</p>
+<h2>Use network policy as a deliberate boundary</h2>
+<p>A CNI such as Cilium can enforce network policy close to the workload. Begin in monitor or audit mode where possible, review observed flows and build policies around actual service dependencies. Apply least privilege between namespaces and services rather than opening broad ranges because an application fails.</p>
+<p>Keep policy ownership clear. A network rule that nobody maintains can become a hidden dependency or an unexpected outage during a release. Include policy review in service onboarding and decommissioning.</p>
+<h2>Production considerations</h2>
+<p>Test kernel compatibility, distribution support, node configuration and the impact of upgrades. Validate observability coverage on different node types and ensure that monitoring remains useful during node replacement or cluster scaling. Measure CPU and memory overhead under realistic traffic.</p>
+<p>Set retention and access rules for network metadata. Flow records can reveal application structure, user activity or internal hostnames. Restrict dashboards to people who need them and avoid collecting more detail than the operational purpose requires.</p>
+<h2>Roll out with a real troubleshooting case</h2>
+<p>Choose one cluster problem—unexpected service-to-service traffic, DNS failures or a policy deny—and instrument that path. Compare the investigation time and evidence available before and after enabling eBPF-based visibility.</p>
+<p>Expand to runtime security only after the team understands its signals and response process. An alert without context or an owner will create noise, not better security.</p>
+<h2>Sources and further reading</h2><ul class="resource-list"><li><a href="https://docs.cilium.io/en/stable/reference-guides/bpf/" target="_blank" rel="noopener noreferrer">Cilium documentation — BPF and XDP reference guide</a></li>
+<li><a href="https://docs.cilium.io/en/stable/overview/intro/" target="_blank" rel="noopener noreferrer">Cilium and Hubble overview</a></li><li><a href="/blogs/network-observability-dns-tls-latency-and-packet-loss/">Network observability</a></li></ul>
+<a class="back-top" href="/blogs/archive/">← Back to all articles</a>
+</article>
+<aside class="side-card">
+<span class="section-kicker">Working on something similar?</span>
+<h3>Talk it through with GrapeCrux.</h3>
+<p>Tell us what you are trying to solve. We will help you consider a sensible next step.</p>
+<a class="btn btn-primary" href="/contact/">Contact the team ↗</a>
+<div class="divider"></div>
+<p class="small">Related capability: <a href="/services/cloud-devops/">Cloud &amp; DevOps</a>.</p>
+<p class="small">Find more topics in the <a href="/blogs/archive/">article archive</a>.</p>
+</aside>
+</div></section>
+</main><div id="site-footer"></div><div id="gc-chatbot"></div>
+</body></html>

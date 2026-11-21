@@ -205,6 +205,8 @@
       "Our AI-assisted SOC guide covers evidence-grounded triage, constrained tools, analyst approvals and measurable outcomes. Read https://grapecrux.com/blogs/ai-assisted-soc-triage-human-oversight-incident-response/."],
     [/\b(data finops|data platform cost|cost per query|data warehouse cost)\b/i,
       "Our data engineering FinOps guide covers workload attribution, cost per outcome, pipeline waste and quality-aware optimization. Read https://grapecrux.com/blogs/data-engineering-finops-cost-per-query-dataset-insight/."],
+  ];
+
   const fallbacks = [
     [/\b(vaagdevi|vaagdevi college|vaagdevi internship|college internship call)\b/i,
       'GrapeCrux has a dedicated internship application page for students of Vaagdevi College of Engineering. The five tracks are Software Developer Intern, Data Analytics Intern, AI Intern, Forward Deployment Intern and QA Testing Intern. This is an unpaid opportunity: no stipend or salary is provided, and students are not charged an application, registration, training or participation fee. Details and the application form are at https://grapecrux.com/careers/internships/special-call-vaagdevi-college-of-engineering/.'],

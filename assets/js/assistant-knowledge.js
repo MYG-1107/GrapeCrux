@@ -163,7 +163,6 @@
       'Our post-quantum readiness guide explains cryptographic inventories, long-lived data risk, vendor assessment and staged testing. Read https://grapecrux.com/blogs/post-quantum-cryptography-migration-for-software-teams/ or discuss a security testing scope at https://grapecrux.com/services/software-testing/.'],
     [/\b(sbom|software bill of materials|software supply chain inventory)\b/i,
       'Our SBOM guide explains the 2026 minimum-elements update, component identity, generation context, validation and vulnerability response. Read https://grapecrux.com/blogs/software-bill-of-materials-sbom-2026-supply-chain-security/ or explore Software Testing at https://grapecrux.com/services/software-testing/.'],
-  ];
 
     [/\b(eu ai act|article 50|ai transparency|synthetic content disclosure|deepfake labelling)\b/i,
       "Our EU AI Act Article 50 guide explains AI-generated content transparency, disclosures, provenance and implementation evidence. Read https://grapecrux.com/blogs/eu-ai-act-article-50-transparency-readiness-2026/."],

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});gtag('js',new Date());gtag('config','G-QXMRMGJEP2',{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false});</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GrapeCrux">
+<meta name="theme-color" content="#f7f8f5">
+<title>PostgreSQL 19: New Features, Performance Changes and Upgrade Guide | GrapeCrux</title>
+<meta name="description" content="PostgreSQL 19 arrived on November 19, 2026. Review REPACK CONCURRENTLY, planner advice, replication updates and the checks to complete before upgrading.">
+<meta name="keywords" content="PostgreSQL 19, PostgreSQL 19 new features, PostgreSQL 19 upgrade, REPACK CONCURRENTLY, pg_plan_advice">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://grapecrux.com/blogs/postgresql-19-features-upgrade-guide/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GrapeCrux">
+<meta property="og:title" content="PostgreSQL 19: New Features, Performance Changes and Upgrade Guide">
+<meta property="og:description" content="PostgreSQL 19 arrived on November 19, 2026. Review REPACK CONCURRENTLY, planner advice, replication updates and the checks to complete before upgrading.">
+<meta property="og:url" content="https://grapecrux.com/blogs/postgresql-19-features-upgrade-guide/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta property="og:image:alt" content="GrapeCrux technology article">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-11-21">
+<meta property="article:modified_time" content="2026-11-21">
+<meta property="article:section" content="Data Engineering">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PostgreSQL 19: New Features, Performance Changes and Upgrade Guide">
+<meta name="twitter:description" content="PostgreSQL 19 arrived on November 19, 2026. Review REPACK CONCURRENTLY, planner advice, replication updates and the checks to complete before upgrading.">
+<meta name="twitter:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta name="twitter:url" content="https://grapecrux.com/blogs/postgresql-19-features-upgrade-guide/">
+<link rel="icon" type="image/png" href="../../grapecrux_brand_logo.png?v=20261113-original-png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"PostgreSQL 19: New Features, Performance Changes and Upgrade Guide","description":"PostgreSQL 19 arrived on November 19, 2026. Review REPACK CONCURRENTLY, planner advice, replication updates and the checks to complete before upgrading.","datePublished":"2026-11-21","dateModified":"2026-11-21","author":{"@type":"Organization","name":"GrapeCrux"},"publisher":{"@type":"Organization","name":"GrapeCrux","logo":{"@type":"ImageObject","url":"https://grapecrux.com/grapecrux_brand_logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://grapecrux.com/blogs/postgresql-19-features-upgrade-guide/"},"image":"https://grapecrux.com/assets/images/hero-orbit.svg","articleSection":"Data Engineering","keywords":"PostgreSQL 19, PostgreSQL 19 new features, PostgreSQL 19 upgrade, REPACK CONCURRENTLY, pg_plan_advice","inLanguage":"en","wordCount":500}</script>
+<script defer src="../../assets/js/config.js"></script>
+<script defer src="../../assets/js/assistant-knowledge.js"></script>
+<script defer src="../../assets/js/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="page-hero"><div class="container">
+<div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><a href="/blogs/">Blogs</a><span class="sep">/</span><span>Data Engineering</span></div>
+<div class="article-meta"><span>Data Engineering</span><span>·</span><span>12 min read</span><span>·</span><time datetime="2026-11-21">21 November 2026</time></div>
+<h1>PostgreSQL 19: New Features, Performance Changes and Upgrade Guide</h1><p class="lead">PostgreSQL 19 was released on 19 November 2026. The release brings changes for database maintenance, query planning and logical replication. Here is what application and database teams should review before moving a production system.</p>
+</div></section>
+<section class="section"><div class="container content-layout">
+<article class="prose blog-prose">
+<h2>The headline changes in PostgreSQL 19</h2>
+<p>The PostgreSQL Global Development Group released version 19 on 19 November 2026. One notable addition is `REPACK (CONCURRENTLY)`, which reorganizes table contents while allowing reads and writes to continue. The release also introduces the `pg_plan_advice` and `pg_stash_advice` extensions for controlling and applying query-planner advice.</p>
+<p>The official release notes describe performance improvements in areas such as I/O worker scaling and foreign-key checks. Logical replication can now be enabled without a server restart when `wal_level` is set to `replica`, and sequence values can be replicated. Review the full notes for details that affect your particular workload.</p>
+<h2>Where the changes may help</h2>
+<p>`REPACK (CONCURRENTLY)` is relevant for tables that accumulate bloat or need physical reorganization without a maintenance window that blocks normal access. It does not remove the need to test disk headroom, locking behaviour and the effect on replicas. Run it first against a staging copy with representative table size and traffic.</p>
+<p>Planner advice is useful for teams investigating unstable plans or workloads where a query's performance changes after data distribution shifts. Treat planner hints as a targeted tool, not a replacement for correct statistics, indexes or query design. Record the query, plan and reason for any advice so another engineer can maintain it.</p>
+<h2>Plan a major-version upgrade properly</h2>
+<p>A major PostgreSQL upgrade is not the same as a minor patch. Review extension compatibility, collation changes, authentication settings, replication slots, backup tooling, drivers and connection poolers. Test the upgrade path with a recent production-like copy and verify both read and write workloads.</p>
+<p>Choose a migration approach such as `pg_upgrade` or dump-and-restore based on database size, downtime tolerance and operational constraints. Test rollback before the production window. A backup is useful only if the team has demonstrated that it can be restored.</p>
+<h2>Applications and replication need their own tests</h2>
+<p>Run application integration tests against PostgreSQL 19 rather than relying only on database-level checks. Include prepared statements, transaction boundaries, time zones, JSON and array handling, extension behaviour and connection pool recovery. If you use logical replication, test sequence state and subscriber behaviour after failover or reconnect.</p>
+<p>Compare query plans, latency, write throughput, vacuum behaviour and replication lag before and after the upgrade. Keep a list of queries that regress so the team can investigate them with repeatable evidence.</p>
+<h2>A measured rollout</h2>
+<p>Upgrade a development environment, then a staging database, before selecting a low-risk production workload. Keep extension versions pinned and maintain a tested rollback plan. The PostgreSQL release notes should be the source of truth for feature and migration details; do not copy settings from an older upgrade guide without checking their current meaning.</p>
+<h2>Sources and further reading</h2><ul class="resource-list"><li><a href="https://www.postgresql.org/about/news/postgresql-19-released-3449/" target="_blank" rel="noopener noreferrer">PostgreSQL 19 release announcement — November 19, 2026</a></li>
+<li><a href="https://www.postgresql.org/docs/19/release-19.html" target="_blank" rel="noopener noreferrer">PostgreSQL 19 official release notes</a></li><li><a href="/blogs/postgresql-query-performance-explained/">PostgreSQL query performance</a></li></ul>
+<a class="back-top" href="/blogs/archive/">← Back to all articles</a>
+</article>
+<aside class="side-card">
+<span class="section-kicker">Working on something similar?</span>
+<h3>Talk it through with GrapeCrux.</h3>
+<p>Tell us what you are trying to solve. We will help you consider a sensible next step.</p>
+<a class="btn btn-primary" href="/contact/">Contact the team ↗</a>
+<div class="divider"></div>
+<p class="small">Related capability: <a href="/services/data-engineering/">Data Engineering</a>.</p>
+<p class="small">Find more topics in the <a href="/blogs/archive/">article archive</a>.</p>
+</aside>
+</div></section>
+</main><div id="site-footer"></div><div id="gc-chatbot"></div>
+</body></html>

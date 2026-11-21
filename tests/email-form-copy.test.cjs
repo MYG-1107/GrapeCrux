@@ -18,7 +18,8 @@ assert.doesNotMatch(contact, /stores the request with a reference number|confirm
 assert.match(privacy, /FormSubmit, a third-party form-delivery service/i);
 assert.match(privacy, /referring page is reduced to its origin only/i);
 assert.match(privacy, /Email addresses in campaign-tag values are discarded/i);
-assert.match(confirmation, /accepted your request for email delivery/i);
+assert.match(confirmation, /Thank you for contacting GrapeCrux/i);
+assert.doesNotMatch(confirmation, /form-delivery provider|email delivery/i);
 
 const main = read('assets/js/main.js');
 assert.match(main, /safeReferrerOrigin/);

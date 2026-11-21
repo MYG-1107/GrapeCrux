@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});gtag('js',new Date());gtag('config','G-QXMRMGJEP2',{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false});</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GrapeCrux">
+<meta name="theme-color" content="#f7f8f5">
+<title>Apache Polaris 1.9.0: What Iceberg Platform Teams Need to Check | GrapeCrux</title>
+<meta name="description" content="Apache Polaris 1.9.0 was released on November 14, 2026. Review catalog changes, external principals, pagination defaults and upgrade requirements.">
+<meta name="keywords" content="Apache Polaris 1.9.0, Apache Iceberg REST catalog, Polaris upgrade, Iceberg catalog governance, Polaris pagination">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://grapecrux.com/blogs/apache-polaris-1-9-iceberg-catalog-upgrade-guide/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GrapeCrux">
+<meta property="og:title" content="Apache Polaris 1.9.0: What Iceberg Platform Teams Need to Check">
+<meta property="og:description" content="Apache Polaris 1.9.0 was released on November 14, 2026. Review catalog changes, external principals, pagination defaults and upgrade requirements.">
+<meta property="og:url" content="https://grapecrux.com/blogs/apache-polaris-1-9-iceberg-catalog-upgrade-guide/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta property="og:image:alt" content="GrapeCrux technology article">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-11-21">
+<meta property="article:modified_time" content="2026-11-21">
+<meta property="article:section" content="Data Engineering">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Apache Polaris 1.9.0: What Iceberg Platform Teams Need to Check">
+<meta name="twitter:description" content="Apache Polaris 1.9.0 was released on November 14, 2026. Review catalog changes, external principals, pagination defaults and upgrade requirements.">
+<meta name="twitter:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta name="twitter:url" content="https://grapecrux.com/blogs/apache-polaris-1-9-iceberg-catalog-upgrade-guide/">
+<link rel="icon" type="image/png" href="../../grapecrux_brand_logo.png?v=20261113-original-png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Apache Polaris 1.9.0: What Iceberg Platform Teams Need to Check","description":"Apache Polaris 1.9.0 was released on November 14, 2026. Review catalog changes, external principals, pagination defaults and upgrade requirements.","datePublished":"2026-11-21","dateModified":"2026-11-21","author":{"@type":"Organization","name":"GrapeCrux"},"publisher":{"@type":"Organization","name":"GrapeCrux","logo":{"@type":"ImageObject","url":"https://grapecrux.com/grapecrux_brand_logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://grapecrux.com/blogs/apache-polaris-1-9-iceberg-catalog-upgrade-guide/"},"image":"https://grapecrux.com/assets/images/hero-orbit.svg","articleSection":"Data Engineering","keywords":"Apache Polaris 1.9.0, Apache Iceberg REST catalog, Polaris upgrade, Iceberg catalog governance, Polaris pagination","inLanguage":"en","wordCount":532}</script>
+<script defer src="../../assets/js/config.js"></script>
+<script defer src="../../assets/js/assistant-knowledge.js"></script>
+<script defer src="../../assets/js/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="page-hero"><div class="container">
+<div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><a href="/blogs/">Blogs</a><span class="sep">/</span><span>Data Engineering</span></div>
+<div class="article-meta"><span>Data Engineering</span><span>·</span><span>11 min read</span><span>·</span><time datetime="2026-11-21">21 November 2026</time></div>
+<h1>Apache Polaris 1.9.0: What Iceberg Platform Teams Need to Check</h1><p class="lead">Apache Polaris 1.9.0 arrived on 14 November 2026 with changes that affect authentication, catalog APIs and client compatibility. If your data platform uses the Iceberg REST catalog, check these details before upgrading.</p>
+</div></section>
+<section class="section"><div class="container content-layout">
+<article class="prose blog-prose">
+<h2>Why the 1.9.0 release deserves a compatibility check</h2>
+<p>Apache Polaris is an open catalog for Apache Iceberg that exposes the Iceberg REST API to engines such as Spark, Flink and Trino. Version 1.9.0 was released on 14 November 2026. Its release notes include changes to principal handling, storage credentials, catalog configuration and list pagination.</p>
+<p>This is not just a version bump for the catalog service. Clients, identity providers, policy engines, migration scripts and operational dashboards may depend on the behaviours that changed. Read the release notes alongside the versions of Spark, Iceberg and connectors actually used in your platform.</p>
+<h2>Pay attention to pagination defaults</h2>
+<p>Polaris 1.9.0 enables `LIST_PAGINATION_ENABLED` by default. Clients that request a page size or provide a page token must follow the returned next-page token to collect all results. A tool that previously assumed one list response contained every namespace, table or view may now show incomplete results if it does not handle pagination correctly.</p>
+<p>Test your catalog clients with more objects than fit in one page. Confirm that the client handles empty pages, invalid tokens, retries and the final page. Update scripts and administrative tools before relying on them for inventory or access reviews.</p>
+<h2>Review authentication and storage settings</h2>
+<p>The release adds support for external principals when configured with an external identity provider and policy decision point. It also introduces an optional S3 `credentialVendingMechanism` field, with STS as the supported mechanism in this release. Check how the catalog's identity model maps to your organization and whether the new configuration aligns with your existing IAM rules.</p>
+<p>Polaris 1.9.0 also upgrades Apache Iceberg to 1.12.0. The release notes mention a required schema v6 migration for the relational JDBC metastore before starting this version. Treat that migration as a planned change with a backup and recovery procedure, not as an incidental startup step.</p>
+<h2>Improve commit recovery and access checks</h2>
+<p>The release notes describe a change to table and view commits when the metastore outcome is unknown. Newly written metadata is no longer deleted in that situation, helping avoid cleanup that could damage a commit that may have succeeded. This is important for intermittent network failures, where a client may lose its connection before learning whether a commit completed.</p>
+<p>Review how your applications retry commits and reconcile uncertain outcomes. Also check the new `CATALOG_READ_CONFIG` privilege and the setting that controls authorization for the catalog configuration endpoint.</p>
+<h2>Upgrade test plan</h2>
+<p>Use a staging catalog with representative numbers of namespaces, tables, views, principals and storage locations. Test pagination, external identity, credential vending, catalog configuration access, commit retries and schema migration. Check Spark, Flink and other client versions in a compatibility matrix.</p>
+<p>Roll out one environment at a time and keep logs for authentication failures, list requests and commit outcomes. The official 1.9.0 release notes contain the definitive list of breaking changes and upgrade notes.</p>
+<h2>Sources and further reading</h2><ul class="resource-list"><li><a href="https://polaris.apache.org/downloads/1.9.0/" target="_blank" rel="noopener noreferrer">Apache Polaris 1.9.0 release notes</a></li>
+<li><a href="https://lists.apache.org/thread/1gvhpzqzlzvlcp4kss2kqzjmyk3xx3ym" target="_blank" rel="noopener noreferrer">Apache Polaris release announcement</a></li><li><a href="/blogs/apache-iceberg-1-12-upgrade-interoperability-guide/">Apache Iceberg 1.12 upgrade planning</a></li></ul>
+<a class="back-top" href="/blogs/archive/">← Back to all articles</a>
+</article>
+<aside class="side-card">
+<span class="section-kicker">Working on something similar?</span>
+<h3>Talk it through with GrapeCrux.</h3>
+<p>Tell us what you are trying to solve. We will help you consider a sensible next step.</p>
+<a class="btn btn-primary" href="/contact/">Contact the team ↗</a>
+<div class="divider"></div>
+<p class="small">Related capability: <a href="/services/data-engineering/">Data Engineering</a>.</p>
+<p class="small">Find more topics in the <a href="/blogs/archive/">article archive</a>.</p>
+</aside>
+</div></section>
+</main><div id="site-footer"></div><div id="gc-chatbot"></div>
+</body></html>

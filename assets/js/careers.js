@@ -1,11 +1,10 @@
 /* Shared role-aware Careers form handling and Job ID validation.
- * Native form POST forwards applications through the hosted email provider; the website does not store submissions.
+ * Applications are submitted through the hosted form service and delivered to the GrapeCrux recruitment team.
  */
 (() => {
   const form = document.getElementById('gc-careers-application-form');
   if (!form) return;
 
-  const recipient = 'yaswanth@grapecrux.com';
   const typeSelect = document.getElementById('career-application-type');
   const roleSelect = document.getElementById('career-track');
   const jobIdField = document.getElementById('career-job-id');
@@ -146,7 +145,7 @@
     if (nextField) nextField.value = `https://grapecrux.com/careers/application-received/?job_id=${encodeURIComponent(jobId)}`;
 
     if (status) {
-      status.textContent = 'Submitting your application for email delivery to ' + recipient + '…';
+      status.textContent = 'Sending your application to the GrapeCrux recruitment team…';
       status.classList.add('show');
       status.classList.remove('is-error');
     }

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});gtag('js',new Date());gtag('config','G-QXMRMGJEP2',{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false});</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GrapeCrux">
+<meta name="theme-color" content="#f7f8f5">
+<title>Google Cloud Agent Registry: Managing MCP Servers, Tools and Skills | GrapeCrux</title>
+<meta name="description" content="What Google Cloud Agent Registry's November 2026 updates mean for MCP tool discovery, skill security, permissions and human approval.">
+<meta name="keywords" content="Google Cloud Agent Registry, MCP server registry, AI agent skills security, Model Context Protocol tools, agent governance">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://grapecrux.com/blogs/google-cloud-agent-registry-mcp-tools-skills-governance/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GrapeCrux">
+<meta property="og:title" content="Google Cloud Agent Registry: Managing MCP Servers, Tools and Skills">
+<meta property="og:description" content="What Google Cloud Agent Registry's November 2026 updates mean for MCP tool discovery, skill security, permissions and human approval.">
+<meta property="og:url" content="https://grapecrux.com/blogs/google-cloud-agent-registry-mcp-tools-skills-governance/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta property="og:image:alt" content="GrapeCrux technology article">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-11-21">
+<meta property="article:modified_time" content="2026-11-21">
+<meta property="article:section" content="AI &amp; Machine Learning">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Google Cloud Agent Registry: Managing MCP Servers, Tools and Skills">
+<meta name="twitter:description" content="What Google Cloud Agent Registry's November 2026 updates mean for MCP tool discovery, skill security, permissions and human approval.">
+<meta name="twitter:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta name="twitter:url" content="https://grapecrux.com/blogs/google-cloud-agent-registry-mcp-tools-skills-governance/">
+<link rel="icon" type="image/png" href="../../grapecrux_brand_logo.png?v=20261113-original-png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Google Cloud Agent Registry: Managing MCP Servers, Tools and Skills","description":"What Google Cloud Agent Registry's November 2026 updates mean for MCP tool discovery, skill security, permissions and human approval.","datePublished":"2026-11-21","dateModified":"2026-11-21","author":{"@type":"Organization","name":"GrapeCrux"},"publisher":{"@type":"Organization","name":"GrapeCrux","logo":{"@type":"ImageObject","url":"https://grapecrux.com/grapecrux_brand_logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://grapecrux.com/blogs/google-cloud-agent-registry-mcp-tools-skills-governance/"},"image":"https://grapecrux.com/assets/images/hero-orbit.svg","articleSection":"AI & Machine Learning","keywords":"Google Cloud Agent Registry, MCP server registry, AI agent skills security, Model Context Protocol tools, agent governance","inLanguage":"en","wordCount":535}</script>
+<script defer src="../../assets/js/config.js"></script>
+<script defer src="../../assets/js/assistant-knowledge.js"></script>
+<script defer src="../../assets/js/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="page-hero"><div class="container">
+<div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><a href="/blogs/">Blogs</a><span class="sep">/</span><span>AI &amp; Machine Learning</span></div>
+<div class="article-meta"><span>AI &amp; Machine Learning</span><span>·</span><span>10 min read</span><span>·</span><time datetime="2026-11-21">21 November 2026</time></div>
+<h1>Google Cloud Agent Registry: Managing MCP Servers, Tools and Skills</h1><p class="lead">As businesses connect more AI agents to internal systems, they need a clear record of which tools exist, who owns them and what an agent is allowed to do. Google Cloud's recent Agent Registry updates are a useful example of that shift.</p>
+</div></section>
+<section class="section"><div class="container content-layout">
+<article class="prose blog-prose">
+<h2>Why an agent registry matters</h2>
+<p>An enterprise agent may call an MCP server, use a tool maintained by another team or load a reusable skill package. Without a shared inventory, teams struggle to answer basic questions: who published this integration, what data can it access, which version is approved and how can it be disabled?</p>
+<p>A registry provides a discovery and governance layer. It does not replace authentication or authorization at the tool itself, but it gives platform and security teams a place to manage the metadata and approval process around the agent ecosystem.</p>
+<h2>What changed in Google Cloud Agent Registry</h2>
+<p>Google Cloud's release notes dated 19 November 2026 say Agent Registry added MCP tool protocol-level metadata, including Identity-Aware Proxy policy hints for tool enablement and human-in-the-loop controls, along with provider metadata attributes in Preview. The same release notes list skill security scanning and governance as available from 6 November, with standalone skills generally available.</p>
+<p>These capabilities are useful signals, but note the release status: the 19 November metadata additions are marked Preview. Check the current product documentation and supported regions before relying on them in a production design.</p>
+<h2>Registering a tool is only the first step</h2>
+<p>A useful registry entry should identify the publisher, purpose, version, supported inputs, data classification, owner, review date and permission model. Keep development and production tools separate. For skills, record the source package and the exact revision that passed review; do not allow an agent to download a mutable, unreviewed package at run time.</p>
+<p>Security scanning can identify suspicious content, but a scan result is not a complete security assessment. Review the skill's instructions, dependencies, network access and expected side effects. Test the tool with a low-privilege identity before making it available to wider groups.</p>
+<h2>Keep enforcement at the point of use</h2>
+<p>A registry can describe a permission or approval rule. The tool service must still enforce it. Verify the caller identity, check access to the requested resource, validate arguments and record the action. For a consequential operation—such as changing a customer record or triggering a payment—require an explicit approval from an authorized person.</p>
+<p>Keep a way to revoke a tool or publisher quickly. Monitor usage and investigate tools that begin requesting new permissions or unusual data. A registry is valuable when inventory, policy and runtime evidence remain connected.</p>
+<h2>A rollout that avoids tool sprawl</h2>
+<p>Start with a small group of approved MCP servers and skills. Assign an owner to each entry, set an approval route for new tools and review changes before publication. After rollout, compare registered tools with actual tool calls and remove entries that are no longer maintained.</p>
+<p>The goal is not to create a catalogue that nobody checks. It is to make tool ownership, trust and permissions visible before agents can affect business systems.</p>
+<h2>Sources and further reading</h2><ul class="resource-list"><li><a href="https://docs.cloud.google.com/agent-registry/release-notes" target="_blank" rel="noopener noreferrer">Google Cloud Agent Registry release notes — November 19 and November 6, 2026</a></li>
+<li><a href="https://docs.cloud.google.com/release-notes" target="_blank" rel="noopener noreferrer">Google Cloud release notes — November 19, 2026</a></li><li><a href="/blogs/model-context-protocol-mcp-security-enterprise-integrations/">MCP security for enterprise integrations</a></li></ul>
+<a class="back-top" href="/blogs/archive/">← Back to all articles</a>
+</article>
+<aside class="side-card">
+<span class="section-kicker">Working on something similar?</span>
+<h3>Talk it through with GrapeCrux.</h3>
+<p>Tell us what you are trying to solve. We will help you consider a sensible next step.</p>
+<a class="btn btn-primary" href="/contact/">Contact the team ↗</a>
+<div class="divider"></div>
+<p class="small">Related capability: <a href="/services/ai-integration-development/">AI Integration &amp; Development</a>.</p>
+<p class="small">Find more topics in the <a href="/blogs/archive/">article archive</a>.</p>
+</aside>
+</div></section>
+</main><div id="site-footer"></div><div id="gc-chatbot"></div>
+</body></html>

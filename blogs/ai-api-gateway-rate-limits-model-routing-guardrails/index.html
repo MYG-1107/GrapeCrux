@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});gtag('js',new Date());gtag('config','G-QXMRMGJEP2',{send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false});</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXMRMGJEP2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GrapeCrux">
+<meta name="theme-color" content="#f7f8f5">
+<title>AI API Gateways: Rate Limits, Model Routing and Audit Controls | GrapeCrux</title>
+<meta name="description" content="How an AI API gateway can centralise authentication, rate limits, model routing, content controls, audit logs and cost visibility for LLM applications.">
+<meta name="keywords" content="AI API gateway, LLM gateway, model routing, LLM rate limiting, generative AI API management">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://grapecrux.com/blogs/ai-api-gateway-rate-limits-model-routing-guardrails/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GrapeCrux">
+<meta property="og:title" content="AI API Gateways: Rate Limits, Model Routing and Audit Controls">
+<meta property="og:description" content="How an AI API gateway can centralise authentication, rate limits, model routing, content controls, audit logs and cost visibility for LLM applications.">
+<meta property="og:url" content="https://grapecrux.com/blogs/ai-api-gateway-rate-limits-model-routing-guardrails/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta property="og:image:alt" content="GrapeCrux technology article">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-11-21">
+<meta property="article:modified_time" content="2026-11-21">
+<meta property="article:section" content="Cloud &amp; DevOps">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI API Gateways: Rate Limits, Model Routing and Audit Controls">
+<meta name="twitter:description" content="How an AI API gateway can centralise authentication, rate limits, model routing, content controls, audit logs and cost visibility for LLM applications.">
+<meta name="twitter:image" content="https://grapecrux.com/assets/images/hero-orbit.svg">
+<meta name="twitter:url" content="https://grapecrux.com/blogs/ai-api-gateway-rate-limits-model-routing-guardrails/">
+<link rel="icon" type="image/png" href="../../grapecrux_brand_logo.png?v=20261113-original-png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"AI API Gateways: Rate Limits, Model Routing and Audit Controls","description":"How an AI API gateway can centralise authentication, rate limits, model routing, content controls, audit logs and cost visibility for LLM applications.","datePublished":"2026-11-21","dateModified":"2026-11-21","author":{"@type":"Organization","name":"GrapeCrux"},"publisher":{"@type":"Organization","name":"GrapeCrux","logo":{"@type":"ImageObject","url":"https://grapecrux.com/grapecrux_brand_logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://grapecrux.com/blogs/ai-api-gateway-rate-limits-model-routing-guardrails/"},"image":"https://grapecrux.com/assets/images/hero-orbit.svg","articleSection":"Cloud & DevOps","keywords":"AI API gateway, LLM gateway, model routing, LLM rate limiting, generative AI API management","inLanguage":"en","wordCount":517}</script>
+<script defer src="../../assets/js/config.js"></script>
+<script defer src="../../assets/js/assistant-knowledge.js"></script>
+<script defer src="../../assets/js/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="page-hero"><div class="container">
+<div class="breadcrumbs"><a href="/">Home</a><span class="sep">/</span><a href="/blogs/">Blogs</a><span class="sep">/</span><span>Cloud &amp; DevOps</span></div>
+<div class="article-meta"><span>Cloud &amp; DevOps</span><span>·</span><span>10 min read</span><span>·</span><time datetime="2026-11-21">21 November 2026</time></div>
+<h1>AI API Gateways: Rate Limits, Model Routing and Audit Controls</h1><p class="lead">When several applications call different model providers directly, each team ends up implementing its own authentication, quotas, logging and fallback rules. An AI API gateway can provide a shared control point—but only if it does more than forward requests.</p>
+</div></section>
+<section class="section"><div class="container content-layout">
+<article class="prose blog-prose">
+<h2>Why teams introduce an AI gateway</h2>
+<p>An AI application may call one model for summarization, another for embeddings and a third for a tool-based workflow. If every service integrates directly with each provider, API keys, rate limits, error handling and cost reporting become fragmented. An AI gateway provides a common endpoint for those model calls.</p>
+<p>The gateway is useful when it centralizes controls that would otherwise be repeated in each application. It should not become a mysterious box that makes model behaviour impossible to inspect. Keep routing and policy decisions visible to operators.</p>
+<h2>Authentication, quotas and tenant boundaries</h2>
+<p>Authenticate the calling application and map it to a tenant or service identity. Apply quotas by user, tenant, model and workload type. Enforce request-size and concurrency limits, and protect the gateway from expensive loops or accidental batch spikes.</p>
+<p>Do not rely on a model-provided tenant identifier or user role. The gateway should derive identity from a trusted credential and pass only the permissions required for the call. Keep credentials for provider APIs in a managed secret store, not in browser code.</p>
+<h2>Route requests using an explicit policy</h2>
+<p>Model routing can consider task type, context length, latency objective, supported modalities, region, provider availability and cost. A simple classification request may use a smaller model, while a complex task may use a more capable service. The routing decision should be deterministic enough to explain and test.</p>
+<p>Fallbacks need care. If a provider is unavailable, sending data to another provider may violate the customer's processing requirements. Define which routes are approved for each data class and whether the user must be told when a different model handles the request.</p>
+<h2>Add safety and observability at the right layer</h2>
+<p>A gateway can enforce request size, content filtering, schema validation and logging policies, but application-level authorization still belongs in the application and tool service. A central filter cannot understand every business rule. Keep untrusted retrieved content distinct from trusted instructions and validate any downstream action.</p>
+<p>Record request identifiers, model version, route, latency, status, token or unit usage and policy decisions. Avoid retaining full prompts and completions by default. If content logging is necessary for debugging, define access, redaction and retention rules.</p>
+<h2>Avoid creating a single point of failure</h2>
+<p>The gateway becomes a critical dependency. Deploy it with capacity, failover and clear timeout behaviour. Test provider outages, malformed responses, retry storms and rate-limit exhaustion. Make sure a retry cannot create duplicate actions in a downstream system.</p>
+<p>Start with one application and a small set of model providers. Measure whether the gateway reduces duplicated integration work and improves cost visibility without adding unacceptable latency. Keep direct provider access as a controlled exception, not an undocumented bypass.</p>
+<h2>Sources and further reading</h2><ul class="resource-list"><li><a href="https://genai.owasp.org/" target="_blank" rel="noopener noreferrer">OWASP GenAI Security Project</a></li>
+<li><a href="https://docs.cloud.google.com/architecture" target="_blank" rel="noopener noreferrer">Google Cloud Architecture Center — AI and API architecture guidance</a></li><li><a href="/blogs/llm-inference-optimization-production-latency-cost/">LLM inference optimization</a></li></ul>
+<a class="back-top" href="/blogs/archive/">← Back to all articles</a>
+</article>
+<aside class="side-card">
+<span class="section-kicker">Working on something similar?</span>
+<h3>Talk it through with GrapeCrux.</h3>
+<p>Tell us what you are trying to solve. We will help you consider a sensible next step.</p>
+<a class="btn btn-primary" href="/contact/">Contact the team ↗</a>
+<div class="divider"></div>
+<p class="small">Related capability: <a href="/services/ai-integration-development/">AI Integration &amp; Development</a>.</p>
+<p class="small">Find more topics in the <a href="/blogs/archive/">article archive</a>.</p>
+</aside>
+</div></section>
+</main><div id="site-footer"></div><div id="gc-chatbot"></div>
+</body></html>

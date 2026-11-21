@@ -15,7 +15,7 @@ const css = read('assets/css/style.css');
 assert.equal((hub.match(/class="article-card(?:\s|")/g) || []).length, 8, 'The public Blogs page should show eight selected guides');
 assert.ok(hub.includes('Selected reading'), 'The hub should identify its curated section');
 assert.ok(hub.includes('/blogs/archive/'), 'The hub should link to the full archive');
-assert.ok(hub.includes('Other published GrapeCrux articles remain available'), 'The hub should explain that the remaining guides are still available');
+assert.ok(hub.includes('Looking for a particular subject? Search all GrapeCrux articles in the archive.'), 'The hub should explain how to find other articles in natural visitor-facing language');
 assert.ok(hub.includes('id="topics"'), 'The hub should provide a topic directory');
 assert.ok(hub.includes('"@type":"CollectionPage"') && hub.includes('"numberOfItems":8'), 'The hub should describe its selected guides in structured data');
 assert.match(hub, /name="robots" content="index,follow/i);
@@ -26,7 +26,7 @@ assert.ok(archive.includes('id="blog-search"') && archive.includes('id="blog-cat
 assert.ok(archive.includes('id="blog-pagination"') && archive.includes('id="blog-next"'), 'The full archive must expose pagination');
 assert.ok(archive.includes('id="blog-clear-filters"'), 'The archive must expose a clear-filters control');
 assert.ok(!archive.includes('</a></div></article>'), 'Archive cards must not contain extra closing div elements');
-assert.equal((archive.match(/class="article-card blog-archive-item"/g) || []).length, 78, 'The archive must contain all 78 article links in the original HTML');
+assert.equal((archive.match(/class="article-card blog-archive-item"/g) || []).length, 118, 'The archive must contain all 118 article links in the original HTML');
 assert.ok(archive.includes('"@type":"CollectionPage"') && archive.includes('"numberOfItems":78'), 'The archive structured data must describe the full library');
 assert.match(archive, /name="robots" content="index,follow/i);
 assert.match(archive, /<link rel="canonical" href="https:\/\/grapecrux\.com\/blogs\/archive\/">/);
@@ -38,7 +38,7 @@ const blogRoot = path.join(root, 'blogs');
 const articleSlugs = fs.readdirSync(blogRoot, {withFileTypes:true})
   .filter(entry => entry.isDirectory() && entry.name !== 'archive' && fs.existsSync(path.join(blogRoot, entry.name, 'index.html')))
   .map(entry => entry.name);
-assert.equal(articleSlugs.length, 78, 'There must be 78 individual indexable article pages');
+assert.equal(articleSlugs.length, 118, 'There must be 118 individual indexable article pages');
 
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
 assert.equal(sitemapUrls.length, new Set(sitemapUrls).size, 'The sitemap must not contain duplicate URLs');
@@ -81,4 +81,4 @@ for (const slug of ['llm-inference-optimization-production-latency-cost','opente
   assert.ok(page.includes('Further reading') && page.includes('Start a project'), slug + ' must link sources and related services');
 }
 
-console.log('Blog reading experience checks passed: curated hub, 78-article archive, 78 indexable articles, sitemap, SEO schema, section navigation and responsive styles.');
+console.log('Blog reading experience checks passed: curated hub, 118-article archive, 118 indexable articles, sitemap, SEO schema, section navigation and responsive styles.');

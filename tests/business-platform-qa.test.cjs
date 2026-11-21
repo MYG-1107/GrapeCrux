@@ -105,7 +105,7 @@ const blog = read('blogs/index.html');
 const archive = read('blogs/archive/index.html');
 const blogCount = (archive.match(/class="article-card blog-archive-item"/g)||[]).length;
 const featuredCount = (blog.match(/class="article-card blog-featured-card"/g)||[]).length;
-assert.equal(blogCount,78,'Full blog archive must contain all 78 static article cards');
+assert.equal(blogCount,118,'Full blog archive must contain all 118 static article cards');
 assert.equal(featuredCount,8,'Blogs landing page must remain curated to eight selected reads');
 assert.ok(blog.includes('href="/blogs/archive/"'),'Curated Blogs page must link to the full archive');
 assert.match(archive,/id="blog-search"/);

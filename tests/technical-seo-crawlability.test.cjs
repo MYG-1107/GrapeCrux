@@ -48,7 +48,8 @@ const files = walk(ROOT);
 const htmlPages = files.filter(file => file.toLowerCase().endsWith('.html'));
 const noindexUtilityPages = new Set([
   'contact/received/index.html',
-  'careers/application-received/index.html'
+  'careers/application-received/index.html',
+  'careers/internships/special-call-vaagdevi-college-of-engineering/application-received/index.html'
 ]);
 const contentPages = htmlPages.filter(file => {
   const source = fs.readFileSync(file, 'utf8');

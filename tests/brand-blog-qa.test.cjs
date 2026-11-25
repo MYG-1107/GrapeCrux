@@ -27,7 +27,7 @@ const featured = [...featuredSection.matchAll(new RegExp('href="/blogs/([a-z0-9-
 const featuredUnique = [...new Set(featured)];
 assert.equal(featuredUnique.length, 8, 'Blogs hub should feature exactly eight curated articles');
 assert.ok(blog.includes('Selected reading'), 'Curated page should be identified as selected reading');
-assert.ok(blog.includes('Other published GrapeCrux articles remain available at their individual URLs and are included in the XML sitemap'), 'Hub should explain where other published guides remain available');
+assert.ok(blog.includes('Looking for a particular subject? Search all GrapeCrux articles in the archive.'), 'Hub should explain how visitors can find other published guides');
 assert.equal((blog.match(/class="blog-topic-section"/g) || []).length, 0, 'Unfeatured topic archives should not appear as hub article lists');
 
 const blogRoot = path.join(root, 'blogs');
